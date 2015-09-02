@@ -63,12 +63,7 @@ namespace webapp
             }
             return "it";
         }
-
-        public static string GetBaseUrl() 
-        { 
-            return @"https://drive.google.com/folderview?id=0B8O5tJ0cWwNLfi1xNnZ6VmZaQkp4TDRGWVdwZ3JRTE5wVUVSSkN4UGRuTk5SdDRXWVRfbjA&usp=sharing"; 
-        }
-        
+                
     }
 
     

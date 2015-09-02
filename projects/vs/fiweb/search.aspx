@@ -1,7 +1,7 @@
 <%@ Page Language="VB" %>
 <%    
     Dim base As String
-    base = "js" 'webapp.FormatUtils.GetBaseUrl()
+    base = "js"
 %>
 <!DOCTYPE html>
 <html lang="en">	
@@ -12,51 +12,10 @@
 	<link rel="stylesheet" href="<%= base %>/jquery.mobile-1.4.5.min.css"/>
     <script type="text/javascript" src="<%= base %>/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" src="<%= base %>/jquery.mobile-1.4.5.min.js"></script>
-    
-	<script type="text/javascript">
-
-		function popupmsg(msg)
-		{	
-			$('#myPopupMsg').html(msg);
-			document.getElementById('hclick').click();
-        }
-
-		function validate(f)
-		{
-		    try {
-
-			    var aic = f.aic.value.trim().toUpperCase();
-
-				if (aic.length == 0) 
-                    throw "Compilare il campo id foglietto";
-				if (aic.length > 9) 
-                    throw "Codice non valido: troppe cifre";
-				if (aic.length == 9 && (aic.charAt(0) != 'A'))
-                    throw "Codice non valido: carattere iniziale non valido";
-				for (var i = 0; i < 8; i++) {
-				    if ("0123456789".indexOf(aic.charAt(i)) < 0)
-				        throw "Codice non valido: carattere in posizione " + (i + 1) + " non numerico";
-				}
-
-				return true;
-
-			}
-            catch (e) {
-
-				popupmsg('Dati compilati non validi!<br/>' + e);
-				return false;
-
-			}
-
-        }
-
-	</script>
-
-	<% If LCase(Request.QueryString("pupup")) = "true" Then%>
+    <script type="text/javascript" src="<%= base %>/search.aspx.js"></script>	
     <link rel="apple-touch-icon-precomposed" href="images/farmadati-apple-icon.png" />
     <script type="text/javascript" src="<%= base %>/bookmark_bubble.js"></script>
-    <% End If%>
-
+    
 </head>
 
 <body oncontextmenu="return false;">
@@ -107,53 +66,7 @@
     
 </center>
 
-    <% If LCase(Request.QueryString("pupup")) = "true" Then %>
-
-	<script type="text/javascript">
-
-	    window.addEventListener('load', function () {
-	        window.setTimeout(function () {
-	            var bubble = new google.bookmarkbubble.Bubble();
-
-	            var parameter = 'bmb=1';
-
-	            bubble.hasHashParameter = function () {
-	                return window.location.hash.indexOf(parameter) != -1;
-	            };
-
-	            bubble.setHashParameter = function () {
-	                if (!this.hasHashParameter()) {
-	                    window.location.hash += parameter;
-	                }
-	            };
-
-	            bubble.getViewportHeight = function () {
-	                window.console.log('Example of how to override getViewportHeight.');
-	                return window.innerHeight;
-	            };
-
-	            bubble.getViewportScrollY = function () {
-	                window.console.log('Example of how to override getViewportScrollY.');
-	                return window.pageYOffset;
-	            };
-
-	            bubble.registerScrollHandler = function (handler) {
-	                window.console.log('Example of how to override registerScrollHandler.');
-	                window.addEventListener('scroll', handler, false);
-	            };
-
-	            bubble.deregisterScrollHandler = function (handler) {
-	                window.console.log('Example of how to override deregisterScrollHandler.');
-	                window.removeEventListener('scroll', handler, false);
-	            };
-
-	            bubble.showIfAllowed();
-	        }, 1000);
-	    }, false);
-
-	</script>
-
-    <% End If  %>
+<script type="text/javascript" src="<%= base %>/bookmark_bubble_activator.js"></script>
 
 </body>
 
