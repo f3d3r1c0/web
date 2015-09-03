@@ -106,7 +106,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="src\ScriptsHttpHandler.cs" />
     <Compile Include="src\DocumentHttpHandler.cs" />
     <Compile Include="src\FormatUtils.cs" />
     <Compile Include="src\GhostscriptWrapper.cs" />
