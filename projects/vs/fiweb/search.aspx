@@ -1,23 +1,25 @@
 <%@ Page Language="VB" %>
 <% 
     Dim scpath As String
-    
     scpath = System.Web.Configuration.WebConfigurationManager.AppSettings("scriptsPath")
-    If scpath Is Nothing Then scpath = "js/"
-    If Not scpath.EndsWith("/") Then scpath += "/"
-
+    If scpath Is Nothing Then
+        scpath = ""
+    ElseIf Not scpath.EndsWith("/") Then
+        scpath += "/"
+    End If
+    
 %>
 <!DOCTYPE html>
 <html lang="en">	
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>Ricerca Foglietto Illustrativo</title>    
-	<link rel="stylesheet" href="<%= scpath %>jquery.mobile-1.4.5.min.css"/>
-    <script type="text/javascript" src="<%= scpath %>jquery-1.11.3.min.js"></script>
-	<script type="text/javascript" src="<%= scpath %>jquery.mobile-1.4.5.min.js"></script>
-    <script type="text/javascript" src="<%= scpath %>search.aspx.js"></script>	
+	<link rel="stylesheet" href="<%= scpath %>js/jquery.mobile-1.4.5.min.css"/>
+    <script type="text/javascript" src="<%= scpath %>js/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="<%= scpath %>js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="<%= scpath %>js/search.aspx.js"></script>	
     <link rel="apple-touch-icon-precomposed" href="images/farmadati-apple-icon.png" />
-    <script type="text/javascript" src="<%= scpath %>bookmark_bubble.js"></script>
+    <script type="text/javascript" src="<%= scpath %>js/bookmark_bubble.js"></script>
     
 </head>
 
@@ -27,7 +29,7 @@
 
     <table>
         <tr>
-            <td style="background: url('images/bg.png');"><img alt="Farmastampati Logo" src="images/farmast.png"/></td>
+            <td><img alt="Farmastampati Logo" src="images/farmast.png"/></td>
         </tr>
         <tr>
             <td align="center" valign="middle"><i>Visualizza il foglietto illustrativo</i></td>
@@ -69,7 +71,7 @@
     
 </center>
 
-<script type="text/javascript" src="<%= scpath %>bookmark_bubble_activator.js"></script>
+<script type="text/javascript" src="<%= scpath %>js/bookmark_bubble_activator.js"></script>
 
 </body>
 

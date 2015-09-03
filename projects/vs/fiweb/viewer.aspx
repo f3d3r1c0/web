@@ -2,10 +2,12 @@
 <%  
     Dim id As String
     Dim scpath As String
-    
     scpath = System.Web.Configuration.WebConfigurationManager.AppSettings("scriptsPath")
-    If scpath Is Nothing Then scpath = "js/"
-    If Not scpath.EndsWith("/") Then scpath += "/"
+    If scpath Is Nothing Then
+        scpath = ""
+    ElseIf Not scpath.EndsWith("/") Then
+        scpath += "/"
+    End If
     
     If Not Request.Params("id") Is Nothing Then
         id = Request.Params("id")
@@ -27,12 +29,12 @@
     
 	<title>Visualizza foglietto illustrativo</title>
 
-	<link rel="stylesheet" type="text/css" href="<%= scpath %>jquery.css" />
-	<link rel="stylesheet" type="text/css" href="<%= scpath %>bookblock.css" />
-	<link rel="stylesheet" type="text/css" href="<%= scpath %>custom.css" />
+	<link rel="stylesheet" type="text/css" href="<%= scpath %>js/jquery.css" />
+	<link rel="stylesheet" type="text/css" href="<%= scpath %>js/bookblock.css" />
+	<link rel="stylesheet" type="text/css" href="<%= scpath %>js/custom.css" />
 
-	<script type="text/javascript" src="<%= scpath %>ga.js"></script>
-	<script type="text/javascript" src="<%= scpath %>modernizr.js"></script>	
+	<script type="text/javascript" src="<%= scpath %>js/ga.js"></script>
+	<script type="text/javascript" src="<%= scpath %>js/modernizr.js"></script>	
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
@@ -73,16 +75,16 @@
 				
 		</div>	<!-- container -->
 
-		<script type="text/javascript" src="<%= scpath %>jquery_003.js"></script>
-		<script type="text/javascript" src="<%= scpath %>jquery_004.js"></script>
-		<script type="text/javascript" src="<%= scpath %>jquery_002.js"></script>
-		<script type="text/javascript" src="<%= scpath %>jquerypp.js"></script>
-		<script type="text/javascript" src="<%= scpath %>jquery.js"></script>
+		<script type="text/javascript" src="<%= scpath %>js/jquery_003.js"></script>
+		<script type="text/javascript" src="<%= scpath %>js/jquery_004.js"></script>
+		<script type="text/javascript" src="<%= scpath %>js/jquery_002.js"></script>
+		<script type="text/javascript" src="<%= scpath %>js/jquerypp.js"></script>
+		<script type="text/javascript" src="<%= scpath %>js/jquery.js"></script>
         
         <script type="text/javascript">
             var _pageurl = 'pages/<%= id %>';
         </script>
-        <script type="text/javascript" src="<%= scpath %>viewer.aspx.js"></script>                       
+        <script type="text/javascript" src="<%= scpath %>js/viewer.aspx.js"></script>                       
             
 	</body>
 
