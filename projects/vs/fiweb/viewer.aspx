@@ -19,12 +19,12 @@
     
 	<title>Visualizza foglietto illustrativo</title>
 
-	<link rel="stylesheet" type="text/css" href="jquery.css" />
-	<link rel="stylesheet" type="text/css" href="bookblock.css" />
-	<link rel="stylesheet" type="text/css" href="custom.css" />
+	<link rel="stylesheet" type="text/css" href="js/jquery.css" />
+	<link rel="stylesheet" type="text/css" href="js/bookblock.css" />
+	<link rel="stylesheet" type="text/css" href="js/custom.css" />
 
-	<script type="text/javascript" src="ga.js"></script>
-	<script type="text/javascript" src="modernizr.js"></script>	
+	<script type="text/javascript" src="js/ga.js"></script>
+	<script type="text/javascript" src="js/modernizr.js"></script>	
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
@@ -65,16 +65,16 @@
 				
 		</div>	<!-- container -->
 
-		<script type="text/javascript" src="jquery_003.js"></script>
-		<script type="text/javascript" src="jquery_004.js"></script>
-		<script type="text/javascript" src="jquery_002.js"></script>
-		<script type="text/javascript" src="jquerypp.js"></script>
-		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="js/jquery_003.js"></script>
+		<script type="text/javascript" src="js/jquery_004.js"></script>
+		<script type="text/javascript" src="js/jquery_002.js"></script>
+		<script type="text/javascript" src="js/jquerypp.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
         
         <script type="text/javascript">
             var _pageurl = 'pages/<%= id %>';
         </script>
-        <script type="text/javascript" src="viewer.aspx.js"></script>                       
+        <script type="text/javascript" src="js/viewer.aspx.js"></script>                       
             
 	</body>
 

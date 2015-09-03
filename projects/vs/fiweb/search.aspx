@@ -4,12 +4,12 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>Ricerca Foglietto Illustrativo</title>    
-	<link rel="stylesheet" href="jquery.mobile-1.4.5.min.css"/>
-    <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
-	<script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
-    <script type="text/javascript" src="search.aspx.js"></script>	
+	<link rel="stylesheet" href="js/jquery.mobile-1.4.5.min.css"/>
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/search.aspx.js"></script>	
     <link rel="apple-touch-icon-precomposed" href="images/farmadati-apple-icon.png" />
-    <script type="text/javascript" src="bookmark_bubble.js"></script>
+    <script type="text/javascript" src="js/bookmark_bubble.js"></script>
     
 </head>
 
@@ -61,7 +61,7 @@
     
 </center>
 
-<script type="text/javascript" src="bookmark_bubble_activator.js"></script>
+<script type="text/javascript" src="js/bookmark_bubble_activator.js"></script>
 
 </body>
 

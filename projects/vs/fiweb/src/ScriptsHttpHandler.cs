@@ -45,64 +45,88 @@ namespace webapp
                 string path = request.Path;
                 string scriptPath = WebConfigurationManager.AppSettings["scriptsPath"];
                 
-                if (scriptPath == null) 
-                    scriptPath = "https://github.com/"
-                        + "f3d3r1c0/web/tree/master/projects/vs/fiweb/js";
+                if (scriptPath == null)
+                {   
+                    FileInfo file = new FileInfo(
+                        Path.GetFullPath(context.Server.MapPath(path)));
 
-                if (!scriptPath.EndsWith("/")) scriptPath += "/";
-                scriptPath += ((path.StartsWith("/") ? path.Substring(1) : path));
-
-                WebRequest wreq = WebRequest.Create(scriptPath);
-
-                //
-                // override proxy settings if required from web.config
-                //
-                string proxyAddress = WebConfigurationManager.AppSettings["scriptsProxy"];
-                if (proxyAddress != null)
-                {
-                    string proxyUser = WebConfigurationManager.AppSettings["scriptsProxyUser"];
-                    string proxyPass = WebConfigurationManager.AppSettings["scriptsProxyPassword"];
-                    if (Logger.Enabled) Logger.Write("override system proxy: {0}:****@{1}", proxyUser, proxyAddress);
-                    WebProxy ovverideProxy = new WebProxy();                    
-                    ovverideProxy = (WebProxy)wreq.Proxy;                    
-                    Uri newUri = new Uri(proxyAddress);                    
-                    ovverideProxy.Address = newUri;                    
-                    ovverideProxy.Credentials = new NetworkCredential(proxyUser, proxyPass);
-                    wreq.Proxy = ovverideProxy;
+                    if (file.Exists)
+                    {
+                        StreamReader reader = new StreamReader(file.FullName);
+                        string responseFromServer = reader.ReadToEnd();
+                        response.ContentType = mimeHelper(path);
+                        response.Write(responseFromServer);
+                        response.StatusCode = 200;
+                        response.Flush();
+                        reader.Close();                        
+                    }
+                    else
+                    {                        
+                        response.StatusCode = 404;
+                        response.StatusDescription = "Not Found";
+                        FormatUtils.ReplyJSon(response);
+                    }
+                    
                 }
+                else 
+                {                    
+                    if (!scriptPath.EndsWith("/")) scriptPath += "/";
+                    scriptPath += ((path.StartsWith("/") ? path.Substring(1) : path));
 
-                wreq.Credentials = CredentialCache.DefaultCredentials;
-                HttpWebResponse wres = (HttpWebResponse)wreq.GetResponse();
+                    WebRequest wreq = WebRequest.Create(scriptPath);
 
-                if (wres.StatusCode == HttpStatusCode.OK)
-                {
-                    Stream dataStream = wres.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    string responseFromServer = reader.ReadToEnd();
-                    response.ContentType = mimeHelper(path);
-                    response.Write(responseFromServer);
-                    response.StatusCode = 200;
-                    response.Flush();
-                    reader.Close();
-                    dataStream.Close();
+                    //
+                    // override proxy settings if required from web.config
+                    //
+                    string proxyAddress = WebConfigurationManager.AppSettings["scriptsProxy"];
+                    if (proxyAddress != null)
+                    {
+                        string proxyUser = WebConfigurationManager.AppSettings["scriptsProxyUser"];
+                        string proxyPass = WebConfigurationManager.AppSettings["scriptsProxyPassword"];
+                        if (Logger.Enabled) Logger.Write("override system proxy: {0}:****@{1}", proxyUser, proxyAddress);
+                        WebProxy ovverideProxy = new WebProxy();
+                        ovverideProxy = (WebProxy)wreq.Proxy;
+                        Uri newUri = new Uri(proxyAddress);
+                        ovverideProxy.Address = newUri;
+                        ovverideProxy.Credentials = new NetworkCredential(proxyUser, proxyPass);
+                        wreq.Proxy = ovverideProxy;
+                    }
+
+                    wreq.Credentials = CredentialCache.DefaultCredentials;
+                    HttpWebResponse wres = (HttpWebResponse)wreq.GetResponse();
+
+                    if (wres.StatusCode == HttpStatusCode.OK)
+                    {
+                        Stream dataStream = wres.GetResponseStream();
+                        StreamReader reader = new StreamReader(dataStream);
+                        string responseFromServer = reader.ReadToEnd();
+                        response.ContentType = mimeHelper(path);
+                        response.Write(responseFromServer);
+                        response.StatusCode = 200;
+                        response.Flush();
+                        reader.Close();
+                        dataStream.Close();
+                    }
+                    else
+                    {
+                        int code = 500;
+                        Int32.TryParse(wres.StatusCode.ToString(), out code);
+                        response.StatusCode = code;
+                        response.StatusDescription = wres.StatusDescription;
+                        FormatUtils.ReplyJSon(response);
+                    }
+
+                    wres.Close();
                 }
-                else
-                {
-                    int code = 500;
-                    Int32.TryParse(wres.StatusCode.ToString(), out code);
-                    response.StatusCode = code;
-                    response.StatusDescription = wres.StatusDescription;
-                    FormatUtils.ReplyJSon(response);
-                }
-
-                wres.Close();
+                
+                
 
 
             }
-            catch 
+            catch (Exception e)
             {
-                response.StatusCode = 404;
-                response.StatusDescription = "Not Found";
+                response.StatusCode = 500;
+                response.StatusDescription = "Server Error - " + e.Message;
                 FormatUtils.ReplyJSon(response);
             }
 
