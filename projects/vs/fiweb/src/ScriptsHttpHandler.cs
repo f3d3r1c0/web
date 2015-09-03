@@ -6,6 +6,7 @@ using System.Web.Configuration;
 using System.Net;
 using System.IO;
 using Microsoft.Win32;
+using System.Globalization;
 
 namespace webapp
 {
@@ -92,11 +93,15 @@ namespace webapp
                         wreq.Proxy = ovverideProxy;
                     }
 
+                    //
+                    // create script request
+                    //
+
                     wreq.Credentials = CredentialCache.DefaultCredentials;
                     HttpWebResponse wres = (HttpWebResponse)wreq.GetResponse();
 
                     if (wres.StatusCode == HttpStatusCode.OK)
-                    {
+                    {   
                         Stream dataStream = wres.GetResponseStream();
                         StreamReader reader = new StreamReader(dataStream);
                         string responseFromServer = reader.ReadToEnd();
@@ -119,9 +124,6 @@ namespace webapp
                     wres.Close();
                 }
                 
-                
-
-
             }
             catch (Exception e)
             {
