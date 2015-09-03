@@ -26,6 +26,9 @@ namespace webapp
             HttpRequest request = context.Request;
             HttpResponse response = context.Response;
 
+            //if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod,
+            //    request.Path, request.UserHostAddress, request.UserAgent);
+
             //
             // read configuration from web config
             //
@@ -70,12 +73,6 @@ namespace webapp
 
             if (!Path.IsPathRooted(mailBody))
                 mailBody = Path.GetFullPath(context.Server.MapPath(".") + mailBody);
-            
-            if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", 
-                    request.HttpMethod,
-                    request.Path, 
-                    request.UserHostAddress, 
-                    request.UserAgent);
             
             //
             // read request parameters

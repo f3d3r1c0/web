@@ -23,8 +23,8 @@ namespace webapp
             HttpRequest request = context.Request;
             HttpResponse response = context.Response;
 
-            if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod,
-                request.Path, request.UserHostAddress, request.UserAgent);
+            //if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod,
+            //    request.Path, request.UserHostAddress, request.UserAgent);
 
             string aic = (request.Params["aic"] != null ? 
                 request.Params["aic"] : request.QueryString["aic"]);

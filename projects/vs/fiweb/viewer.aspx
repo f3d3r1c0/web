@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="VB" %>
-<%    
-    Dim id As String, base As String
+<%     
     If Not Request.Params("id") Is Nothing Then
         id = Request.Params("id")
     ElseIf Not Request.QueryString("id") Is Nothing Then
@@ -8,7 +7,6 @@
     Else
         Response.Redirect("search.aspx", True)
     End If
-    base = "js"
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,12 +19,12 @@
     
 	<title>Visualizza foglietto illustrativo</title>
 
-	<link rel="stylesheet" type="text/css" href="<%= base %>/jquery.css" />
-	<link rel="stylesheet" type="text/css" href="<%= base %>/bookblock.css" />
-	<link rel="stylesheet" type="text/css" href="<%= base %>/custom.css" />
+	<link rel="stylesheet" type="text/css" href="jquery.css" />
+	<link rel="stylesheet" type="text/css" href="bookblock.css" />
+	<link rel="stylesheet" type="text/css" href="custom.css" />
 
-	<script type="text/javascript" src="<%= base %>/ga.js"></script>
-	<script type="text/javascript" src="<%= base %>/modernizr.js"></script>	
+	<script type="text/javascript" src="ga.js"></script>
+	<script type="text/javascript" src="modernizr.js"></script>	
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
@@ -67,16 +65,16 @@
 				
 		</div>	<!-- container -->
 
-		<script type="text/javascript" src="<%= base %>/jquery_003.js"></script>
-		<script type="text/javascript" src="<%= base %>/jquery_004.js"></script>
-		<script type="text/javascript" src="<%= base %>/jquery_002.js"></script>
-		<script type="text/javascript" src="<%= base %>/jquerypp.js"></script>
-		<script type="text/javascript" src="<%= base %>/jquery.js"></script>
+		<script type="text/javascript" src="jquery_003.js"></script>
+		<script type="text/javascript" src="jquery_004.js"></script>
+		<script type="text/javascript" src="jquery_002.js"></script>
+		<script type="text/javascript" src="jquerypp.js"></script>
+		<script type="text/javascript" src="jquery.js"></script>
         
         <script type="text/javascript">
             var _pageurl = 'pages/<%= id %>';
         </script>
-        <script type="text/javascript" src="<%= base %>/viewer.aspx.js"></script>                       
+        <script type="text/javascript" src="viewer.aspx.js"></script>                       
             
 	</body>
 

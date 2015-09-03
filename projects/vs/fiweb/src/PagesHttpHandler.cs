@@ -23,10 +23,10 @@ namespace webapp
             HttpRequest request = context.Request;
             HttpResponse response = context.Response;
 
-            ITextUtils utils = new ITextUtils();            
+            //if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod,
+            //    request.Path, request.UserHostAddress, request.UserAgent);
 
-            if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod, 
-                request.Path, request.UserHostAddress, request.UserAgent);
+            ITextUtils utils = new ITextUtils();            
 
             string documentRoot = WebConfigurationManager.AppSettings["documentRoot"];
             if (!Path.IsPathRooted(documentRoot)) 

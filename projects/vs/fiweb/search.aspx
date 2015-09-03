@@ -1,20 +1,15 @@
 <%@ Page Language="VB" %>
-<%    
-    Dim base As String
-    base = "js"
-%>
 <!DOCTYPE html>
 <html lang="en">	
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>Ricerca Foglietto Illustrativo</title>
-    
-	<link rel="stylesheet" href="<%= base %>/jquery.mobile-1.4.5.min.css"/>
-    <script type="text/javascript" src="<%= base %>/jquery-1.11.3.min.js"></script>
-	<script type="text/javascript" src="<%= base %>/jquery.mobile-1.4.5.min.js"></script>
-    <script type="text/javascript" src="<%= base %>/search.aspx.js"></script>	
+	<title>Ricerca Foglietto Illustrativo</title>    
+	<link rel="stylesheet" href="jquery.mobile-1.4.5.min.css"/>
+    <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="search.aspx.js"></script>	
     <link rel="apple-touch-icon-precomposed" href="images/farmadati-apple-icon.png" />
-    <script type="text/javascript" src="<%= base %>/bookmark_bubble.js"></script>
+    <script type="text/javascript" src="bookmark_bubble.js"></script>
     
 </head>
 
@@ -66,7 +61,7 @@
     
 </center>
 
-<script type="text/javascript" src="<%= base %>/bookmark_bubble_activator.js"></script>
+<script type="text/javascript" src="bookmark_bubble_activator.js"></script>
 
 </body>
 
