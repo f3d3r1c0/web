@@ -11,6 +11,10 @@ namespace webapp
 {
     public class MailHttpHandler : IHttpHandler
     {
+        static object transaction_lock = "";
+        static Int32 transaction_counter = 0;
+        static Random rnd = new Random(-84612123);
+
         public MailHttpHandler()
         {
             Logger.Write("creating new instance of MailHttpHandler");
@@ -21,6 +25,17 @@ namespace webapp
             get { return true; }
         }
 
+        private string generateId()
+        {
+            lock (transaction_lock)
+            {
+                transaction_counter ++;
+                transaction_counter %= 1000000000;
+                return String.Format("{0:D9}-{1:D9}", rnd.Next(1000000000), transaction_counter);
+            }
+            
+        }
+
         public void ProcessRequest(HttpContext context)
         {
             HttpRequest request = context.Request;
@@ -28,6 +43,8 @@ namespace webapp
 
             //if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod,
             //    request.Path, request.UserHostAddress, request.UserAgent);
+
+            string transactionID = generateId();
 
             //
             // read configuration from web config
@@ -51,7 +68,7 @@ namespace webapp
                         request.UserHostAddress, request.UserAgent);
                 response.StatusCode = 403;
                 response.StatusDescription = "Forbidden";
-                FormatUtils.ReplyJSon(response);
+                FormatUtils.ReplyJSon(response, "id", transactionID);
                 response.Flush();
                 return;
             }
@@ -125,7 +142,7 @@ namespace webapp
                 if (Logger.Enabled) Logger.Write("Bad request, missing required fields: {0}", badreqFields);
                 response.StatusCode = 400;
                 response.StatusDescription = "Bad request";
-                FormatUtils.ReplyJSon(response);
+                FormatUtils.ReplyJSon(response, "id", transactionID);
                 response.Flush();
                 return;
             }
@@ -186,7 +203,7 @@ namespace webapp
 
                 response.StatusCode = 200;
                 response.StatusDescription = "OK";
-                FormatUtils.ReplyJSon(response);
+                FormatUtils.ReplyJSon(response, "id", transactionID);
                 response.Flush();
                 
             }
@@ -195,7 +212,7 @@ namespace webapp
                 if (Logger.Enabled) Logger.Write("MailHttpHandler error - {0}", e);
                 response.StatusCode = 500;
                 response.StatusDescription = "Server Error - " + e.Message;
-                FormatUtils.ReplyJSon(response);
+                FormatUtils.ReplyJSon(response, "id", transactionID);
                 response.Flush();
                 
             }

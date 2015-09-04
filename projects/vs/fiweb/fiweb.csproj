@@ -92,12 +92,10 @@
     <Content Include="samples\png\F0002111[3].png" />
     <Content Include="samples\png\F0002111[4].png" />
     <Content Include="search.aspx" />
-    <Content Include="search.html" />
     <Content Include="tester\sources\watermark.png" />
     <Content Include="viewer.aspx" />
     <None Include="libs\itextsharp.dll" />
     <Content Include="mailbody.html" />
-    <Content Include="viewer.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

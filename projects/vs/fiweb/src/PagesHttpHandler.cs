@@ -120,12 +120,18 @@ namespace webapp
                     outfile += @"\";
                     outfile += f_id + "[" + page + "]." + ext;
 
+                    bool nocache = (request.Params["nocache"] != null 
+                        && request.Params["nocache"].ToLower().Equals("true"));
+                    if (!nocache)
+                        nocache = (request.QueryString["nocache"] != null
+                        && request.QueryString["nocache"].ToLower().Equals("true"));
+                    
                     FileInfo f = new FileInfo(outfile);
                     bool cached = (f.Exists ? (
-                        (f.LastWriteTime.ToFileTime() > pdfInf.LastWriteTime.ToFileTime())
-                        ): false);
-
-                    if (!cached)
+                            (f.LastWriteTime.ToFileTime() > pdfInf.LastWriteTime.ToFileTime())
+                            ) : false);
+                    
+                    if (!nocache && !cached)
                     {
                         GhostscriptWrapper wrapper = new GhostscriptWrapper();
                         wrapper.Options = addiionalOptions;

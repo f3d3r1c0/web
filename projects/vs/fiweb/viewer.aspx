@@ -1,13 +1,10 @@
 ﻿<%@ Page Language="VB" %>
 <%  
-    Dim id As String
+    
     Dim scpath As String
-    scpath = System.Web.Configuration.WebConfigurationManager.AppSettings("scriptsPath")
-    If scpath Is Nothing Then
-        scpath = ""
-    ElseIf Not scpath.EndsWith("/") Then
-        scpath += "/"
-    End If
+    scpath = webapp.FormatUtils.BasePath
+    
+    Dim id As String
     
     If Not Request.Params("id") Is Nothing Then
         id = Request.Params("id")

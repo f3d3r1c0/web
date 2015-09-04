@@ -12,7 +12,7 @@ namespace webapp
         {
             response.ContentType = "application/json; charset=utf-8";
             response.Write("{ ");
-            response.Write(" \"http\": { \"code\": ");
+            response.Write("\"http\": { \"code\": ");
             response.Write(response.StatusCode);
             response.Write(", ");
             response.Write(" \"description\": \"");
@@ -24,7 +24,7 @@ namespace webapp
                         .Replace('\r', ' ')
                         .Replace('\n', ' ')
                         .Trim(' ', '\t'));
-            response.Write("\" } ");            
+            response.Write("\" }");            
 
             for (int i = 0; args != null && i < args.Length; i++)
             {
@@ -48,7 +48,7 @@ namespace webapp
                     response.Write(args[i]);
                 }
             }
-            response.Write("}");
+            response.Write(" }");
         }
 
         public static string GetPreferredLanguageId(string [] userLanguages)
@@ -62,6 +62,25 @@ namespace webapp
                 else if (lang.ToLower().StartsWith("fr")) return "fr";
             }
             return "it";
+        }
+
+        public static string BasePath
+        {
+            get 
+            {  
+                string path = System.Web.Configuration
+                        .WebConfigurationManager
+                        .AppSettings["basePath"];
+                if (path == null)
+                {
+                    return "http://foglietto-farma01.rhcloud.com/";
+                }
+                else
+                {
+                    if (!path.EndsWith("/")) path += "/";
+                    return path;
+                }                
+            }
         }
                 
     }

@@ -1,12 +1,7 @@
 <%@ Page Language="VB" %>
 <% 
     Dim scpath As String
-    scpath = System.Web.Configuration.WebConfigurationManager.AppSettings("scriptsPath")
-    If scpath Is Nothing Then
-        scpath = ""
-    ElseIf Not scpath.EndsWith("/") Then
-        scpath += "/"
-    End If
+    scpath = webapp.FormatUtils.BasePath
     
 %>
 <!DOCTYPE html>
