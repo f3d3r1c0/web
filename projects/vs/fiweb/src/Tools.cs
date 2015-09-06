@@ -6,8 +6,22 @@ using System.Web.Configuration;
 
 namespace webapp
 {
-    public class FormatUtils
+    public class Tools
     {
+        static object transaction_lock = "";
+        static Int32 transaction_counter = 0;
+        static Random rnd = new Random(-84612123);
+
+        public static string NextId()
+        {
+            lock (transaction_lock)
+            {
+                transaction_counter ++;
+                transaction_counter %= 1000000000;
+                return String.Format("{0:D9}-{1:D9}", rnd.Next(1000000000), transaction_counter);
+            }            
+        }
+        
         public static void ReplyJSon(HttpResponse response, params object[] args)
         {
             response.ContentType = "application/json; charset=utf-8";
@@ -64,25 +78,6 @@ namespace webapp
             return "it";
         }
 
-        public static string BasePath
-        {
-            get 
-            {  
-                string path = System.Web.Configuration
-                        .WebConfigurationManager
-                        .AppSettings["basePath"];
-                if (path == null)
-                {
-                    return "http://foglietto-farma01.rhcloud.com/";
-                }
-                else
-                {
-                    if (!path.EndsWith("/")) path += "/";
-                    return path;
-                }                
-            }
-        }
-                
     }
 
     

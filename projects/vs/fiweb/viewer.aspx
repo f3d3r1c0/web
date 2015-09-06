@@ -1,9 +1,5 @@
-﻿<%@ Page Language="VB" %>
-<%  
-    
-    Dim scpath As String
-    scpath = webapp.FormatUtils.BasePath
-    
+﻿<%@ Page Language="VB" EnableSessionState="False" %>
+<%   
     Dim id As String
     
     If Not Request.Params("id") Is Nothing Then
@@ -26,12 +22,12 @@
     
 	<title>Visualizza foglietto illustrativo</title>
 
-	<link rel="stylesheet" type="text/css" href="<%= scpath %>js/jquery.css" />
-	<link rel="stylesheet" type="text/css" href="<%= scpath %>js/bookblock.css" />
-	<link rel="stylesheet" type="text/css" href="<%= scpath %>js/custom.css" />
+	<link rel="stylesheet" type="text/css" href="js/jquery.css" />
+	<link rel="stylesheet" type="text/css" href="js/bookblock.css" />
+	<link rel="stylesheet" type="text/css" href="js/custom.css" />
 
-	<script type="text/javascript" src="<%= scpath %>js/ga.js"></script>
-	<script type="text/javascript" src="<%= scpath %>js/modernizr.js"></script>	
+	<script type="text/javascript" src="js/ga.js"></script>
+	<script type="text/javascript" src="js/modernizr.js"></script>	
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
@@ -72,16 +68,16 @@
 				
 		</div>	<!-- container -->
 
-		<script type="text/javascript" src="<%= scpath %>js/jquery_003.js"></script>
-		<script type="text/javascript" src="<%= scpath %>js/jquery_004.js"></script>
-		<script type="text/javascript" src="<%= scpath %>js/jquery_002.js"></script>
-		<script type="text/javascript" src="<%= scpath %>js/jquerypp.js"></script>
-		<script type="text/javascript" src="<%= scpath %>js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery_003.js"></script>
+		<script type="text/javascript" src="js/jquery_004.js"></script>
+		<script type="text/javascript" src="js/jquery_002.js"></script>
+		<script type="text/javascript" src="js/jquerypp.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
         
         <script type="text/javascript">
             var _pageurl = 'pages/<%= id %>';
         </script>
-        <script type="text/javascript" src="<%= scpath %>js/viewer.aspx.js"></script>                       
+        <script type="text/javascript" src="js/viewer.aspx.js"></script>                       
             
 	</body>
 

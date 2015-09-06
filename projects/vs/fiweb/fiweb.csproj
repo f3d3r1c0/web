@@ -105,7 +105,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="src\DocumentHttpHandler.cs" />
-    <Compile Include="src\FormatUtils.cs" />
+    <Compile Include="src\Tools.cs" />
     <Compile Include="src\GhostscriptWrapper.cs" />
     <Compile Include="src\ITextUtils.cs" />
     <Compile Include="src\Logger.cs" />

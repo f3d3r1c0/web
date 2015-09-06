@@ -10,7 +10,7 @@ namespace webapp
     {
         public PagesHttpHandler()
         {
-            if (Logger.Enabled) Logger.Write("creating new instance of PagesHttpHandler ...");            
+            //if (Logger.Enabled) Logger.Write("creating new instance of PagesHttpHandler ...");            
         }
 
         public bool IsReusable
@@ -61,7 +61,7 @@ namespace webapp
                     if (Logger.Enabled) Logger.Write("file {0} not found", pdf);
                     response.StatusCode = 404;
                     response.StatusDescription = "Not Found";
-                    FormatUtils.ReplyJSon(response);
+                    Tools.ReplyJSon(response);
                     response.Flush();
                     return;
                 }
@@ -76,7 +76,7 @@ namespace webapp
                 if (page == -1)
                 {
                     response.StatusCode = 200;
-                    FormatUtils.ReplyJSon(response, "id", f_id, "pages", utils.GetNumberOfPdfPages(pdf));                    
+                    Tools.ReplyJSon(response, "id", f_id, "pages", utils.GetNumberOfPdfPages(pdf));                    
                     response.Flush();
                 }
                 else
@@ -102,7 +102,7 @@ namespace webapp
                                 "from this Application Pool - details: {1}", outdir, e);
                             response.StatusCode = 403;
                             response.StatusDescription = "Forbidden";
-                            FormatUtils.ReplyJSon(response);
+                            Tools.ReplyJSon(response);
                             response.Flush();
                             return;
                         }
@@ -113,38 +113,60 @@ namespace webapp
                     if (ext == null) ext = "png";
                     if (ext.StartsWith(".")) ext = ext.Substring(1);
 
-                    string addiionalOptions = request.Params["gsopts"];
-                    if (addiionalOptions == null) addiionalOptions = request.QueryString["gsopts"];
-                    if (addiionalOptions == null) addiionalOptions = "";
-                    
+                    string command = request.Params["gsopts"];
+                    if (command == null) command = request.QueryString["gsopts"];
+                    if (command == null) command = "";
+
+                    int timeout = -1;
+
+                    if (request.Params["timeout"] != null)
+                    {
+                        int.TryParse(request.Params["timeout"], out timeout);
+                    }
+                    else if (request.QueryString["timeout"] != null)
+                    {
+                        int.TryParse(request.QueryString["timeout"], out timeout);
+                    }
+                                        
                     outfile += @"\";
                     outfile += f_id + "[" + page + "]." + ext;
-
-                    bool nocache = (request.Params["nocache"] != null 
-                        && request.Params["nocache"].ToLower().Equals("true"));
-                    if (!nocache)
-                        nocache = (request.QueryString["nocache"] != null
-                        && request.QueryString["nocache"].ToLower().Equals("true"));
                     
-                    FileInfo f = new FileInfo(outfile);
-                    bool cached = (f.Exists ? (
-                            (f.LastWriteTime.ToFileTime() > pdfInf.LastWriteTime.ToFileTime())
-                            ) : false);
-                    
-                    if (!nocache && !cached)
+                    bool nocache = false;    
+                
+                    if (request.Params["nocache"] != null) {
+                        nocache = request.Params["nocache"].ToLower().Equals("true");
+                    }
+                    else if (request.QueryString["nocache"] != null)
                     {
-                        GhostscriptWrapper wrapper = new GhostscriptWrapper();
-                        wrapper.Options = addiionalOptions;
+                        nocache = request.QueryString["nocache"].ToLower().Equals("true");
+                    }
 
-                        if (!wrapper.ConvertPage(pdf, outfile, page))
+                    bool cached = false;
+
+                    if (!nocache)
+                    {
+                        FileInfo f = new FileInfo(outfile);
+                        cached = (f.Exists ? (
+                                (f.LastWriteTime.ToFileTime() > pdfInf.LastWriteTime.ToFileTime())
+                                ) : false);
+                    }
+                    
+                    if (!cached)
+                    {
+                        DateTime start = DateTime.Now;
+                        GhostscriptWrapper wrapper = new GhostscriptWrapper();
+
+                        if (!wrapper.ConvertPage(command, pdf, outfile, timeout))
                         {
                             if (wrapper.IsGhostscriptInstalled)
                             {
-                                if (Logger.Enabled) Logger.Write("error: conversion failure from {0} to {1}[{2}]",
-                                    pdf, outfile, page);
+                                if (Logger.Enabled)
+                                    Logger.Write(
+                                        "error: conversion failure from {0} to {1}[{2}]",
+                                            pdf, outfile, page);
                                 response.StatusCode = 500;
                                 response.StatusDescription = "Server Error";
-                                FormatUtils.ReplyJSon(response);
+                                Tools.ReplyJSon(response);
                                 response.Flush();
                             }
                             else
@@ -154,10 +176,19 @@ namespace webapp
                                     pdf, outfile, page);
                                 response.StatusCode = 503;
                                 response.StatusDescription = "Service Unavailable";
-                                FormatUtils.ReplyJSon(response);
+                                Tools.ReplyJSon(response);
                                 response.Flush();
                             }
                             return;
+                        }
+                        else
+                        {
+                            if (Logger.Enabled) 
+                                Logger.Write(
+                                    "conversion from {0} ({1}Kb) to {2} ({3}Kb) in {4:F2}\"",
+                                    Path.GetFileName(pdf), (new FileInfo(pdf).Length / 1024),
+                                    Path.GetFileName(outfile), (new FileInfo(outfile).Length / 1024),
+                                    (((TimeSpan)(DateTime.Now - start)).TotalMilliseconds / 1000));
                         }
                     }
 
@@ -173,7 +204,7 @@ namespace webapp
                 Logger.Write("PagesHandler exception {0}", e);
                 response.StatusCode = 500;
                 response.StatusDescription = "SERVER ERROR - " + e.Message;
-                FormatUtils.ReplyJSon(response);
+                Tools.ReplyJSon(response);
                 response.Flush();
             }
 

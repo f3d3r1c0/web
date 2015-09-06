@@ -30,7 +30,7 @@ namespace webapp
                 {
                     _path = value;
                     DirectoryInfo dir = new DirectoryInfo(Path.GetDirectoryName(_path));
-                    if (!dir.Exists) Directory.CreateDirectory(_path);
+                    if (!dir.Exists) Directory.CreateDirectory(Path.GetDirectoryName(_path));
                 }
             }
         }

@@ -10,7 +10,7 @@ namespace webapp
     {
         public DocumentHttpHandler()
         {
-            if (Logger.Enabled) Logger.Write("creating new instance of DocumentHttpHandler ...");
+            //if (Logger.Enabled) Logger.Write("creating new instance of DocumentHttpHandler ...");
         }
 
         public bool IsReusable
@@ -37,7 +37,7 @@ namespace webapp
                     lang = WebConfigurationManager.AppSettings["defaultLanguage"];
                 
                 if (lang == null || lang.ToLower().Equals("auto")) 
-                    lang = FormatUtils.GetPreferredLanguageId(request.UserLanguages);
+                    lang = Tools.GetPreferredLanguageId(request.UserLanguages);
                 
                 if (lang == null) 
                     lang = "it";
@@ -57,7 +57,7 @@ namespace webapp
             {
                 response.StatusCode = 400;
                 response.StatusDescription = "Bad Request";
-                FormatUtils.ReplyJSon(response);
+                Tools.ReplyJSon(response);
             }
 
         }

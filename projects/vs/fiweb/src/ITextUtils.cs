@@ -16,12 +16,14 @@ namespace webapp
             PdfReader reader = null;
             try
             {
+                if (!new FileInfo(pdfinput).Exists) return -1;
                 reader = new PdfReader(pdfinput);
                 return reader.NumberOfPages;
             }
-            catch
+            catch(Exception e)
             {
-                return -1;
+                if (Logger.Enabled) Logger.Write("PdfReader Error: {0}", e);
+                return -2;
             }
             finally
             {

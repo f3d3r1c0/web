@@ -10,20 +10,7 @@ namespace webapp
     {        
         static readonly string GSEXE = 
             System.Environment.Is64BitOperatingSystem ?
-                "gswin64c.exe" : "gswin32c.exe";
-
-        string opts = "-dMaxBitmap=500000000 " +                    
-		                "-dAlignToPixels=0 " +
-                        "-dGridFitTT=0 " +          
-		                "-dTextAlphaBits=4 " +
-		                "-dGraphicsAlphaBits=4 " +
-		                "-r120x120";        
-
-        public string Options
-        {
-            get { return opts; }
-            set { opts = value; }
-        }
+                "gswin64c.exe" : "gswin32c.exe";            
 
         public bool IsGhostscriptInstalled
         {
@@ -43,59 +30,52 @@ namespace webapp
                 {
                     if (Logger.Enabled) Logger.Write("exception running {0} {1} - reason: {3}",
                         p.StartInfo.FileName, p.StartInfo.Arguments, e);
-                    if (Logger.Enabled) Logger.Write("Error: Ghoscript seems to be missing in our System Path. Please " +
-                        "install Ghostscript and add it to System Environment Path before " +
-                        "running this web app !!!");
+                    if (Logger.Enabled) Logger.Write("Error: Ghoscript seems to be missing in server system path. Please " +
+                        "install Ghostscript and add it to system environment path before running this web app !!!");
                     return false;   
                 }
             }        
         }
 
-        public bool ConvertPage(string inpdf, string outpng, int page)
+        public bool ConvertPage(string gscmd, string inpdf, string outpng, int timeout = -1)
         {
             Process p = new Process();
-
+            
             try
             {
-                DateTime start = DateTime.Now;
-
                 string args = String.Format (
                         "-q -dQUIET -dPARANOIDSAFER -dBATCH -dNOPAUSE -dNOPROMPT " + 
-                            "-sDEVICE=pngalpha " +         
-                            "-dFirstPage={0} -dLastPage={0} " +
-		                    opts + " -sOutputFile=\"{1}\" " +
-                            "\"{2}\"",
-                        page, outpng, inpdf);
+                            gscmd + " -sOutputFile=\"{0}\" \"{1}\"",
+                            outpng, inpdf);
 
                 p.StartInfo.FileName = GSEXE;
                 p.StartInfo.Arguments = args;
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 p.Start();
-                p.WaitForExit();
-
-                if (p.ExitCode == 0) 
+                if (timeout > 250)
                 {
-                    if (Logger.Enabled) Logger.Write("conversion success := {0} ({1}Kb) => {2}({3}Kb) in {4} ms",                        
-                        Path.GetFileName(inpdf), (new FileInfo(inpdf).Length / 1024), 
-                        Path.GetFileName(outpng), (new FileInfo(outpng).Length / 1024), 
-                        ((TimeSpan)(DateTime.Now - start)).TotalMilliseconds);
-                    return true;
+                    p.WaitForExit(timeout);
+                    if (!p.HasExited)
+                    {
+                        p.Kill();
+                        throw new Exception("conversion failure: ghostscript process timed out!");
+                    }
                 }
                 else 
                 {
-                    Logger.Write("conversion failure := exit code {0} , command {1} {2}",
-                        p.ExitCode, p.StartInfo.FileName, p.StartInfo.Arguments);
-                    return false;
-                }                
+                    p.WaitForExit();
+                }
+
+                return (p.ExitCode == 0);
                 
             }
             catch (Exception e)
             {
-                Logger.Write("exception running {0} {1} - reason: {3}",
+                Logger.Write("exception running gostscript {0} {1} - reason: {3}",
                     p.StartInfo.FileName, p.StartInfo.Arguments, e);
                 return false;   
             }
-        
+
         }
 
     }
