@@ -6,6 +6,6 @@
 <html lang="en">
 <head></head>
 <body>
-moving ...		
+moving to http://webservices-farmadati.dyndns.ws/FarmastampatiMobi/search.aspx ...
 </body>
 </html>

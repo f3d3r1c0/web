@@ -1,4 +1,9 @@
 <%@ Page Language="VB" %>
+<%
+    Dim searchField As String
+    searchField = System.Web.Configuration.WebConfigurationManager.AppSettings("searchField")
+    If searchField Is Nothing Then searchField = "aic"
+    %>
 <!DOCTYPE html>
 <html lang="en">	
 <head>
@@ -28,13 +33,13 @@
 
     <form id="form" data-ajax="false" method="POST" action="document" onsubmit="return validate(this)">
     	<table>
-	    	<tr>
+            <tr>
 				<td align="center">Inserisci il Codice AIC</td>			
 			</tr>
 			<tr>
-				<td><input name="aic" type="text" maxsize="10" size="10"/></td>
-			</tr>
-			<tr>                
+				<td><input name="<%= searchField %>" type="text" maxlength="10" size="10"/></td>
+			</tr>	    	            
+            <tr>                
 				<td><input id="submit" type="submit" value="cerca" /></td>
 			</tr>
 		</table>    
@@ -45,10 +50,19 @@
 	<div id="showaic">
 		<i style="font-size: small;">
             Il codice AIC lo trovi nella<br/>
-            scatola del medicinale come nella figura di esempio:
+            scatola del medicinale
+            <br />
+            <a href="#aicPopup" data-rel="popup" data-transition="flip">            
+                Clicca qui per vedere un esempio
+            </a>
         </i>
+
         <br />
-		<img style="border: 0px; width: 400px;" alt="Codiice Agenzia Italiana del Farmaco" src="images/aicsample.jpg"/>
+        		
+        <div data-role="popup" id="aicPopup" class="ui-content">
+            <img style="border: 0px; width: 400px;" alt="Codiice Agenzia Italiana del Farmaco" src="images/aicsample.jpg"/>
+        </div>
+
 	</div>
 
     <div data-role="main" class="ui-content">

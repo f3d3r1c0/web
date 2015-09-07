@@ -5,12 +5,12 @@ using System.IO;
 using System.Web.Configuration;
 
 namespace webapp
-{    
+{
     public class PagesHttpHandler : IHttpHandler
     {
         public PagesHttpHandler()
         {
-            //if (Logger.Enabled) Logger.Write("creating new instance of PagesHttpHandler ...");            
+            //if (Logger.Enabled) Logger.Write("creating new instance of PagesHttpHandler ...");                 
         }
 
         public bool IsReusable
@@ -26,33 +26,34 @@ namespace webapp
             //if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod,
             //    request.Path, request.UserHostAddress, request.UserAgent);
 
-            ITextUtils utils = new ITextUtils();            
+            ITextUtils utils = new ITextUtils();
 
             string documentRoot = WebConfigurationManager.AppSettings["documentRoot"];
-            if (!Path.IsPathRooted(documentRoot)) 
+            if (!Path.IsPathRooted(documentRoot))
                 documentRoot = Path.GetFullPath(context.Server.MapPath("..") + documentRoot);
             if (!documentRoot.EndsWith(@"\")) documentRoot += @"\";
-            
+
             string outputPath = WebConfigurationManager.AppSettings["outputPath"];
             if (!Path.IsPathRooted(outputPath))
-                outputPath = Path.GetFullPath(context.Server.MapPath("..") + outputPath);            
+                outputPath = Path.GetFullPath(context.Server.MapPath("..") + outputPath);
             if (!outputPath.EndsWith(@"\")) outputPath += @"\";
 
             try
-            {  
+            {
                 int n = request.Path.IndexOf("/pages/");
                 n += 7;
 
                 string f_id = request.Path.Substring(n);
-                if (!f_id.StartsWith("F"))
-                {
-                    f_id = String.Format("F{0:D7}",
-                        Int32.Parse(f_id));
-                }
+
+                string s_id = f_id.ToLower();
+                if (s_id.EndsWith(".pdf")) s_id = s_id.Substring(0, s_id.Length - 4);
+                if (s_id.StartsWith("f")) s_id = s_id.Substring(1);
+
+                f_id = String.Format("F{0:D7}", Int32.Parse(s_id));
 
                 string pdf = documentRoot;
                 pdf += f_id;
-                pdf += ".pdf";
+                if (!pdf.ToLower().EndsWith(".pdf")) pdf += ".pdf";
 
                 FileInfo pdfInf = new FileInfo(pdf);
 
@@ -70,26 +71,28 @@ namespace webapp
 
                 if (request.Params["page"] != null)
                     Int32.TryParse(request.Params["page"], out page);
-                else if (request.QueryString["page"] != null) 
+                else if (request.QueryString["page"] != null)
                     Int32.TryParse(request.QueryString["page"], out page);
-                                
+
                 if (page == -1)
                 {
                     response.StatusCode = 200;
-                    Tools.ReplyJSon(response, "id", f_id, "pages", utils.GetNumberOfPdfPages(pdf));                    
+                    Tools.ReplyJSon(response, "id", f_id, "pages", utils.GetNumberOfPdfPages(pdf));
                     response.Flush();
                 }
                 else
                 {
                     string outfile = outputPath;
+
                     outfile += (Int32.Parse(
-                                    f_id.Substring(5).TrimStart('0'))
-                                    % 256)
-                        .ToString("X2")
-                        .ToUpper();                    
+                                        f_id.Substring(5).TrimStart('0'))
+                                        % 256)
+                            .ToString("X2")
+                            .ToUpper();
+
                     DirectoryInfo outdir = new DirectoryInfo(outfile);
 
-                    if (!outdir.Exists) 
+                    if (!outdir.Exists)
                     {
                         try
                         {
@@ -98,7 +101,7 @@ namespace webapp
                         catch (Exception e)
                         {
                             Logger.Write("Error: web app does not have wrtie access rigth to {0}, " +
-                                "please modify directory permissions to make directory writable " + 
+                                "please modify directory permissions to make directory writable " +
                                 "from this Application Pool - details: {1}", outdir, e);
                             response.StatusCode = 403;
                             response.StatusDescription = "Forbidden";
@@ -127,13 +130,14 @@ namespace webapp
                     {
                         int.TryParse(request.QueryString["timeout"], out timeout);
                     }
-                                        
+
                     outfile += @"\";
                     outfile += f_id + "[" + page + "]." + ext;
-                    
-                    bool nocache = false;    
-                
-                    if (request.Params["nocache"] != null) {
+
+                    bool nocache = false;
+
+                    if (request.Params["nocache"] != null)
+                    {
                         nocache = request.Params["nocache"].ToLower().Equals("true");
                     }
                     else if (request.QueryString["nocache"] != null)
@@ -150,11 +154,16 @@ namespace webapp
                                 (f.LastWriteTime.ToFileTime() > pdfInf.LastWriteTime.ToFileTime())
                                 ) : false);
                     }
-                    
+
                     if (!cached)
                     {
                         DateTime start = DateTime.Now;
                         GhostscriptWrapper wrapper = new GhostscriptWrapper();
+
+                        if (WebConfigurationManager.AppSettings["gsPath"] != null)
+                        {
+                            wrapper.ExecutablePath = WebConfigurationManager.AppSettings["gsPath"];
+                        }
 
                         if (!wrapper.ConvertPage(command, pdf, outfile, timeout))
                         {
@@ -183,7 +192,7 @@ namespace webapp
                         }
                         else
                         {
-                            if (Logger.Enabled) 
+                            if (Logger.Enabled)
                                 Logger.Write(
                                     "conversion from {0} ({1}Kb) to {2} ({3}Kb) in {4:F2}\"",
                                     Path.GetFileName(pdf), (new FileInfo(pdf).Length / 1024),

@@ -55,6 +55,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="viewerpdf.aspx" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="images\aicsample.jpg" />
@@ -104,6 +105,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="src\PdfHttpHandler.cs" />
     <Compile Include="src\DocumentHttpHandler.cs" />
     <Compile Include="src\Tools.cs" />
     <Compile Include="src\GhostscriptWrapper.cs" />

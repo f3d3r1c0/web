@@ -8,9 +8,21 @@ namespace webapp
 {
     public class GhostscriptWrapper
     {        
-        static readonly string GSEXE = 
+        string GSEXE = 
             System.Environment.Is64BitOperatingSystem ?
-                "gswin64c.exe" : "gswin32c.exe";            
+                "gswin64c.exe" : "gswin32c.exe";
+
+        public string ExecutablePath
+        {
+            get
+            {
+                return GSEXE;
+            }
+            set
+            {
+                GSEXE = value;
+            }
+        }
 
         public bool IsGhostscriptInstalled
         {

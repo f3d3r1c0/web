@@ -6,12 +6,18 @@
 
 <configuration>
 
+  <connectionStrings>
+    <add name="farmadati"
+         connectionString="server=WINDOWS2012R2; database=DBFarmadati_WEB; user id=UserSetDati2; password=Customers1987;" />
+  </connectionStrings>
+
   <system.web>
     <compilation debug="false" targetFramework="4.0" />
     <httpHandlers>
       <add verb="*" path="document"  type="webapp.DocumentHttpHandler"/>
       <add verb="*" path="mail"  type="webapp.MailHttpHandler"/>
-      <add verb="*" path="pages/*"  type="webapp.PagesHttpHandler"/>      
+      <add verb="*" path="pages/*"  type="webapp.PagesHttpHandler"/>
+      <add verb="*" path="docs/*"  type="webapp.PdfHttpHandler"/>
     </httpHandlers>
   </system.web>
     
@@ -30,6 +36,9 @@
     
     <!-- The directory where to store png generated cache files (MANDATORY) -->
     <add key="outputPath" value="C:\Temp"/>
+
+    <!-- ghostscript path if not specified, ensure you set it into your system path -->
+    <add key="gsPath" value="C:\bin\gs9.10\gswin64c.exe"/>
     
     <!-- Log file for debug purposes
          WARNING: Comment logFile setting in production environment
@@ -44,8 +53,10 @@
          it, de, es, fr, en, auto 
          auto means detected from browser settings
          -->    
-    <add key="defaultLanguage" value="auto"/>    
-        
+    <add key="defaultLanguage" value="auto"/>
+    
+    <add key="searchRedirect" value="viewerpdf.aspx"/>
+
     <!-- 
         ////////////////////////////////////////////////////////////////////
         //        
