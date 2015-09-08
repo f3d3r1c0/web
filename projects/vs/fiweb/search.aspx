@@ -5,6 +5,7 @@
     Dim searchField As String = WebConfigurationManager.AppSettings("searchField")
     If searchField Is Nothing Then searchField = "aic"
     Dim otype As Integer = Tools.GetBrowserId(Request)
+    
     %>
 <!DOCTYPE html>
 <html lang="en">

@@ -55,8 +55,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\ajax-loader.gif" />
-    <Content Include="viewerpdf.aspx" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="images\aicsample.jpg" />
