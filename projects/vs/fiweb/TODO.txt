@@ -5,10 +5,16 @@ PRIORITARIO
 - Gestione degli errori sul form di ricerca
 
 PRORITARIO MA SUCCESSIVO
-- Aggiustare il frontend specialmente 
-  su Android non funziona bene
+- Aggiustare il frontend specialmente su Android non funziona bene
 - Aggiustare i popups di errore
+
+- tracciamento email su un file rollato 
 
 SECONDARIO
 - internazionalizzazione
+
+TERZO 
+- impedire la visualizzazione senza parametro email
+- tracciamento visualizzazioni foglietto con email associata
+
 

@@ -7,8 +7,9 @@
     Dim otype As Integer = Tools.GetBrowserId(Request)
     %>
 <!DOCTYPE html>
-<html lang="en">	
+<html lang="en">
 <head>
+
 	<% If otype = 1 Then %>
     <!-- Android -->
     <meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,height=device-height,target-densitydpi=device-dpi,user-scalable=yes" />
@@ -21,6 +22,7 @@
     <% Else %>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <% End If %>
+
 	<title>Foglietto Illustrativo</title>
 
 	<link rel="stylesheet" href="js/jquery.mobile-1.4.5.min.css"/>
@@ -34,6 +36,8 @@
     <script type="text/javascript" src="js/bookmark_bubble.js"></script>
     <script type="text/javascript" src="js/bookmark_bubble_msg_it.js"></script>
     <script type="text/javascript" src="js/bookmark_bubble_activator.js"></script>
+
+    <link rel="icon" type="image/png" href="images/farmadati-apple-icon.png">
     
 </head>
 

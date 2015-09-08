@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -73,24 +74,41 @@ namespace webapp
 
                             save_sql = command.CommandText;
 
-                            using (SqlDataReader reader = command.ExecuteReader(
-                                CommandBehavior.SingleResult /* TODO: puo' essere piu' di una lingua */
-                                        | CommandBehavior.SequentialAccess
-                                        | CommandBehavior.CloseConnection))
+                            Hashtable filesmap = new Hashtable();
+                            
+                            using (SqlDataReader reader = command.ExecuteReader())
                             {
-                                if (reader.Read())
+                                while (reader.Read())
                                 {
                                     string filename = reader.IsDBNull(0) ? "" : reader.GetString(0);
                                     string language = reader.IsDBNull(1) ? "" : reader.GetString(1);
-                                    idf = filename;
-                                    // TODO: selezionare la lingua di default ma aggiungere 
-                                    //       la possibilità di più lingue                                  
+                                    
+                                    filesmap.Add(
+                                        language, 
+                                        filename
+                                            .ToLower()
+                                            .Replace(".pdf", "")
+                                            .Replace("f", "")
+                                            .TrimStart('0'));
+
                                 }
-                                else
+
+                                if (filesmap.Count == 0)
                                 {
                                     if (Logger.Enabled)
                                         Logger.Write("No records found executing SQL > {0}", save_sql);
-                                    idf = null;
+                                }
+                                else
+                                {
+                                    // TODO: 
+                                    //      1) selezionare la lingua preferita se c'è
+                                    //      2) in caso contrario restituire la default di sistema
+                                    //      3) se non c'è neanche quella restituire il primo elemento (con warning su log)                                    
+                                    foreach (var v in filesmap.Values)
+                                    {
+                                        idf = (string)v;
+                                        break;
+                                    }                                    
                                 }
 
                                 try
@@ -139,8 +157,9 @@ namespace webapp
                     response.StatusCode = 404;
                     response.StatusDescription = "Not Found";
                 }
-
+                
                 Tools.ReplyJSon(response);
+
             }
 
         }

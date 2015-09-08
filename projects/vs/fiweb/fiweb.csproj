@@ -55,6 +55,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\ajax-loader.gif" />
     <Content Include="viewerpdf.aspx" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
@@ -63,37 +64,7 @@
     <Content Include="images\farmadati.png" />
     <Content Include="images\farmast-logo.png" />
     <Content Include="images\farmast.png" />
-    <Content Include="samples\bookmark\all\bookmark_bubble.js" />
-    <Content Include="samples\bookmark\all\bookmark_bubble_msg_fr.js" />
-    <Content Include="samples\bookmark\all\bookmark_bubble_msg_ja.js" />
-    <Content Include="samples\bookmark\all\example\example.html" />
-    <Content Include="samples\bookmark\all\example\example.js" />
-    <Content Include="samples\bookmark\all\example\images\ajax-loader.png" />
-    <Content Include="samples\bookmark\all\example\images\icons-18-black.png" />
-    <Content Include="samples\bookmark\all\example\images\icons-18-white.png" />
-    <Content Include="samples\bookmark\all\example\images\icons-36-black.png" />
-    <Content Include="samples\bookmark\all\example\images\icons-36-white.png" />
-    <Content Include="samples\bookmark\all\example\jquery.min.js" />
-    <Content Include="samples\bookmark\all\example\jquery.mobile.min.css" />
-    <Content Include="samples\bookmark\all\example\jquery.mobile.min.js" />
-    <Content Include="samples\bookmark\all\images\arrow.png" />
-    <Content Include="samples\bookmark\all\images\close.png" />
-    <Content Include="samples\bookmark\all\images\icon_calendar.png" />
-    <Content Include="samples\bookmark\all\images\icon_jqm.png" />
-    <Content Include="samples\bookmark\all\index.html" />
-    <Content Include="samples\bookmark\ios\bookmark_bubble.js" />
-    <Content Include="samples\bookmark\ios\example\example.html" />
-    <Content Include="samples\bookmark\ios\example\example.js" />
-    <Content Include="samples\bookmark\ios\images\arrow.png" />
-    <Content Include="samples\bookmark\ios\images\close.png" />
-    <Content Include="samples\bookmark\ios\images\icon_calendar.png" />
-    <Content Include="samples\giro.html" />
-    <Content Include="samples\png\F0002111[1].png" />
-    <Content Include="samples\png\F0002111[2].png" />
-    <Content Include="samples\png\F0002111[3].png" />
-    <Content Include="samples\png\F0002111[4].png" />
     <Content Include="search.aspx" />
-    <Content Include="tester\sources\watermark.png" />
     <Content Include="viewer.aspx" />
     <None Include="libs\itextsharp.dll" />
     <Content Include="mailbody.html" />
@@ -116,19 +87,7 @@
     <Compile Include="src\MailHttpHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="samples\bookmark\all\COPYING" />
-    <None Include="samples\bookmark\all\images\generate_base64_images" />
-    <None Include="samples\bookmark\ios\COPYING" />
-    <None Include="samples\bookmark\ios\images\generate_base64_images" />
-    <None Include="tester\do_conversion.cmd" />
-    <None Include="tester\do_optimize.cmd" />
-    <None Include="tester\do_watermark.cmd" />
-    <None Include="tester\gs_test.cmd" />
-    <None Include="tester\sources\F0016398.pdf" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="bin\" />
-    <Folder Include="tester\output\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

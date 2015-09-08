@@ -6,6 +6,11 @@ function popupmsg(msg)
 
 function validate(f)
 {
+	var emsg1 = "Codice AIC inserito non valido<br />"
+		+ "<ol>" 
+		+ "<li>Il codice deve essere un numero di max 9 cifre</li>"
+		+ "<li>Eventuali zeri iniziali possono essere omessi</li>"
+		+ "</ol>"; 
 
     try {
 
@@ -15,14 +20,14 @@ function validate(f)
 	    var aic = f.aic.value.trim().toUpperCase();
 
 		if (aic.length == 0) 
-            throw "Compilare il campo testo del codice aic";
+            throw "Inserire il codice AIC";
 		if (aic.length > 10) 
-            throw "Codice non valido: troppe cifre";
+            throw emsg1
 		if (aic.length == 10 && (aic.charAt(0) != 'A'))
-            throw "Codice non valido: carattere iniziale non valido";
+            throw emsg1;
 		for (var i = 0; i < 9; i++) {
 		    if ("0123456789".indexOf(aic.charAt(i)) < 0)
-		        throw "Codice non valido: carattere in posizione " + (i + 1) + " non numerico";
+		        throw emsg1;
 		}
 
 		return true;
@@ -30,7 +35,7 @@ function validate(f)
 	}
     catch (e) {
 
-		popupmsg('Dati compilati non validi!<br/>' + e);
+		popupmsg(e);
 		return false;
 
 	}
