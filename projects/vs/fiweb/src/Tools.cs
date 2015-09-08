@@ -78,6 +78,29 @@ namespace webapp
             return "it";
         }
 
+        public static int GetBrowserId(HttpRequest request)
+        {
+            string ua = request.UserAgent.ToLower();
+            if (ua.IndexOf("droid") >= 0)
+            {
+                return 1;
+            }
+            else if (ua.IndexOf("ios") >= 0
+                || ua.IndexOf("osx") >= 0
+                || ua.IndexOf("ipad") >= 0)
+            {
+                return 2;
+            }
+            else if (ua.IndexOf("chrome") >= 0)
+            {
+                return 3;
+            }
+            else 
+            { 
+                return 0;  
+            }
+        }
+
     }
 
     

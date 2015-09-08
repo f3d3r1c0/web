@@ -74,7 +74,7 @@ namespace webapp
                             save_sql = command.CommandText;
 
                             using (SqlDataReader reader = command.ExecuteReader(
-                                CommandBehavior.SingleResult
+                                CommandBehavior.SingleResult /* TODO: puo' essere piu' di una lingua */
                                         | CommandBehavior.SequentialAccess
                                         | CommandBehavior.CloseConnection))
                             {
@@ -83,7 +83,8 @@ namespace webapp
                                     string filename = reader.IsDBNull(0) ? "" : reader.GetString(0);
                                     string language = reader.IsDBNull(1) ? "" : reader.GetString(1);
                                     idf = filename;
-                                    //TODO: chemmmenefaccio del language ???                                    
+                                    // TODO: selezionare la lingua di default ma aggiungere 
+                                    //       la possibilità di più lingue                                  
                                 }
                                 else
                                 {

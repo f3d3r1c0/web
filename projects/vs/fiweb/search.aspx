@@ -1,20 +1,39 @@
 <%@ Page Language="VB" %>
+<%@ Import Namespace="System.Web.Configuration" %>
+<%@ Import Namespace="webapp" %>
 <%
-    Dim searchField As String
-    searchField = System.Web.Configuration.WebConfigurationManager.AppSettings("searchField")
+    Dim searchField As String = WebConfigurationManager.AppSettings("searchField")
     If searchField Is Nothing Then searchField = "aic"
+    Dim otype As Integer = Tools.GetBrowserId(Request)
     %>
 <!DOCTYPE html>
 <html lang="en">	
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>Ricerca Foglietto Illustrativo</title>    
+	<% If otype = 1 Then %>
+    <!-- Android -->
+    <meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,height=device-height,target-densitydpi=device-dpi,user-scalable=yes" />
+    <!-- IOS -->
+    <% ElseIf otype = 2 Then %>
+    <meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0" />
+    <!-- Chrome -->
+    <% ElseIf otype = 3 Then%>
+    <meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,user-scalable=no" />
+    <% Else %>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <% End If %>
+	<title>Foglietto Illustrativo</title>
+
 	<link rel="stylesheet" href="js/jquery.mobile-1.4.5.min.css"/>
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-    <script type="text/javascript" src="js/search.aspx.js"></script>	
+
+    <script type="text/javascript" src="js/search.aspx.js"></script>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="apple-touch-icon-precomposed" href="images/farmadati-apple-icon.png" />
     <script type="text/javascript" src="js/bookmark_bubble.js"></script>
+    <script type="text/javascript" src="js/bookmark_bubble_msg_it.js"></script>
+    <script type="text/javascript" src="js/bookmark_bubble_activator.js"></script>
     
 </head>
 

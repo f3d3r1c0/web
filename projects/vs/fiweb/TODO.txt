@@ -1,0 +1,14 @@
+PRIORITARIO 
+- Popup ios + Android >= 4
+- Pagina full screen sul collegamento
+- Combo internazionale sul visualizzatore quando AIC associato a più lingue
+- Gestione degli errori sul form di ricerca
+
+PRORITARIO MA SUCCESSIVO
+- Aggiustare il frontend specialmente 
+  su Android non funziona bene
+- Aggiustare i popups di errore
+
+SECONDARIO
+- internazionalizzazione
+

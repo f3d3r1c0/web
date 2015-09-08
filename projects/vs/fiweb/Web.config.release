@@ -17,7 +17,9 @@
       <add verb="*" path="document"  type="webapp.DocumentHttpHandler"/>
       <add verb="*" path="mail"  type="webapp.MailHttpHandler"/>
       <add verb="*" path="pages/*"  type="webapp.PagesHttpHandler"/>
+      <!--
       <add verb="*" path="docs/*"  type="webapp.PdfHttpHandler"/>
+      -->
     </httpHandlers>
   </system.web>
     
@@ -55,8 +57,6 @@
          -->    
     <add key="defaultLanguage" value="auto"/>
     
-    <add key="searchRedirect" value="viewerpdf.aspx"/>
-
     <!-- 
         ////////////////////////////////////////////////////////////////////
         //        
