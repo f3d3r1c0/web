@@ -30,36 +30,64 @@ namespace webapp
             //if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod,
             //    request.Path, request.UserHostAddress, request.UserAgent);
 
-            string idf = (request.Params["idf"] != null ?
-                request.Params["idf"] : request.QueryString["idf"]);
-
-            string aic = (request.Params["aic"] != null ?
-                request.Params["aic"] : request.QueryString["aic"]);
-
-            string connectionString = ConfigurationManager.ConnectionStrings["farmadati"].ConnectionString;
-
+            string idf = Tools.GetRequestParameter(request, "idf");
+            string aic = Tools.GetRequestParameter(request, "aic");
+            
             string save_sql = "";
             Exception save_ex = null;
 
+            string redirect = "viewer.aspx";
+            string redirect_opts = "";
+            
+            // begin parsing test string command
+            if (aic != null && aic.StartsWith("test"))
+            {
+                int count = 0;
+                string[] pz = aic.Split(' ', '\t', ',', ';');
+
+                foreach (string p in pz)
+                {
+                    if (pz.Length == 0) continue;
+                    if (count == 1) 
+                    {
+                        if (p.ToUpper().StartsWith("F")) 
+                        {
+                            idf = p;
+                            aic = null; 
+                        }
+                        else
+                        {
+                            aic = p;
+                        }
+                    }
+                    else if (count == 2) 
+                    { 
+                        redirect = "viewer" + p + ".aspx"; 
+                    }                    
+                    count++;
+                }
+
+                if (count < 2)
+                {
+                    idf = "10001";
+                    redirect_opts = "&languages=itF0015000,deF0015001,frF0015002,enF0015003,esF0015004";
+                    aic = null;
+                }
+
+            }
+            // end parsing test string command
+
+            string requestLang = Tools.GetRequestParameter(request, "language");
+
             if (aic != null)
             {
-                if (aic.StartsWith("A")) aic = aic.Substring(1);
+                if (aic.ToUpper().StartsWith("A")) aic = aic.Substring(1);
                 while (aic.Length < 9) aic = "0" + aic;
-
-                string lang = request.Params["lang"];
-
-                if (lang == null)
-                    lang = WebConfigurationManager.AppSettings["defaultLanguage"];
-
-                if (lang == null || lang.ToLower().Equals("auto"))
-                    lang = Tools.GetPreferredLanguageId(request.UserLanguages);
-
-                if (lang == null)
-                    lang = "it";
+                                
+                string connectionString = ConfigurationManager.ConnectionStrings["farmadati"].ConnectionString;
 
                 try
                 {
-
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
                         using (SqlCommand command = new SqlCommand(
@@ -75,21 +103,38 @@ namespace webapp
                             save_sql = command.CommandText;
 
                             Hashtable filesmap = new Hashtable();
-                            
+
                             using (SqlDataReader reader = command.ExecuteReader())
                             {
                                 while (reader.Read())
                                 {
                                     string filename = reader.IsDBNull(0) ? "" : reader.GetString(0);
-                                    string language = reader.IsDBNull(1) ? "" : reader.GetString(1);
-                                    
-                                    filesmap.Add(
-                                        language, 
-                                        filename
-                                            .ToLower()
-                                            .Replace(".pdf", "")
-                                            .Replace("f", "")
-                                            .TrimStart('0'));
+                                    string language = reader.IsDBNull(1) ? "" : reader.GetString(1).ToLower();
+
+                                    if (language.StartsWith("it")) language = "it";
+                                    else if (language.StartsWith("es")) language = "es";
+                                    else if (language.StartsWith("en")) language = "en";
+                                    else if (language.StartsWith("de")) language = "de";
+                                    else if (language.StartsWith("fr")) language = "fr";
+                                    else if (language.StartsWith("us")) language = "en";
+
+                                    if (filesmap.ContainsKey(language))
+                                    {
+                                        if (Logger.Enabled)
+                                            Logger.Write("Warning: duplicate language found for AIC {0} " +
+                                                "- language: {1}, filename: {2}",
+                                                aic, language, filename);
+                                    }
+                                    else
+                                    {
+                                        filesmap.Add(
+                                            language,
+                                            filename
+                                                .ToLower()
+                                                .Replace(".pdf", "")
+                                                .Replace("f", "")
+                                                .TrimStart('0'));
+                                    }
 
                                 }
 
@@ -99,16 +144,51 @@ namespace webapp
                                         Logger.Write("No records found executing SQL > {0}", save_sql);
                                 }
                                 else
-                                {
-                                    // TODO: 
-                                    //      1) selezionare la lingua preferita se c'è
-                                    //      2) in caso contrario restituire la default di sistema
-                                    //      3) se non c'è neanche quella restituire il primo elemento (con warning su log)                                    
-                                    foreach (var v in filesmap.Values)
+                                {   
+                                    string[] browserLang = request.UserLanguages;
+
+                                    idf = null;
+
+                                    if (requestLang != null)
+                                    {                                        
+                                        idf = (string)filesmap[requestLang.Substring(0, 2).ToLower()];
+                                    }
+
+                                    // get first browser language matching 
+                                    if (idf == null)
                                     {
-                                        idf = (string)v;
+                                        foreach (string l in browserLang)                                        
+                                        {                                            
+                                            if (filesmap[l.Substring(0, 2).ToLower()] != null)
+                                            {
+                                                idf = (string)filesmap[l.Substring(0, 2).ToLower()];
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    // no matching languages ... get first doc available.
+                                    if (idf == null)
+                                    {
+                                        foreach (var f in filesmap.Values)
+                                        {
+                                            idf = (string)f;
+                                            break;
+                                        }
+                                    }
+
+                                    // create available user languages list
+                                    string lkeys = "";
+                                    foreach (var k in filesmap.Keys)
+                                    {
+                                        lkeys += k;                                        
+                                        lkeys += filesmap[k].ToString().ToUpper().Replace(".PDF", "");
+                                        lkeys += ",";
                                         break;
-                                    }                                    
+                                    }
+
+                                    redirect_opts = "&languages=" + lkeys;                                    
+
                                 }
 
                                 try
@@ -141,9 +221,8 @@ namespace webapp
 
             if (idf != null)
             {
-                string redirect = WebConfigurationManager.AppSettings["searchRedirect"];
-                if (redirect == null) redirect = "viewer.aspx";
-                response.Redirect(redirect + (redirect.IndexOf('?') >= 0 ? "&" : "?") + "id=" + idf, true);
+                if (requestLang != null) redirect_opts += "&currentLanguage=" + requestLang;
+                response.Redirect(redirect + "?id=" + idf + redirect_opts, true);
             }
             else
             {

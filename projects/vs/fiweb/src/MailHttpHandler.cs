@@ -81,41 +81,11 @@ namespace webapp
             // read request parameters
             //
 
-            string pharmacy = null;
-            string mailBox = null;
-            string aic = null;
-            string fid = null;
-            string lang = null;
-
-            if (request.Params["pharmacy"] != null)
-                pharmacy = request.Params["pharmacy"];
-            else if (request.QueryString["pharmacy"] != null)
-                pharmacy = request.QueryString["pharmacy"];
-
-            if (request.Params["farmacia"] != null)
-                pharmacy = request.Params["farmacia"];
-            else if (request.QueryString["farmacia"] != null)
-                pharmacy = request.QueryString["farmacia"];
-
-            if (request.Params["mailbox"] != null)
-                mailBox = request.Params["mailbox"];
-            else if (request.QueryString["mailbox"] != null)
-                mailBox = request.QueryString["mailbox"];
-            
-            if (request.Params["aic"] != null)
-                aic = request.Params["aic"];
-            else if (request.QueryString["aic"] != null)
-                aic = request.QueryString["aic"];
-            
-            if (request.Params["fid"] != null)
-                fid = request.Params["fid"];
-            else if (request.QueryString["fid"] != null)
-                fid = request.QueryString["fid"];
-            
-            if (request.Params["lang"] != null)
-                lang = request.Params["lang"];
-            else if (request.QueryString["lang"] != null)
-                lang = request.QueryString["lang"];  
+            string pharmacy = Tools.GetRequestParameter(request, "pharmacy");
+            string mailBox = Tools.GetRequestParameter(request, "mailbox");
+            string aic = Tools.GetRequestParameter(request, "aic");
+            string fid = Tools.GetRequestParameter(request, "fid"); 
+            string lang = Tools.GetRequestParameter(request, "lang"); 
             
             string badreqFields = "";
 

@@ -48,15 +48,7 @@
     <!--
     <add key="logFile" value="C:\Temp\FarmastampatiMobi.log"/>
     -->
-    
-    <!-- Preferred system language of requested pdf, 
-         when not explicitly specified by the client request (OPTIONAL) 
-         if uncommented specify one of the following values:
-         it, de, es, fr, en, auto 
-         auto means detected from browser settings
-         -->    
-    <add key="defaultLanguage" value="auto"/>
-    
+       
     <!-- 
         ////////////////////////////////////////////////////////////////////
         //        

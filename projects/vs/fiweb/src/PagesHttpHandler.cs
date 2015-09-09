@@ -68,12 +68,9 @@ namespace webapp
                 }
 
                 int page = -1;
-
-                if (request.Params["page"] != null)
-                    Int32.TryParse(request.Params["page"], out page);
-                else if (request.QueryString["page"] != null)
-                    Int32.TryParse(request.QueryString["page"], out page);
-
+                string requestPage = Tools.GetRequestParameter(request, "page");
+                if (requestPage != null) Int32.TryParse(requestPage, out page);
+                
                 if (page == -1)
                 {
                     response.StatusCode = 200;
@@ -111,39 +108,20 @@ namespace webapp
                         }
                     }
 
-                    string ext = request.Params["gsext"];
-                    if (ext == null) ext = request.QueryString["gsext"];
-                    if (ext == null) ext = "png";
+                    string ext = Tools.GetRequestParameter(request, "gsopts", "png");                    
                     if (ext.StartsWith(".")) ext = ext.Substring(1);
 
-                    string command = request.Params["gsopts"];
-                    if (command == null) command = request.QueryString["gsopts"];
-                    if (command == null) command = "";
+                    string command = Tools.GetRequestParameter(request, "gsopts", "-version");
 
                     int timeout = -1;
-
-                    if (request.Params["timeout"] != null)
-                    {
-                        int.TryParse(request.Params["timeout"], out timeout);
-                    }
-                    else if (request.QueryString["timeout"] != null)
-                    {
-                        int.TryParse(request.QueryString["timeout"], out timeout);
-                    }
-
+                    string requestTimeout = Tools.GetRequestParameter(request, "timeout", null);
+                    if (requestTimeout != null) int.TryParse(requestTimeout, out timeout);
+                    
                     outfile += @"\";
                     outfile += f_id + "[" + page + "]." + ext;
 
-                    bool nocache = false;
-
-                    if (request.Params["nocache"] != null)
-                    {
-                        nocache = request.Params["nocache"].ToLower().Equals("true");
-                    }
-                    else if (request.QueryString["nocache"] != null)
-                    {
-                        nocache = request.QueryString["nocache"].ToLower().Equals("true");
-                    }
+                    bool nocache = Tools.GetRequestParameter(request, "timeout", "false")
+                            .ToLower().Equals("true"); 
 
                     bool cached = false;
 

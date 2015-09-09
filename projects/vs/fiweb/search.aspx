@@ -2,13 +2,10 @@
 <%@ Import Namespace="System.Web.Configuration" %>
 <%@ Import Namespace="webapp" %>
 <%
-    Dim searchField As String = WebConfigurationManager.AppSettings("searchField")
-    If searchField Is Nothing Then searchField = "aic"
     Dim otype As Integer = Tools.GetBrowserId(Request)
-    
     %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ajax="false">
 <head>
 
 	<% If otype = 1 Then %>
@@ -30,7 +27,55 @@
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
 
-    <script type="text/javascript" src="js/search.aspx.js"></script>
+    <script type="text/javascript">
+
+        function popupmsg(msg)
+        {   
+            $('#myPopupMsg').html(msg);
+            document.getElementById('hclick').click();
+        }
+
+        function validate(f)
+        {
+            
+            var emsg1 = "Codice AIC inserito non valido<br />"
+                + "<ol>" 
+                + "<li>Il codice deve essere un numero di max 9 cifre</li>"
+                + "<li>Eventuali zeri iniziali possono essere omessi</li>"
+                + "</ol>"; 
+
+            try {
+
+                if (f.idf) return true;
+                if (f.pdf) return true;                
+                
+                var aic = f.aic.value.trim().toUpperCase();                
+                
+                if (aic.length == 0) 
+                    throw "Inserire il codice AIC";
+                
+                if (aic.indexOf('TEST') == 0) return true;
+
+                if (aic.length > 10) 
+                    throw emsg1
+                
+                if (aic.length == 10 && (aic.charAt(0) != 'A'))
+                    throw emsg1;
+                
+                for (var i = 0; i < 9; i++) {
+                    if ("0123456789".indexOf(aic.charAt(i)) < 0)
+                        throw emsg1;
+                }
+
+                return true;
+            }
+            catch (e) {
+                popupmsg(e);
+                return false;
+            }
+        }
+        
+    </script>
     
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="apple-touch-icon-precomposed" href="images/farmadati-apple-icon.png" />
@@ -42,7 +87,7 @@
     
 </head>
 
-<body oncontextmenu="return false;">
+<body oncontextmenu="return true;">
 
 <center>
 
@@ -61,7 +106,10 @@
 				<td align="center">Inserisci il Codice AIC</td>			
 			</tr>
 			<tr>
-				<td><input name="<%= searchField %>" type="text" maxlength="10" size="10"/></td>
+                <!--
+				<td><input name="aic" type="text" maxlength="10" size="10"/></td>
+                -->
+                <td><input name="aic" type="text" size="10"/></td>
 			</tr>	    	            
             <tr>                
 				<td><input id="submit" type="submit" value="cerca" /></td>
@@ -100,6 +148,17 @@
 </center>
 
 <script type="text/javascript" src="js/bookmark_bubble_activator.js"></script>
+
+<%
+    If Not Request.QueryString("mesg") Is Nothing Then
+        %>
+    <script type="text/javascript">
+        popupmsg('<%= Request.QueryString("mesg") %>');
+    </script>        
+<%
+    End If
+    
+    %>
 
 </body>
 

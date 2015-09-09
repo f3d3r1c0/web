@@ -101,6 +101,14 @@ namespace webapp
             }
         }
 
+        public static string GetRequestParameter(
+                HttpRequest request, string key, string defaultValue = null)
+        {
+            string valueFromrequest = (request.Params[key] != null ?
+                request.Params[key] : request.QueryString[key]);
+            return (valueFromrequest != null ? valueFromrequest : defaultValue);
+        }
+
     }
 
     
