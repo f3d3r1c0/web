@@ -5,7 +5,7 @@
     Dim otype As Integer = Tools.GetBrowserId(Request)
     %>
 <!DOCTYPE html>
-<html lang="en" data-ajax="false">
+<html lang="en">
 <head>
 
 	<% If otype = 1 Then %>
