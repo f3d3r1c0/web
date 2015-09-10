@@ -79,10 +79,6 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="apple-touch-icon-precomposed" href="images/farmadati-apple-icon.png" />
-    <script type="text/javascript" src="js/bookmark_bubble.js"></script>
-    <script type="text/javascript" src="js/bookmark_bubble_msg_it.js"></script>
-    <script type="text/javascript" src="js/bookmark_bubble_activator.js"></script>
-
     <link rel="icon" type="image/png" href="images/farmadati-apple-icon.png">
     
 </head>
@@ -146,19 +142,6 @@
 	</div>
     
 </center>
-
-<script type="text/javascript" src="js/bookmark_bubble_activator.js"></script>
-
-<%
-    If Not Request.QueryString("mesg") Is Nothing Then
-        %>
-    <script type="text/javascript">
-        popupmsg('<%= Request.QueryString("mesg") %>');
-    </script>        
-<%
-    End If
-    
-    %>
 
 </body>
 
