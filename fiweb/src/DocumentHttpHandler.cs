@@ -32,13 +32,13 @@ namespace webapp
 
             string idf = Tools.GetRequestParameter(request, "idf");
             string aic = Tools.GetRequestParameter(request, "aic");
-            
+
             string save_sql = "";
             Exception save_ex = null;
 
             string redirect = "viewer.aspx";
             string redirect_opts = "";
-            
+
             // begin parsing test string command
             if (aic != null && aic.StartsWith("test"))
             {
@@ -48,22 +48,22 @@ namespace webapp
                 foreach (string p in pz)
                 {
                     if (pz.Length == 0) continue;
-                    if (count == 1) 
+                    if (count == 1)
                     {
-                        if (p.ToUpper().StartsWith("F")) 
+                        if (p.ToUpper().StartsWith("F"))
                         {
                             idf = p;
-                            aic = null; 
+                            aic = null;
                         }
                         else
                         {
                             aic = p;
                         }
                     }
-                    else if (count == 2) 
-                    { 
-                        redirect = "viewer" + p + ".aspx"; 
-                    }                    
+                    else if (count == 2)
+                    {
+                        redirect = "viewer" + p + ".aspx";
+                    }
                     count++;
                 }
 
@@ -83,7 +83,7 @@ namespace webapp
             {
                 if (aic.ToUpper().StartsWith("A")) aic = aic.Substring(1);
                 while (aic.Length < 9) aic = "0" + aic;
-                                
+
                 string connectionString = ConfigurationManager.ConnectionStrings["farmadati"].ConnectionString;
 
                 try
@@ -144,24 +144,25 @@ namespace webapp
                                         Logger.Write("No records found executing SQL > {0}", save_sql);
                                 }
                                 else
-                                {   
+                                {
                                     string[] browserLang = request.UserLanguages;
 
                                     idf = null;
 
                                     if (requestLang != null)
-                                    {                                        
+                                    {
                                         idf = (string)filesmap[requestLang.Substring(0, 2).ToLower()];
                                     }
 
                                     // get first browser language matching 
                                     if (idf == null)
                                     {
-                                        foreach (string l in browserLang)                                        
-                                        {                                            
+                                        foreach (string l in browserLang)
+                                        {
                                             if (filesmap[l.Substring(0, 2).ToLower()] != null)
                                             {
                                                 idf = (string)filesmap[l.Substring(0, 2).ToLower()];
+                                                requestLang = l.Substring(0, 2).ToLower();
                                                 break;
                                             }
                                         }
@@ -181,13 +182,12 @@ namespace webapp
                                     string lkeys = "";
                                     foreach (var k in filesmap.Keys)
                                     {
-                                        lkeys += k;                                        
+                                        lkeys += k;
                                         lkeys += filesmap[k].ToString().ToUpper().Replace(".PDF", "");
                                         lkeys += ",";
-                                        break;
                                     }
 
-                                    redirect_opts = "&languages=" + lkeys;                                    
+                                    redirect_opts = "&languages=" + lkeys;
 
                                 }
 
@@ -221,8 +221,12 @@ namespace webapp
 
             if (idf != null)
             {
-                if (requestLang != null) redirect_opts += "&currentLanguage=" + requestLang;
-                response.Redirect(redirect + "?id=" + idf + redirect_opts, true);
+                if (requestLang != null) redirect_opts += "&language=" + requestLang;
+
+                //response.Redirect(redirect + "?id=" + idf + redirect_opts, true);
+                response.StatusCode = 200;
+                Tools.ReplyJSon(response, "redirect", redirect + "?id=" + idf + redirect_opts);
+
             }
             else
             {
@@ -236,7 +240,7 @@ namespace webapp
                     response.StatusCode = 404;
                     response.StatusDescription = "Not Found";
                 }
-                
+
                 Tools.ReplyJSon(response);
 
             }

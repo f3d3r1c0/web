@@ -23,7 +23,7 @@
 <body oncontextmenu="return true;">
 <center>
 	<div data-role="page" id="index">
-		<iframe style="overflow: hidden; border: 0px; width: 100%; height: 100%;" src="search.aspx"></iframe>
+		<iframe style="overflow: hidden; border: 0px; width: 100%; height: 1000px;" src="search.aspx"></iframe>
 	</div>	
 </center>
 </body>

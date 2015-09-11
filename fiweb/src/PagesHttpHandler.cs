@@ -70,7 +70,7 @@ namespace webapp
                 int page = -1;
                 string requestPage = Tools.GetRequestParameter(request, "page");
                 if (requestPage != null) Int32.TryParse(requestPage, out page);
-                
+
                 if (page == -1)
                 {
                     response.StatusCode = 200;
@@ -108,7 +108,7 @@ namespace webapp
                         }
                     }
 
-                    string ext = Tools.GetRequestParameter(request, "gsopts", "png");                    
+                    string ext = Tools.GetRequestParameter(request, "gsext", "png");
                     if (ext.StartsWith(".")) ext = ext.Substring(1);
 
                     string command = Tools.GetRequestParameter(request, "gsopts", "-version");
@@ -116,12 +116,12 @@ namespace webapp
                     int timeout = -1;
                     string requestTimeout = Tools.GetRequestParameter(request, "timeout", null);
                     if (requestTimeout != null) int.TryParse(requestTimeout, out timeout);
-                    
+
                     outfile += @"\";
                     outfile += f_id + "[" + page + "]." + ext;
 
                     bool nocache = Tools.GetRequestParameter(request, "timeout", "false")
-                            .ToLower().Equals("true"); 
+                            .ToLower().Equals("true");
 
                     bool cached = false;
 

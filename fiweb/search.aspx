@@ -38,36 +38,35 @@
         function validate(f)
         {
             
-            var emsg1 = "Codice AIC inserito non valido<br />"
-                + "<ol>" 
-                + "<li>Il codice deve essere un numero di max 9 cifre</li>"
-                + "<li>Eventuali zeri iniziali possono essere omessi</li>"
-                + "</ol>"; 
+//            var emsg1 = "Il codice AIC inserito non e' valido<br />"
+//                + "Deve essere un numero composto al massimo di 9 cifre. "
+//                + "Eventuali zeri iniziali possono essere omessi"; 
 
             try {
-
-                if (f.idf) return true;
-                if (f.pdf) return true;                
                 
                 var aic = f.aic.value.trim().toUpperCase();                
                 
                 if (aic.length == 0) 
                     throw "Inserire il codice AIC";
                 
-                if (aic.indexOf('TEST') == 0) return true;
+                $.ajax({
+                    url: 'document',
+                    dataType: 'json',
+                    data: 'aic=' + aic,
+                    success: function (data) {
+                        if (data.redirect) {
+                            document.location.href = data.redirect;
+                        }
+                        else {
+                            popupmsg("Servizio non disponibile, errore di backend.");
+                        }
+                    },
+                    error: function (data) {
+                        popupmsg("AIC non trovato");
+                    }
+                });
+                return false;
 
-                if (aic.length > 10) 
-                    throw emsg1
-                
-                if (aic.length == 10 && (aic.charAt(0) != 'A'))
-                    throw emsg1;
-                
-                for (var i = 0; i < 9; i++) {
-                    if ("0123456789".indexOf(aic.charAt(i)) < 0)
-                        throw emsg1;
-                }
-
-                return true;
             }
             catch (e) {
                 popupmsg(e);
@@ -89,7 +88,10 @@
 
     <table>
         <tr>
-            <td><img alt="Farmastampati Logo" src="images/farmast.png"/></td>
+            <td>
+                <br />
+                <img alt="Farmastampati Logo" src="images/farmast.png"/>
+            </td>
         </tr>
         <tr>
             <td align="center" valign="middle"><i>Visualizza il foglietto illustrativo</i></td>

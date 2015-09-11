@@ -46,6 +46,8 @@
         If languages.ToString().EndsWith(",") Then
             languages = languages.ToString().Substring(0, languages.ToString().Length - 1)
         End If
+    Else
+        languages = "it" + id
     End If
     Dim currentLanguage = Tools.GetRequestParameter(Request, "language")
     Dim lkeys As String() = Nothing
@@ -105,7 +107,7 @@
     
 </head>
 
-<%--
+<!--
             @see https://demos.jquerymobile.com/1.2.0/docs/pages/page-transitions.html
             @see http://www.w3schools.com/jquerymobile/jquerymobile_transitions.asp    
 
@@ -121,68 +123,162 @@
                 slidedown
                 turn
                 none
-
-            studio slide menu @see http://demos.jquerymobile.com/1.3.0-beta.1/docs/panels/
-
-            html arrows:
-            ------------
-            left  &#8592;
-            up    &#8593; 
-            right &#8594; 
-            down  &#8595; 
-
-        --%>   
+        -->   
 
 <body style="margin: 0px;" oncontextmenu="return false" onload="on_load('<%= id %>', <%= pages %>)">
 
 <%  For i As Integer = 1 To pages%>
      
-    <div data-role="page" id="page<%= i %>">
-      
-      <table style="position: fixed; top: 0px; left: 0px; width: 100%;" cellpadding="0" cellspacing="0">
+    <div data-role="page" id="page<%= i %>">      
 
-        <tr data-role="header">    
+        <!--
+            For jquery icons  
+            @see http://demos.jquerymobile.com/1.4.5/icons/
+            --> 
 
-            <td style="width: 50px;" data-role="header">                   
-                <a href="javascript:document.location.href='search.aspx';">&#8962;</a>                    
-            </td>      
+    <div data-role="footer" class="ui-footer ui-bar-a" role="contentinfo" style="position: fixed; width: 100%;">
+        <div data-role="navbar" class="ui-navbar ui-mini" role="navigation">
+            <ul class="ui-grid-b">
 
-            <td style="width: 50px;" data-role="header">              
-            <% If i > 1 Then%> 
-            <a href="#page<%= i - 1%>" data-transition="slide" data-direction="reverse">&#8656;</a>        
-            <% End If%>
-            </td>              
-            
-            <td style="width: 50px;" data-role="header">       
-            <% If i < pages Then%> 
-            <a href="#page<%= i + 1%>" data-transition="slide">&#8658;</a>        
-            <% End If%>       
-            </td>   
-            
-            <td align="right" valign="middle">       
-            <% If Not lkeys Is Nothing Then%>
-                <select name="language" onchange="changeLanguage(this.value, '<%= languages %>')">
-                    <% For k As Integer = 0 To lkeys.Length - 1%>
-                    <option value="<%= lfiles(k) %>&language=<%= lkeys(k) %>" <%= lopts(k) %>>
-                        <%= ldesc(lkeys(k))%>
-                    </option>
-                    <% Next%>                    
-                </select>    
-            <% else %>
-                Lingua unica
-            <% end if  %>                               
-            </td>       
+                <li class="ui-block-a">
+                    <a 
+                        <% If i > 1 Then %>
+                        href="#page<%= i - 1%>" 
+                        <% End If %>
+                        data-transition="slide" 
+                        data-direction="reverse" 
+                        data-icon="arrow-l" 
+                        data-corners="false" 
+                        data-shadow="false" 
+                        data-iconshadow="true" 
+                        data-wrapperels="span" 
+                        data-iconpos="top" 
+                        data-theme="a" 
+                        data-inline="true" 
+                        class="ui-btn ui-btn-up-a ui-btn-inline ui-btn-icon-top">
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text">Indietro
+                            </span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>
+                    </a>
+                </li>
 
+                <li class="ui-block-b">
+                    <a href="javascript:document.location.href='search.aspx';" 
+                        data-transition="slideup"                         
+                        data-icon="search" 
+                        data-corners="false" 
+                        data-shadow="false" 
+                        data-iconshadow="true" 
+                        data-wrapperels="span" 
+                        data-iconpos="top" 
+                        data-theme="a" 
+                        data-inline="true" 
+                        class="ui-btn-active ui-btn ui-btn-inline ui-btn-icon-top ui-btn-up-a"> 
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text">Nuova Ricerca
+                            </span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="ui-block-c">
+                    <a 
+                        <% If i < pages Then %>
+                        href="#page<%= i + 1%>" 
+                        <% End If %>
+                        data-transition="slide"                         
+                        data-icon="arrow-r" 
+                        data-corners="false" 
+                        data-shadow="false" 
+                        data-iconshadow="true" 
+                        data-wrapperels="span" 
+                        data-iconpos="top" 
+                        data-theme="a" 
+                        data-inline="true" 
+                        class="ui-btn ui-btn-inline ui-btn-icon-top ui-btn-up-a">
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text">Avanti
+                            </span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>
+                    </a>
+                </li>
+
+            </ul>
+        </div><!-- /navbar -->
+    </div>
+
+        <!--
+        <div data-role="navbar" data-type="horizontal">
+            <a class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-u ui-btn-icon-top ui-btn-icon-notext"
+                     href="javascript:document.location.href='search.aspx';"></a>                                
+            <a class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left ui-btn-icon-notext"
+                    href="#page<%= i - 1%>" 
+                    data-transition="slide" 
+                    data-direction="reverse"></a>                                        
+            <a class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-r ui-btn-icon-right ui-btn-icon-notext"
+                    href="#page<%= i + 1%>" 
+                    data-transition="slide"></a>                                    
+            <select name="language" onchange="changeLanguage(this.value, '<%= languages %>')">
+                <% For k As Integer = 0 To lkeys.Length - 1%>
+                <option value="<%= lfiles(k) %>&language=<%= lkeys(k) %>" <%= lopts(k) %>>
+                    <%= ldesc(lkeys(k))%>
+                </option>
+                <% Next%>                    
+            </select>    
+        </div>    
+-->
+
+        <!--
+
+        <table data-role="header" data-type="horizontal" style"width: 100%;">
+        <tr>
+            <td>
+            <a class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-u ui-btn-icon-top ui-btn-icon-notext"
+                     href="javascript:document.location.href='search.aspx';"></a>                                
+            </td>
+            <td>    
+            <a class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-left ui-btn-icon-notext"
+                    href="#page<%= i - 1%>" 
+                    data-transition="slide" 
+                    data-direction="reverse"></a>                                        
+            </td>
+            <td>                
+            <a class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-r ui-btn-icon-right ui-btn-icon-notext"
+                    href="#page<%= i + 1%>" 
+                    data-transition="slide"></a>                                    
+            </td>
+            <td>                
+            <select name="language" onchange="changeLanguage(this.value, '<%= languages %>')">
+                <% For k As Integer = 0 To lkeys.Length - 1%>
+                <option value="<%= lfiles(k) %>&language=<%= lkeys(k) %>" <%= lopts(k) %>>
+                    <%= ldesc(lkeys(k))%>
+                </option>
+                <% Next%>                    
+            </select>    
+            </td>                       
         </tr>
+        </table>    
+        -->
 
-      </table>
-
-      <div data-role="main" class="ui-content"> 
-        <img style="width: 100%; border: 0px;" src="#" id="imgpage<%= i %>" />
+      <div data-role="main" class="ui-content" style="vertical-align:middle;"> 
+        <img style="width: 100%; border: 0px; border-top: 50px #ffffff solid;" src="#" id="imgpage<%= i %>" />
       </div>
 
-      <div data-role="footer">
+      <div data-role="footer" style="text-align: right;">
+        <!--
         <h1>pagina <%= i %> di <%= pages %></h1>        
+    -->
+        <select name="language" onchange="changeLanguage(this.value, '<%= languages %>')">
+            <% For k As Integer = 0 To lkeys.Length - 1%>
+            <option value="<%= lfiles(k) %>&language=<%= lkeys(k) %>" <%= lopts(k) %>>
+                <%= ldesc(lkeys(k))%>
+            </option>
+            <% Next%>                    
+        </select>    
       </div>
 
     </div>
