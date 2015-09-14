@@ -1,4 +1,4 @@
-﻿<%@ Page Language="VB" %>
+﻿<%@ Page Language="VB"  EnableSessionState="false" %>
 <!DOCTYPE html>
 <html lang="en">
 	<meta charset="utf-8" >

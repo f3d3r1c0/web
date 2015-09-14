@@ -173,13 +173,14 @@ namespace webapp
                                 Path.GetFileName(pdf), (new FileInfo(pdf).Length / 1024),
                                 Path.GetFileName(outfile), (new FileInfo(outfile).Length / 1024),
                                 (((TimeSpan)(DateTime.Now - start)).TotalMilliseconds / 1000));
-                    }
+                    }                   
                     
-                    response.ContentType = "image/" + ext;
-                    response.BinaryWrite(File.ReadAllBytes(outfile));
-                    response.StatusCode = 200;
-                    response.Flush();
                 }
+
+                response.ContentType = "image/" + ext;
+                response.BinaryWrite(File.ReadAllBytes(outfile));
+                response.StatusCode = 200;
+                response.Flush();
 
             }
             catch (Exception e)
