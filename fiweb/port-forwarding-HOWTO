@@ -1,11 +1,6 @@
+- crea il portforwarding da porta locale privata a porta locale pubblica
+  netsh interface portproxy add v4tov4 listenport=49636 listenaddress=127.0.0.1 connectport=9090 connectaddress=172.20.10.3
 
-C:\Windows\system32>netsh interface portproxy add v4tov4 listenport=49636 listenaddress=127.0.0.1 connectport=9090 connectaddress=17
-2.20.10.3
-
-
-C:\Windows\system32>netsh interface portproxy delete v4tov4 listenport=49636 listenaddress=127.0.0.1
-
-
-C:\Windows\system32>netsh interface portproxy delete v4tov4 listenport=49636 listenaddress=127.0.0.1
-The system cannot find the file specified.
+- rimuovi il portforwarding creato sopra
+  netsh interface portproxy delete v4tov4 listenport=49636 listenaddress=127.0.0.1
 

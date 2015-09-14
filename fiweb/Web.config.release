@@ -14,13 +14,9 @@
   <system.web>
     <compilation debug="false" targetFramework="4.0" />
     <httpHandlers>
-      <add verb="*" path="archive"  type="webapp.ArchiveHttpHandler"/>
-      <add verb="*" path="document"  type="webapp.DocumentHttpHandler"/>
+      <add verb="*" path="archive"  type="webapp.ArchiveHttpHandler"/>      
       <add verb="*" path="mail"  type="webapp.MailHttpHandler"/>
-      <add verb="*" path="pages/*"  type="webapp.PagesHttpHandler"/>
-      <!--
-      <add verb="*" path="docs/*"  type="webapp.PdfHttpHandler"/>
-      -->
+      <add verb="*" path="pages/*"  type="webapp.PagesHttpHandler"/>      
     </httpHandlers>
   </system.web>
     

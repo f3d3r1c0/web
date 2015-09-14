@@ -26,8 +26,6 @@ namespace webapp
             //if (Logger.Enabled) Logger.Write("{0} {1} - {2} => {3}", request.HttpMethod,
             //    request.Path, request.UserHostAddress, request.UserAgent);
 
-            ITextUtils utils = new ITextUtils();
-
             string documentRoot = WebConfigurationManager.AppSettings["documentRoot"];
             if (!Path.IsPathRooted(documentRoot))
                 documentRoot = Path.GetFullPath(context.Server.MapPath("..") + documentRoot);
@@ -71,114 +69,112 @@ namespace webapp
                 string requestPage = Tools.GetRequestParameter(request, "page");
                 if (requestPage != null) Int32.TryParse(requestPage, out page);
 
-                if (page == -1)
+                if (page <= 0) 
+                    throw new Exception(
+                        "bad request page not specified or page non positive integer");
+
+                string outfile = outputPath;
+
+                outfile += (Int32.Parse(
+                                    f_id.Substring(5).TrimStart('0'))
+                                    % 256)
+                        .ToString("X2")
+                        .ToUpper();
+
+                DirectoryInfo outdir = new DirectoryInfo(outfile);
+
+                if (!outdir.Exists)
                 {
-                    response.StatusCode = 200;
-                    Tools.ReplyJSon(response, "id", f_id, "pages", utils.GetNumberOfPdfPages(pdf));
-                    response.Flush();
+                    try
+                    {
+                        Directory.CreateDirectory(outdir.FullName);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Write("Error: web app does not have wrtie access rigth to {0}, " +
+                            "please modify directory permissions to make directory writable " +
+                            "from this Application Pool - details: {1}", outdir, e);
+                        response.StatusCode = 403;
+                        response.StatusDescription = "Forbidden";
+                        Tools.ReplyJSon(response);
+                        response.Flush();
+                        return;
+                    }
                 }
-                else
+
+                string ext = Tools.GetRequestParameter(request, "gsext", "png");
+                if (ext.StartsWith(".")) ext = ext.Substring(1);
+
+                string command = Tools.GetRequestParameter(request, "gsopts", "-version");
+
+                if (ext.Length > 4 || command.Length < 20 || command.IndexOf("-sDEVICE") < 0)
+                    throw new Exception ("invalid ghostscript command: " + command);
+
+                int timeout = -1;
+                string requestTimeout = Tools.GetRequestParameter(request, "timeout", null);
+                if (requestTimeout != null) int.TryParse(requestTimeout, out timeout);
+
+                outfile += @"\";
+                outfile += f_id + "[" + page + "]." + ext;
+
+                bool nocache = Tools.GetRequestParameter(request, "timeout", "false")
+                        .ToLower().Equals("true");
+
+                bool cached = false;
+
+                if (!nocache)
                 {
-                    string outfile = outputPath;
+                    FileInfo f = new FileInfo(outfile);
+                    cached = (f.Exists ? (
+                            (f.LastWriteTime.ToFileTime() > pdfInf.LastWriteTime.ToFileTime())
+                            ) : false);
+                }
 
-                    outfile += (Int32.Parse(
-                                        f_id.Substring(5).TrimStart('0'))
-                                        % 256)
-                            .ToString("X2")
-                            .ToUpper();
+                if (!cached)
+                {
+                    DateTime start = DateTime.Now;
+                    GhostscriptWrapper wrapper = new GhostscriptWrapper();
 
-                    DirectoryInfo outdir = new DirectoryInfo(outfile);
-
-                    if (!outdir.Exists)
+                    if (WebConfigurationManager.AppSettings["gsPath"] != null)
                     {
-                        try
-                        {
-                            Directory.CreateDirectory(outdir.FullName);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.Write("Error: web app does not have wrtie access rigth to {0}, " +
-                                "please modify directory permissions to make directory writable " +
-                                "from this Application Pool - details: {1}", outdir, e);
-                            response.StatusCode = 403;
-                            response.StatusDescription = "Forbidden";
-                            Tools.ReplyJSon(response);
-                            response.Flush();
-                            return;
-                        }
+                        wrapper.ExecutablePath = WebConfigurationManager.AppSettings["gsPath"];
                     }
 
-                    string ext = Tools.GetRequestParameter(request, "gsext", "png");
-                    if (ext.StartsWith(".")) ext = ext.Substring(1);
-
-                    string command = Tools.GetRequestParameter(request, "gsopts", "-version");
-
-                    int timeout = -1;
-                    string requestTimeout = Tools.GetRequestParameter(request, "timeout", null);
-                    if (requestTimeout != null) int.TryParse(requestTimeout, out timeout);
-
-                    outfile += @"\";
-                    outfile += f_id + "[" + page + "]." + ext;
-
-                    bool nocache = Tools.GetRequestParameter(request, "timeout", "false")
-                            .ToLower().Equals("true");
-
-                    bool cached = false;
-
-                    if (!nocache)
+                    if (!wrapper.ConvertPage(command, pdf, outfile, timeout))
                     {
-                        FileInfo f = new FileInfo(outfile);
-                        cached = (f.Exists ? (
-                                (f.LastWriteTime.ToFileTime() > pdfInf.LastWriteTime.ToFileTime())
-                                ) : false);
-                    }
-
-                    if (!cached)
-                    {
-                        DateTime start = DateTime.Now;
-                        GhostscriptWrapper wrapper = new GhostscriptWrapper();
-
-                        if (WebConfigurationManager.AppSettings["gsPath"] != null)
-                        {
-                            wrapper.ExecutablePath = WebConfigurationManager.AppSettings["gsPath"];
-                        }
-
-                        if (!wrapper.ConvertPage(command, pdf, outfile, timeout))
-                        {
-                            if (wrapper.IsGhostscriptInstalled)
-                            {
-                                if (Logger.Enabled)
-                                    Logger.Write(
-                                        "error: conversion failure from {0} to {1}[{2}]",
-                                            pdf, outfile, page);
-                                response.StatusCode = 500;
-                                response.StatusDescription = "Server Error";
-                                Tools.ReplyJSon(response);
-                                response.Flush();
-                            }
-                            else
-                            {
-                                if (Logger.Enabled) Logger.Write("error: conversion unavailable from {0} to {1}[{2}] - "
-                                    + "GHOSTSCRIPT NOT INSTALLED OR NOT SET IN SYSTEM PATH!",
-                                    pdf, outfile, page);
-                                response.StatusCode = 503;
-                                response.StatusDescription = "Service Unavailable";
-                                Tools.ReplyJSon(response);
-                                response.Flush();
-                            }
-                            return;
-                        }
-                        else
+                        if (wrapper.IsGhostscriptInstalled)
                         {
                             if (Logger.Enabled)
                                 Logger.Write(
-                                    "conversion from {0} ({1}Kb) to {2} ({3}Kb) in {4:F2}\"",
-                                    Path.GetFileName(pdf), (new FileInfo(pdf).Length / 1024),
-                                    Path.GetFileName(outfile), (new FileInfo(outfile).Length / 1024),
-                                    (((TimeSpan)(DateTime.Now - start)).TotalMilliseconds / 1000));
+                                    "error: conversion failure from {0} to {1}[{2}]",
+                                        pdf, outfile, page);
+                            response.StatusCode = 500;
+                            response.StatusDescription = "Server Error";
+                            Tools.ReplyJSon(response);
+                            response.Flush();
                         }
+                        else
+                        {
+                            if (Logger.Enabled) Logger.Write("error: conversion unavailable from {0} to {1}[{2}] - "
+                                + "GHOSTSCRIPT NOT INSTALLED OR NOT SET IN SYSTEM PATH!",
+                                pdf, outfile, page);
+                            response.StatusCode = 503;
+                            response.StatusDescription = "Service Unavailable";
+                            Tools.ReplyJSon(response);
+                            response.Flush();
+                        }
+                        return;
                     }
-
+                    else
+                    {
+                        if (Logger.Enabled)
+                            Logger.Write(
+                                "conversion from {0} ({1}Kb) to {2} ({3}Kb) in {4:F2}\"",
+                                Path.GetFileName(pdf), (new FileInfo(pdf).Length / 1024),
+                                Path.GetFileName(outfile), (new FileInfo(outfile).Length / 1024),
+                                (((TimeSpan)(DateTime.Now - start)).TotalMilliseconds / 1000));
+                    }
+                    
                     response.ContentType = "image/" + ext;
                     response.BinaryWrite(File.ReadAllBytes(outfile));
                     response.StatusCode = 200;
@@ -188,11 +184,29 @@ namespace webapp
             }
             catch (Exception e)
             {
-                Logger.Write("PagesHandler exception {0}", e);
-                response.StatusCode = 500;
-                response.StatusDescription = "SERVER ERROR - " + e.Message;
-                Tools.ReplyJSon(response);
-                response.Flush();
+                try
+                {
+                    response.ContentType = "image/gif";
+                    response.BinaryWrite(File.ReadAllBytes(context.Server.MapPath(".") + "images/404.gif"));
+                    response.StatusCode = 404;
+                    response.StatusDescription = "Not found";
+                    response.Flush();
+                }
+                catch 
+                {
+                    try
+                    {
+                        response.StatusCode = 500;
+                        response.StatusDescription = "Server Error";
+                        response.Flush();
+                    }
+                    catch (Exception eccezziunaleeeVerrameeennttee) 
+                    {
+                        if (Logger.Enabled)
+                            Logger.Write("error flushing response - {0}", 
+                                eccezziunaleeeVerrameeennttee);
+                    }
+                }
             }
 
         }

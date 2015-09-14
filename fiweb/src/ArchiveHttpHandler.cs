@@ -11,13 +11,16 @@ using System.Data;
 using System.Collections;
 using System.Web.Configuration;
 
-namespace webapp.src
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+
+namespace webapp
 {
     [DataContract]
     internal class DocumentRequest
     {
         [DataMember]
-        internal string aic;
+        internal string aic = null;
     }
 
     [DataContract]
@@ -52,6 +55,27 @@ namespace webapp.src
         public bool IsReusable
         {
             get { return true; }
+        }
+
+        private int countPdfPages(string pdfinput)
+        { 
+            PdfReader reader = null;
+            try
+            {
+                if (!new FileInfo(pdfinput).Exists) return -1;
+                reader = new PdfReader(pdfinput);
+                return reader.NumberOfPages;
+            }
+            catch(Exception e)
+            {
+                if (Logger.Enabled) Logger.Write("PdfReader Error: {0}", e);
+                return -2;
+            }
+            finally
+            {
+                if (reader != null) try { reader.Close(); }
+                    catch { }
+            }
         }
 
         public void ProcessRequest(HttpContext context)
@@ -92,7 +116,7 @@ namespace webapp.src
                                     {
                                         DocumentResponse entry = new DocumentResponse();
                                         entry.language = sqlreader.IsDBNull(1) ? "" : sqlreader.GetString(1);
-                                        entry.pagesCount = new ITextUtils().GetNumberOfPdfPages(documentRoot + sqlreader.GetString(0));
+                                        entry.pagesCount = countPdfPages (documentRoot + sqlreader.GetString(0));
                                         entry.filename = sqlreader.IsDBNull(0) ? "": sqlreader.GetString(0).ToUpper().Replace(".PDF", "");
                                         lst.Add(entry);                                        
                                     }
