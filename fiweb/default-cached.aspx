@@ -176,7 +176,7 @@
                             }   
                             
                             for (var k = 0; k < <%= PAGESER %>; k ++) {
-                                $('#page' + k + 'select').html(htmlopts);                                
+                                $('#page' + k + 'select').html(htmlopts);
                             }          
 
                             if (!doc || doc == null) doc = list[0];
@@ -262,7 +262,7 @@
             var lang = selobj.value;
             
             for (i = 0; i < <%= PAGESER %>; i++) {
-                dbg += $('#page' + i + 'file').attr('src', 'images/loading.gif');
+                $('#page' + i + 'file').attr('src', 'images/loading.gif');
             }
 
             // select document with currennt language
@@ -323,18 +323,26 @@
 
     <div data-role="main" class="ui-content"> 
     
-        <div data-role="main" class="ui-content" data-mini="true"> 
-            <img alt="Farmastampati Logo" src="images/farmast.png"/><br />              
+        <div data-role="main" class="ui-content" data-mini="true">
+            <!-- logo -->
+            <img alt="Farmastampati Logo" src="images/farmast.png"/><br />
             <span style="font-style: italic;">Visualizza il foglietto illustrativo</span><br /><br />
+            <!-- aic text box -->
             <span style="font-weight: bolder;">Inserisci il Codice AIC</span>       
             <input name="aic" id="aic" type="text" size="10" value="<%= aic %>">
             <!-- popup -->
-            <a id="displayerror" style="display: none;" href="#popupBasic" data-rel="popup" data-position-to="window" data-transition="popup"></a>
-            <div data-role="popup" id="popupBasic" style="max-width:400px; white-space: normal !important;" class="ui-corner-all">
-                <a href="#" data-rel="popup" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-                <h3 id="error" style="font-weight: bolder; color: #bb1111;"></h3>
+            <!-- available positions: window, origin, #id -->
+            <a id="displayerror" style="display: none;" 
+                    href="#popupCloseRight" data-rel="popup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" 
+		            data-position-to="window" 
+		            data-transition="flip">...</a>
+                <div data-role="popup" id="popupCloseRight" class="ui-content" style="max-width:280px; border: 10px #aa1111 solid; color: darkRed;">
+                    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
+			                style="background-color: #dd4231;">Close</a>
+	                <p id="error">...</p>
             </div>
             <!-- end popup -->
+            <!-- search button click -->
             <a id="success" style="display: none" href="#page0" data-transition="slideup"></a>          
             <a href="javascript: dosearch();" 
                     class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a><br />
@@ -345,7 +353,7 @@
                     <span style="font-size: 36px; font-weight: bolder;">?</span>
                 </a>
             </span>
-            <!-- popup aic instructions here -->
+            <!-- Aic help instructions here -->
             <div data-role="popup" id="aicPopup" class="ui-content">
                 <img style="border: 0px; width: 400px;" 
                     alt="Codiice Agenzia Italiana del Farmaco" 

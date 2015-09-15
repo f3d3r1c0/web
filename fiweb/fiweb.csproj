@@ -56,6 +56,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dbtest-development.sql" />
     <Content Include="default.aspx" />
     <Content Include="default-cached.aspx" />
     <Content Include="Global.asax" />
