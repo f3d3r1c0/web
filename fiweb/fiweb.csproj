@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="default.aspx" />
-    <Content Include="search.aspx" />
+    <Content Include="default-cached.aspx" />
     <Content Include="Global.asax" />
     <Content Include="images\aicsample.jpg" />
     <Content Include="images\farmadati-apple-icon.png" />

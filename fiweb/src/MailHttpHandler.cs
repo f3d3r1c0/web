@@ -139,9 +139,7 @@ namespace webapp
                 {
                     body.Append(
                             line.
-                            Replace("@@aic@@", (aic != null ? aic : "")).
-                            Replace("@@mailBodyBookmarkUrl@@", (mailBodyBookmarkUrl != null ? mailBodyBookmarkUrl : ""))                                        
-                        );
+                            Replace("@@aic@@", (aic != null ? aic : "")));
                 }
                 sr.Close();
 

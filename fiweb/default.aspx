@@ -1,5 +1,22 @@
 ﻿<%@ Page Language="VB" EnableSessionState="false"%>
 <%
-    'Response.Redirect("popup.aspx", True)
-    Response.Redirect("search.aspx", True)
+    'Dim redirectPage = "popup.aspx"
+    Dim redirectPage = "default-cached.aspx"
+    
+    Dim querystring As String = ""
+    If Not Request.QueryString Is Nothing Then
+        For Each q As String In Request.QueryString
+            If querystring.Length = 0 Then
+                querystring = "?"
+            Else
+                querystring = "&"
+            End If
+            querystring += q
+            querystring += "="
+            querystring += Request.QueryString(q)
+        Next
+    End If
+    
+    Response.Redirect(redirectPage + querystring, True)
+    
     %>
