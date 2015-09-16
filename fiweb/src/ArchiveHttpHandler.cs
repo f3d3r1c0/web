@@ -92,7 +92,7 @@ namespace webapp
                 {
                     Stream stream = response.OutputStream;
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(DocumentResponse));
-                    
+
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
                         using (SqlCommand command = new SqlCommand(

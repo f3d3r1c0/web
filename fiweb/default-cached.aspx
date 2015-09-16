@@ -130,8 +130,8 @@
                     aic = '0' + aic; 
                 }
 
-                $.ajax({
-                    
+                $.ajax({                    
+
                     url: 'archive',
                     dataType: 'json',
                     data: '{ "aic": "' + aic + '" }',
@@ -178,10 +178,7 @@
                             }   
                             
                             for (var k = 0; k < <%= PAGESER %>; k ++) {                                                            
-                                $('#page' + k + 'select').html(htmlopts);                                               
-                                
-                                $("#page" + k).bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ alert ("pippppooooo!"); });
-                                                                                 
+                                $('#page' + k + 'select').html(htmlopts);        
                             }          
 
                             if (!doc || doc == null) doc = list[0];
@@ -191,15 +188,19 @@
                             $("#success").click();
 
                         }
-                        catch (e1) {
-                        
+                        catch (e1) {                        
+
                             msgbox(e1);                            
 
                         }
+
+                        $("#loading-popup").hide();
+
                     },
 
                     error: function (data) {   
 
+                        $("#loading-popup").hide();
                         msgbox('Codice AIC non trovato');    
                         
                     }
@@ -208,6 +209,7 @@
             }
             catch(e2) {
             
+                $("#loading-popup").hide();
                 msgbox(e2);    
                 
             }         
@@ -258,8 +260,10 @@
             ); 
 
             for (var k = 0; k < <%= PAGESER %>; k ++) {                                                                            
-                var ik = -1;                                
-                $('#page' + k + 'select').val(selectedLang);                                
+                var ik = -1;   
+
+                $('#page' + k + 'select').val(selectedLang);   
+
                 $('#page' + k + ' a').each (function() {
                     switch (ik) {
                         case -1:
@@ -272,8 +276,24 @@
                             break;
                     }
                     ik ++;
-                });                                                                
-            }              
+
+                    //
+                    // TODO: intervenire qui per la gestione dello swipe
+                    // 
+                    //alert (event.id);
+                    //var pageid = $.mobile.activePage.attr('id');                    
+                    /*
+                    $('#page' + k).on("swiperight", function () {                    
+                       alert ('right'); 
+                    });
+
+                    $('#page' + k).on("swipeleft", function () {                    
+                       alert ('left'); 
+                    });
+                    */
+
+                });
+            }
         }
                 
         function selchange(selobj)
@@ -312,9 +332,24 @@
 
         function _onload() {
             $.mobile.changePage("#other-page", { allowSamePageTransition: true });
+
+            var $loading = $('#loading').hide();
+            var $aic = $('#searchbutton').fadeIn();
+
+            $(document)
+              .ajaxStart(function () {
+                $aic.hide();
+                $loading.fadeIn(1000);
+              })
+              .ajaxStop(function () {
+                $loading.hide();
+                $aic.show();
+              });
+
             if ($('#aic').val().trim().length > 0) {
                 dosearch();
             }
+            
         }
 
     </script>
@@ -327,17 +362,22 @@
     
 <div id="search" data-role="page">
 
-    <div data-role="main" class="ui-content"> 
-    
+    <div data-role="main" class="ui-content" style="max-width: 400px;"> 
+        
         <div data-role="main" class="ui-content" data-mini="true">
+
             <!-- logo -->
             <img alt="Farmastampati Logo" src="images/farmast.png"/><br />
             <span style="font-style: italic;">Visualizza il foglietto illustrativo</span><br /><br />
+
             <!-- aic text box -->
-            <span style="font-weight: bolder;">Inserisci il Codice AIC</span>       
-            <input name="aic" id="aic" type="text" size="10" value="<%= aic %>">
-            <!-- popup -->
-            <!-- available positions: window, origin, #id -->
+            <span style="font-weight: bolder;">Inserisci il Codice AIC</span>                   
+            
+            <div class="ui-content"> 
+                <input name="aic" id="aic" type="text" size="10" value="<%= aic %>">
+            </div>
+
+            <!-- popup, available positions: window, origin, #id -->
             <a id="displayerror" style="display: none;" 
                     href="#popupCloseRight" data-rel="popup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" 
 		            data-position-to="window" 
@@ -348,23 +388,31 @@
 	                <p id="error">...</p>
             </div>
             <!-- end popup -->
+            
             <!-- search button click -->
             <a id="success" style="display: none" href="#page0" data-transition="slideup"></a>          
-            <a href="javascript: dosearch();" 
+            <div id="searchbutton" class="ui-content"> 
+                <a href="javascript: dosearch();" 
                     class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a><br />
+            </div>
+            <div id="loading" class="ui-content"> 
+                <img alt="loading" src="js/images/ajax-loader.gif"/>                
+            </div>
+
+            <!-- Aic help instructions  -->
             <span>                      
                 <a href="#aicPopup" data-rel="popup" data-transition="flip"
                         class="ui-btn ui-corner-all ui-shadow ui-btn-middle">            
                         Il codice AIC si trova nella<br/>scatola del medicinale<br/>
                     <span style="font-size: 36px; font-weight: bolder;">?</span>
                 </a>
-            </span>
-            <!-- Aic help instructions here -->
+            </span>            
             <div data-role="popup" id="aicPopup" class="ui-content">
                 <img style="border: 0px; width: 400px;" 
                     alt="Codiice Agenzia Italiana del Farmaco" 
                     src="images/aicsample.jpg"/>
             </div>
+
         </div>
             
     </div>
