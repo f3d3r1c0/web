@@ -88,11 +88,16 @@
     <!-- Page Scripting -->
     <script type="text/javascript">
 
-        //
-        // javascript doc/ loader 
-        //
+        /*
+         *  Reference Documentation
+         *      @see http://demos.jquerymobile.com/1.0rc2/docs/api/events.html
+         *      @see http://demos.jquerymobile.com/1.4.5/icons/       
+         *
+         */
+
         var list = null;
-        var doc = null;       
+        var doc = null;   
+        var selectedLang = null;          
 
         function msgbox(mesg)
         {           
@@ -131,13 +136,6 @@
                     dataType: 'json',
                     data: '{ "aic": "' + aic + '" }',
                     method: 'post',
-                    
-                    //DEBUG HTML
-					/*
-                    url: 'document.json',
-                    dataType: 'json',
-                    method: 'get',
-					*/
                                         
                     success: function (data) {
 
@@ -148,16 +146,20 @@
                                                         
                             doc = null;
                             list = data;
-                            
-                            var htmlopts = '';
+                            var lang = null;
+
+                            selectedLang = null;
+                            var htmlopts = '';                            
 
                             for (var i = 0; i < list.length; i ++) {
-
-                                list[i].page = 0;
-
-                                if (list[i].isDefaultLanguage) doc = list[i];
-
+    
                                 var lang = list[i].language.toLowerCase();
+
+                                if (list[i].isDefaultLanguage) {
+                                    doc = list[i];
+                                    selectedLang = lang;                                    
+                                }
+
                                 if (lang == 'it') desc = 'Italiano';
                                 else if (lang == 'de') desc = 'Deutsch';
                                 else if (lang == 'en') desc = 'English';
@@ -175,14 +177,17 @@
                                 htmlopts += '</option>';
                             }   
                             
-                            for (var k = 0; k < <%= PAGESER %>; k ++) {
-                                $('#page' + k + 'select').html(htmlopts);
+                            for (var k = 0; k < <%= PAGESER %>; k ++) {                                                            
+                                $('#page' + k + 'select').html(htmlopts);                                               
+                                
+                                $("#page" + k).bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ alert ("pippppooooo!"); });
+                                                                                 
                             }          
 
                             if (!doc || doc == null) doc = list[0];
 
-                            imagesload();
-
+                            reload();
+                            
                             $("#success").click();
 
                         }
@@ -209,8 +214,7 @@
         }   
         
         function getpageurl(filename, page)
-        {
-            // URL RELEASE
+        {            
             var timeout = -1;
             var nocache = false; 
             var gsext = 'png';            
@@ -228,14 +232,13 @@
                     (timeout > 0 ? '&timeout=' + timeout : '') + 
                     (nocache ? '&nocache=true' : '') + 
                     '&gsext=' + gsext +
-                    '&gsopts=' + encodeURI(gsopts);                    
-            // URL DEBUG HTML
-            //return 'samples/' + filename + '[' + page + '].png'
+                    '&gsopts=' + encodeURI(gsopts);                                
         }
 
-        function imagesload()
+        function reload()
         {            
             var ic = 0;
+
             $('img').each(
                 function () {
                     var id = $(this).attr('id');
@@ -252,56 +255,59 @@
                         $('#page' + (ic - 1) + 'footer').html('Pagina ' + ic + ' di ' + doc.pagesCount);
                     }                    
                 }
-            );              
-        }
+            ); 
 
+            for (var k = 0; k < <%= PAGESER %>; k ++) {                                                                            
+                var ik = -1;                                
+                $('#page' + k + 'select').val(selectedLang);                                
+                $('#page' + k + ' a').each (function() {
+                    switch (ik) {
+                        case -1:
+                            $(this).attr('href', '#page' + (k + ik));       
+                            break;                                         
+                        case 1:
+                            $(this).attr('href', (k < doc.pagesCount - 1 ? 
+                                    '#page' + (k + ik) : 
+                                    '#'));
+                            break;
+                    }
+                    ik ++;
+                });                                                                
+            }              
+        }
+                
         function selchange(selobj)
         {           
-            var i;
-            var currentPage = doc.page;
-            var lang = selobj.value;
+            var i;            
+            selectedLang = selobj.value;            
             
             for (i = 0; i < <%= PAGESER %>; i++) {
-                $('#page' + i + 'file').attr('src', 'images/loading.gif');
+                $('#page' + i + 'file').attr('src', 'images/loading.gif');                
             }
 
-            // select document with currennt language
             for (i = 0; i < list.length; i ++) {
-                if (list[i].language == lang) {
-                    doc = list[i];
+                if (list[i].language.toLowerCase() == selectedLang) {
+                    doc = list[i];                    
                     break;
                 }
             }
 
-            // select value of all combo on current language
-            for (i = 0; i < <%= PAGESER %>; i ++) {
-                
-                var dbg = 'combo ' + i + '\r\nbefore value: ';
-                dbg += $('#page' + i + 'select').val();
-                dbg += '\r\nafter value: ';
+            reload();                       
 
-                $('#page' + i + 'select').val(lang);
-
-                dbg += $('#page' + i + 'select').val();
-
-                //!!! TODO: debug here ... not completed !!!
-            
-                //alert(dbg);
-                //$("#select-id").prop("selectedIndex");
-                //$("#select-id").prop("selectedIndex",1);
-            }
-
-            // reload document
-            doc.page = 0;
-            imagesload();            
-            
-            // scroll to the beginning of document
-            if (currentPage == 0) {
+            if ($.mobile.activePage.attr('id') == 'page0') {
                 $("html, body").animate({ scrollTop: 0 }, "slow");     
             }
             else {
-                $('#page1back').click();                                  
+                var ik = 0;
+                var a = null;
+                $("#page1 a").each( function() {
+                    if (ik > 0) return;
+                    ik ++;
+                    a = $(this);
+                });
+                a.click();                
             }
+            
         }
 
         function _onload() {
@@ -368,11 +374,6 @@
 <!-- END SEARCH FORM -->
 
 <!-- BEGIN VISUALIZER -->
-
-<!--
-    Reference Documentation
-        -@see http://demos.jquerymobile.com/1.4.5/icons/            
-    --> 
 
 <%
     For i As Integer = 0 To PAGESER
