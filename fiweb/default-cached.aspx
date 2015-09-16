@@ -96,8 +96,7 @@
          */
 
         var list = null;
-        var doc = null;   
-        var selectedLang = null;          
+        var doc = null;           
 
         function msgbox(mesg)
         {           
@@ -146,40 +145,13 @@
                                                         
                             doc = null;
                             list = data;
-                            var lang = null;
-
-                            selectedLang = null;
-                            var htmlopts = '';                            
-
-                            for (var i = 0; i < list.length; i ++) {
     
-                                var lang = list[i].language.toLowerCase();
-
+                            for (var i = 0; i < list.length; i ++) {    
                                 if (list[i].isDefaultLanguage) {
                                     doc = list[i];
-                                    selectedLang = lang;                                    
+                                    break;
                                 }
-
-                                if (lang == 'it') desc = 'Italiano';
-                                else if (lang == 'de') desc = 'Deutsch';
-                                else if (lang == 'en') desc = 'English';
-                                else if (lang == 'fr') desc = 'Francais';
-                                else if (lang == 'es') desc = 'Espanol';
-                                else continue;
-
-                                if (htmlopts.indexOf('value="' + lang + '"') >= 0) continue;
-
-                                htmlopts += '<option value="';
-                                htmlopts += lang;
-                                htmlopts += '"';
-                                htmlopts += (list.length == 1 || list[i].isDefaultLanguage ? ' selected="true">' : '>');
-                                htmlopts += desc;
-                                htmlopts += '</option>';
                             }   
-                            
-                            for (var k = 0; k < <%= PAGESER %>; k ++) {                                                            
-                                $('#page' + k + 'select').html(htmlopts);        
-                            }          
 
                             if (!doc || doc == null) doc = list[0];
 
@@ -257,12 +229,32 @@
                         $('#page' + (ic - 1) + 'footer').html('Pagina ' + ic + ' di ' + doc.pagesCount);
                     }                    
                 }
-            ); 
+            );             
+
+
+            var htmlopts = ''; 
+            for (var i = 0; i < list.length; i ++) {    
+                var lang = list[i].language.toLowerCase();                                
+                if (lang == 'it') desc = 'Italiano';
+                else if (lang == 'de') desc = 'Deutsch';
+                else if (lang == 'en') desc = 'English';
+                else if (lang == 'fr') desc = 'Francais';
+                else if (lang == 'es') desc = 'Espanol';
+                else continue;
+                if (htmlopts.indexOf('value="' + lang + '"') >= 0) continue;
+                htmlopts += '<option value="';
+                htmlopts += lang;
+                htmlopts += '"';
+                htmlopts += (list.length == 1 || list[i].language == doc.language ? ' selected="true">' : '>');
+                htmlopts += desc;
+                htmlopts += '</option>';
+            }   
 
             for (var k = 0; k < <%= PAGESER %>; k ++) {                                                                            
-                var ik = -1;   
 
-                $('#page' + k + 'select').val(selectedLang);   
+                $('#page' + k + 'select').html(htmlopts); 
+
+                var ik = -1;  
 
                 $('#page' + k + ' a').each (function() {
                     switch (ik) {
@@ -274,39 +266,43 @@
                                     '#page' + (k + ik) : 
                                     '#'));
                             break;
-                    }
-                    ik ++;
-
-                    //
-                    // TODO: intervenire qui per la gestione dello swipe
-                    // 
-                    //alert (event.id);
-                    //var pageid = $.mobile.activePage.attr('id');                    
-                    /*
-                    $('#page' + k).on("swiperight", function () {                    
-                       alert ('right'); 
-                    });
-
-                    $('#page' + k).on("swipeleft", function () {                    
-                       alert ('left'); 
-                    });
-                    */
-
+                    }                    
+                    ik ++;                    
                 });
+
+                $('#page' + k).on("swiperight", function () {                        
+                    var n = parseInt($.mobile.activePage.attr('id').substr(4));
+                    $.mobile.changePage('#page' + (n - 1), 
+                        { allowSamePageTransition: true, transition: 'slide', reverse: true });
+                });
+
+                $('#page' + k).on("swipeleft", function () {         
+                    var n = parseInt($.mobile.activePage.attr('id').substr(4));                    
+                    if (n >= doc.pagesCount - 1) return;
+                    $.mobile.changePage('#page' + (n + 1), 
+                        { allowSamePageTransition: true, transition: 'slide' }); 
+                });
+
+                //$('#page' + k).on("pageshow", function () {                    
+                //
+                //});
+
             }
+
         }
+
                 
         function selchange(selobj)
         {           
             var i;            
-            selectedLang = selobj.value;            
+            var lang = selobj.value;            
             
             for (i = 0; i < <%= PAGESER %>; i++) {
                 $('#page' + i + 'file').attr('src', 'images/loading.gif');                
             }
 
             for (i = 0; i < list.length; i ++) {
-                if (list[i].language.toLowerCase() == selectedLang) {
+                if (list[i].language.toLowerCase() == lang) {
                     doc = list[i];                    
                     break;
                 }
@@ -318,19 +314,14 @@
                 $("html, body").animate({ scrollTop: 0 }, "slow");     
             }
             else {
-                var ik = 0;
-                var a = null;
-                $("#page1 a").each( function() {
-                    if (ik > 0) return;
-                    ik ++;
-                    a = $(this);
-                });
-                a.click();                
+                $.mobile.changePage('#page0', 
+                        { allowSamePageTransition: true, transition: 'slide', reverse: true });                
             }
             
         }
 
         function _onload() {
+
             $.mobile.changePage("#other-page", { allowSamePageTransition: true });
 
             var $loading = $('#loading').hide();
@@ -434,8 +425,7 @@
             <ul class="ui-grid-b">
 
                 <li class="ui-block-a">
-                    <a 
-                        href="#page<%= i - 1 %>"
+                    <a href="#page<%= i - 1 %>"
                         data-transition="slide" 
                         data-direction="reverse" 
                         data-icon="arrow-l" 
@@ -476,8 +466,7 @@
                 </li>
 
                 <li class="ui-block-c">
-                    <a 
-                        href="#page<%= i + 1 %>"
+                    <a href="#page<%= i + 1 %>"
                         data-transition="slide"                         
                         data-icon="arrow-r" 
                         data-corners="false" 
