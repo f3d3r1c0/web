@@ -373,8 +373,10 @@
                     href="#popupCloseRight" data-rel="popup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" 
 		            data-position-to="window" 
 		            data-transition="flip">...</a>
-                <div data-role="popup" id="popupCloseRight" class="ui-content" style="max-width:280px; border: 10px #aa1111 solid; color: darkRed;">
-                    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
+                <div data-role="popup" id="popupCloseRight" class="ui-content"
+                        style="max-width:280px; border: 3px #aa1111 solid; color: darkRed;">
+                    <a href="#" data-rel="back" 
+                            class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
 			                style="background-color: #dd4231;">Close</a>
 	                <p id="error">...</p>
             </div>
@@ -386,20 +388,28 @@
                 <a href="javascript: dosearch();" 
                     class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a><br />
             </div>
-            <div id="loading" class="ui-content"> 
-                <img alt="loading" src="js/images/ajax-loader.gif"/>                
+            <div id="loading" class="ui-content">
+                <img alt="loading" src="js/images/ajax-loader.gif"/>
             </div>
 
             <!-- Aic help instructions  -->
             <span>                      
-                <a href="#aicPopup" data-rel="popup" data-transition="flip"
+                <a href="#aicPopup" data-rel="popup" data-transition="flip" data-position-to="window" 
                         class="ui-btn ui-corner-all ui-shadow ui-btn-middle">            
-                        Il codice AIC si trova nella<br/>scatola del medicinale<br/>
+                        Non trovi il codice AIC del medicinale<br/>
                     <span style="font-size: 36px; font-weight: bolder;">?</span>
                 </a>
             </span>            
             <div data-role="popup" id="aicPopup" class="ui-content">
-                <img style="border: 0px; width: 400px;" 
+            <a href="#" data-rel="back" 
+                        class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
+                        style="background-color: #dd4231;">Close</a>
+            <span style="font-weight: smaller;">
+                Il codice AIC viene riportato di<br/>
+                solito su un lato della scatola<br/>
+                come nella figura di esempio
+            </span>
+            <img style="border: 0px; width: 400px;" 
                     alt="Codiice Agenzia Italiana del Farmaco" 
                     src="images/aicsample.jpg"/>
             </div>
@@ -497,7 +507,11 @@
 
     <div data-role="footer" style="text-align: right;">
         <h1 id="page<%= i %>footer">Pagina ? di ?</h1>        
-        <select id="page<%= i %>select" onchange="selchange(this)">
+        <select id="page<%= i %>select" 
+            <% If i > 0 Then %>
+            style="display: none;"
+            <% End If %>
+            onchange="selchange(this)">
         </select>
     </div>
 

@@ -60,7 +60,7 @@ namespace webapp
                     if (Logger.Enabled) Logger.Write("file {0} not found", pdf);
                     response.StatusCode = 404;
                     response.StatusDescription = "Not Found";
-                    Tools.ReplyJSon(response);
+                    response.BinaryWrite(File.ReadAllBytes(context.Server.MapPath(".") + "images/404.gif"));
                     response.Flush();
                     return;
                 }
@@ -96,7 +96,7 @@ namespace webapp
                             "from this Application Pool - details: {1}", outdir, e);
                         response.StatusCode = 403;
                         response.StatusDescription = "Forbidden";
-                        Tools.ReplyJSon(response);
+                        response.BinaryWrite(File.ReadAllBytes(context.Server.MapPath(".") + "images/404.gif"));
                         response.Flush();
                         return;
                     }
@@ -150,7 +150,7 @@ namespace webapp
                                         pdf, outfile, page);
                             response.StatusCode = 500;
                             response.StatusDescription = "Server Error";
-                            Tools.ReplyJSon(response);
+                            response.BinaryWrite(File.ReadAllBytes(context.Server.MapPath(".") + "images/404.gif"));
                             response.Flush();
                         }
                         else
@@ -160,7 +160,7 @@ namespace webapp
                                 pdf, outfile, page);
                             response.StatusCode = 503;
                             response.StatusDescription = "Service Unavailable";
-                            Tools.ReplyJSon(response);
+                            response.BinaryWrite(File.ReadAllBytes(context.Server.MapPath(".") + "images/404.gif"));
                             response.Flush();
                         }
                         return;
@@ -169,7 +169,7 @@ namespace webapp
                     {
                         if (Logger.Enabled)
                             Logger.Write(
-                                "conversion from {0} ({1}Kb) to {2} ({3}Kb) in {4:F2}\"",
+                                "HTTP /pages conversion from {0} ({1}Kb) to {2} ({3}Kb) in {4:F2}\"",
                                 Path.GetFileName(pdf), (new FileInfo(pdf).Length / 1024),
                                 Path.GetFileName(outfile), (new FileInfo(outfile).Length / 1024),
                                 (((TimeSpan)(DateTime.Now - start)).TotalMilliseconds / 1000));

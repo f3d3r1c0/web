@@ -41,7 +41,7 @@ namespace webapp
 
     public class ArchiveHttpHandler : IHttpHandler
     {
-       private string connectionString;
+        private string connectionString;
         private string documentRoot;
 
         public ArchiveHttpHandler()
@@ -57,25 +57,13 @@ namespace webapp
             get { return true; }
         }
 
-        private int countPdfPages(string pdfinput)
-        { 
+        private int countPdfPages(string pdfinput) 
+        {            
             PdfReader reader = null;
-            try
-            {
-                if (!new FileInfo(pdfinput).Exists) return -1;
-                reader = new PdfReader(pdfinput);
-                return reader.NumberOfPages;
-            }
-            catch(Exception e)
-            {
-                if (Logger.Enabled) Logger.Write("PdfReader Error: {0}", e);
-                return -2;
-            }
-            finally
-            {
-                if (reader != null) try { reader.Close(); }
-                    catch { }
-            }
+            if (!new FileInfo(pdfinput).Exists) return -1;
+            reader = new PdfReader(pdfinput);
+            try { reader.Close(); } catch { }
+            return reader.NumberOfPages;            
         }
 
         public void ProcessRequest(HttpContext context)
@@ -83,10 +71,12 @@ namespace webapp
             HttpRequest request = context.Request;
             HttpResponse response = context.Response;
 
+            DateTime start = DateTime.Now;
+
             try
             {
                 DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(DocumentRequest));
-                DocumentRequest form = (DocumentRequest) deserializer.ReadObject(request.InputStream);
+                DocumentRequest form = (DocumentRequest)deserializer.ReadObject(request.InputStream);
 
                 if (form.aic != null)
                 {
@@ -111,14 +101,14 @@ namespace webapp
                                 {
                                     ArrayList lst = new ArrayList();
                                     response.ContentType = "application/json";
-                                    
+
                                     while (sqlreader.Read())
                                     {
                                         DocumentResponse entry = new DocumentResponse();
                                         entry.language = sqlreader.IsDBNull(1) ? "" : sqlreader.GetString(1);
-                                        entry.pagesCount = countPdfPages (documentRoot + sqlreader.GetString(0));
-                                        entry.filename = sqlreader.IsDBNull(0) ? "": sqlreader.GetString(0).ToUpper().Replace(".PDF", "");
-                                        lst.Add(entry);                                        
+                                        entry.pagesCount = countPdfPages(documentRoot + sqlreader.GetString(0));
+                                        entry.filename = sqlreader.IsDBNull(0) ? "" : sqlreader.GetString(0).ToUpper().Replace(".PDF", "");
+                                        lst.Add(entry);
                                     }
 
                                     bool hasUserLanguage = false;
@@ -127,14 +117,14 @@ namespace webapp
                                     {
                                         for (int i = 0; !hasUserLanguage && i < lst.Count; i++)
                                         {
-                                            DocumentResponse entry = (DocumentResponse) lst[i];
+                                            DocumentResponse entry = (DocumentResponse)lst[i];
                                             if (lang.ToLower().StartsWith(entry.language.ToLower().Substring(0, 2)))
                                             {
                                                 entry.isDefaultLanguage = true;
                                                 hasUserLanguage = true;
                                                 break;
                                             }
-                                        }                                        
+                                        }
                                     }
 
                                     if (!hasUserLanguage) ((DocumentResponse)lst[0]).isDefaultLanguage = true;
@@ -144,8 +134,6 @@ namespace webapp
                                 }
                                 else
                                 {
-                                    //response.StatusCode = 404;
-                                    //response.StatusDescription = "Not Found";
                                     throw new Exception("AIC not found");
                                 }
                             }
@@ -158,6 +146,25 @@ namespace webapp
             {
                 response.StatusCode = 500;
                 response.StatusDescription = "Server Error - " + e.Message;
+            }
+            finally 
+            {
+                double elapsed = (double)(DateTime.Now - start).TotalMilliseconds / 1000;
+
+                if (Logger.Enabled)
+                    Logger.Write("HTTP /archive {0}\t{1:F2}\t{2}\t{3}\t{4}\t{5}",
+                            response.StatusCode == 200 ? "OK" : "FAIL",
+                            elapsed,
+                            request.UserHostAddress,
+                            request.UserHostName != null && request.UserHostName.Length > 0 ? "anonymous" : request.UserHostName,
+                            response.StatusCode,
+                            response.StatusDescription
+                                .Replace('\r', ' ')
+                                .Replace('\n', ' ')
+                                .Replace('\t', ' ')
+                                .Trim()
+                            );
+
             }
 
         }

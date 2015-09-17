@@ -1,7 +1,8 @@
 PRIORITARIO 
 - Combo internazionale sul visualizzatore quando AIC associato a più lingue
+  per ora viene riportata solo in prima pagina, verificarne funzionamento.
+- popup di aiuto non zoomma
 - Popup aggiungi a home ... ios + Android
-- aggiornare modifiche su sito
 - tracciamento su logfile con rolling backup / retention: 
 	a) riordinare codice con logging semplice
 	b) prova invio email
