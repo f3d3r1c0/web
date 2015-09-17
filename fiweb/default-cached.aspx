@@ -396,7 +396,7 @@
             <span>                      
                 <a href="#aicPopup" data-rel="popup" data-transition="flip" data-position-to="window" 
                         class="ui-btn ui-corner-all ui-shadow ui-btn-middle">            
-                        Non trovi il codice AIC del medicinale<br/>
+                        Non trovi il codice AIC<br/>
                     <span style="font-size: 36px; font-weight: bolder;">?</span>
                 </a>
             </span>            
@@ -407,7 +407,7 @@
             <span style="font-weight: smaller;">
                 Il codice AIC viene riportato di<br/>
                 solito su un lato della scatola<br/>
-                come nella figura di esempio
+                del medicinale come in figura:
             </span>
             <img style="border: 0px; width: 400px;" 
                     alt="Codiice Agenzia Italiana del Farmaco" 

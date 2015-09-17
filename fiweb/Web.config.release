@@ -55,13 +55,13 @@
         ////////////////////////////////////////////////////////////////////        
         -->    
     <!-- smtp settings -->
-    <add key="mailFrom" value="noreply@farmadati.it"/>
+    <add key="mailFrom" value="farmastampati@farmadati.it"/>
     <add key="mailSubject" value="Foglietto Illustrativo"/>
-    <add key="mailSmtpServer" value="smtp.gmail.com"/>    
-    <add key="mailSmtpUser" value="nfserv@gmail.com"/>
-    <add key="mailSmtpPassword" value="Aigor1705"/>
-    <add key="mailSmtpPort" value="587"/>
-    <add key="mailSmtpRequireSSL" value="true"/>
+    <add key="mailSmtpServer" value="smtp.inet.it"/>    
+    <add key="mailSmtpUser" value=""/>
+    <add key="mailSmtpPassword" value=""/>
+    <add key="mailSmtpPort" value="25"/>
+    <add key="mailSmtpRequireSSL" value="false"/>
     <add key="mailSmtpTimeout" value="10000"/>
     <!-- html body of the -->
     <add key="mailBody" value=".\mailbody.html"/>
