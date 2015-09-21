@@ -58,13 +58,15 @@ namespace webapp
         }
 
         private int countPdfPages(string pdfinput) 
-        {            
-            PdfReader reader = null;
+        {   
             if (!new FileInfo(pdfinput).Exists) return -1;
-            reader = new PdfReader(pdfinput);
+            PdfReader reader = new PdfReader(pdfinput);
+            int n = reader.NumberOfPages;
             try { reader.Close(); } catch { }
-            return reader.NumberOfPages;            
+            return n;            
         }
+
+        
 
         public void ProcessRequest(HttpContext context)
         {
