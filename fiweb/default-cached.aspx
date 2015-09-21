@@ -209,6 +209,18 @@
                     '&gsopts=' + encodeURI(gsopts);                                
         }
 
+        var swipe_off_flag = false;
+
+        function swipe_off()
+        {
+            swipe_off_flag = true;
+            setInterval("swipe_on()", 500);
+        }
+
+        function swipe_on() {
+            swipe_off_flag = false;
+        }
+
         function reload()
         {            
             var ic = 0;
@@ -270,15 +282,19 @@
                     ik ++;                    
                 });
 
-                $('#page' + k).on("swiperight", function () {                        
+                $('#page' + k).on("swiperight", function () {          
+                    if (swipe_off_flag) return;              
                     var n = parseInt($.mobile.activePage.attr('id').substr(4));
+                    swipe_off();
                     $.mobile.changePage('#page' + (n - 1), 
                         { allowSamePageTransition: true, transition: 'slide', reverse: true });
                 });
 
                 $('#page' + k).on("swipeleft", function () {         
-                    var n = parseInt($.mobile.activePage.attr('id').substr(4));                    
+                    if (swipe_off_flag) return;
+                    var n = parseInt($.mobile.activePage.attr('id').substr(4));                                        
                     if (n >= doc.pagesCount - 1) return;
+                    swipe_off();
                     $.mobile.changePage('#page' + (n + 1), 
                         { allowSamePageTransition: true, transition: 'slide' }); 
                 });
@@ -291,7 +307,6 @@
 
         }
 
-                
         function selchange(selobj)
         {           
             var i;            
