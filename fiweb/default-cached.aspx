@@ -241,30 +241,23 @@
                         $('#page' + (ic - 1) + 'footer').html('Pagina ' + ic + ' di ' + doc.pagesCount);
                     }                    
                 }
-            );             
-
-
-            var htmlopts = ''; 
-            for (var i = 0; i < list.length; i ++) {    
-                var lang = list[i].language.toLowerCase();                                
-                if (lang == 'it') desc = 'Italiano';
-                else if (lang == 'de') desc = 'Deutsch';
-                else if (lang == 'en') desc = 'English';
-                else if (lang == 'fr') desc = 'Francais';
-                else if (lang == 'es') desc = 'Espanol';
-                else continue;
-                if (htmlopts.indexOf('value="' + lang + '"') >= 0) continue;
-                htmlopts += '<option value="';
-                htmlopts += lang;
-                htmlopts += '"';
-                htmlopts += (list.length == 1 || list[i].language == doc.language ? ' selected="true">' : '>');
-                htmlopts += desc;
-                htmlopts += '</option>';
-            }   
+            );          
 
             for (var k = 0; k < <%= PAGESER %>; k ++) {                                                                            
 
-                $('#page' + k + 'select').html(htmlopts); 
+                $('#lang-it' + '-' + k).css('display', 'none');
+                $('#lang-de' + '-' + k).css('display', 'none');
+                $('#lang-en' + '-' + k).css('display', 'none');
+                $('#lang-es' + '-' + k).css('display', 'none');
+                $('#lang-fr' + '-' + k).css('display', 'none');
+                
+                for (var i = 0; i < list.length; i ++) {    
+                    var lang = list[i].language.toLowerCase();                                
+                    try {
+                        $('#lang-' + lang + '-' + k).css('display', 'block');
+                    }
+                    catch (e) {}
+                }   
 
                 var ik = -1;  
 
@@ -307,10 +300,10 @@
 
         }
 
-        function selchange(selobj)
+
+        function chlang(lang)
         {           
-            var i;            
-            var lang = selobj.value;            
+            var i;                        
             
             for (i = 0; i < <%= PAGESER %>; i++) {
                 $('#page' + i + 'file').attr('src', 'images/loading.gif');                
@@ -335,6 +328,7 @@
             
         }
 
+
         function _onload() {
 
             $.mobile.changePage("#other-page", { allowSamePageTransition: true });
@@ -345,7 +339,7 @@
             $(document)
               .ajaxStart(function () {
                 $aic.hide();
-                $loading.fadeIn(1000);
+                $loading.fadeIn();
               })
               .ajaxStop(function () {
                 $loading.hide();
@@ -392,7 +386,7 @@
                         style="max-width:280px; border: 3px #aa1111 solid; color: darkRed;">
                     <a href="#" data-rel="back" 
                             class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
-			                style="background-color: #dd4231;">Close</a>
+			                style="background-color: #dd4231;">Chiudi</a>
 	                <p id="error">...</p>
             </div>
             <!-- end popup -->
@@ -403,8 +397,8 @@
                 <a href="javascript: dosearch();" 
                     class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a><br />
             </div>
-            <div id="loading" class="ui-content">
-                <img alt="loading" src="js/images/ajax-loader.gif"/>
+            <div id="loading" data-position="fixed" style="display: none;">
+                <img alt="loading" src="js/images/ajax-loader.gif" />
             </div>
 
             <!-- Aic help instructions  -->
@@ -418,7 +412,7 @@
             <div data-role="popup" id="aicPopup" class="ui-content">
             <a href="#" data-rel="back" 
                         class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
-                        style="background-color: #dd4231;">Close</a>
+                        style="background-color: #dd4231;">Chiudi</a>
             <span style="font-weight: smaller;">
                 Il codice AIC viene riportato di<br/>
                 solito su un lato della scatola<br/>
@@ -509,9 +503,25 @@
                         </span>
                     </a>
                 </li>
-<!--
-                <li class="ui-block-d">
-                    <a href="#rightpanel<%= i %>"                        
+
+            </ul>
+
+        </div><!-- /navbar -->
+               
+    </div><!-- /header -->
+
+    <div data-role="main" class="ui-content" style="vertical-align:middle;">         
+        <img style="width: 100%; border: 0px;" src="images/loading.gif" id="page<%= i %>file" />
+    </div>
+
+    <div data-role="footer" class="ui-footer ui-bar-a" role="contentinfo" data-position="fixed">
+
+        <div data-role="navbar" class="ui-navbar ui-mini" role="navigation">
+
+            <ul class="ui-grid-b">
+
+                <li class="ui-block-a">
+                    <a href="#leftpanel<%= i %>"                        
                         data-icon="bars" 
                         data-corners="false" 
                         data-shadow="false" 
@@ -522,56 +532,128 @@
                         data-inline="true" 
                         class="ui-btn-icon-top">
                         <span class="ui-btn-inner">
-                            <span class="ui-btn-text">Cambia Lingua
+                            <span class="ui-btn-text">Menu Lingua</span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="ui-block-b">
+                    <a href="#" 
+                        data-transition="slidedown"                         
+                        data-icon="info" 
+                        data-corners="false" 
+                        data-shadow="false" 
+                        data-iconshadow="true" 
+                        data-wrapperels="span" 
+                        data-iconpos="top" 
+                        data-theme="a" 
+                        data-inline="true" 
+                        class="ui-btn-icon-top"> 
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text" id="page<%= i %>footer"></span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="ui-block-c">
+                    <a href="#page0"
+                        data-transition="slide" 
+                        data-direction="reverse"                        
+                        data-icon="home" 
+                        data-corners="false" 
+                        data-shadow="false" 
+                        data-iconshadow="true" 
+                        data-wrapperels="span" 
+                        data-iconpos="top" 
+                        data-theme="a" 
+                        data-inline="true" 
+                        class="ui-btn-icon-top">
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text">Pagina iniziale
                             </span>
                             <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
                         </span>
                     </a>
                 </li>
--->
+                
             </ul>
 
         </div><!-- /navbar -->
-               
-    </div><!-- /footer -->
 
-    <div data-role="main" class="ui-content" style="vertical-align:middle;">         
-        <img style="width: 100%; border: 0px; border-top: 50px #ffffff solid;" src="images/loading.gif" id="page<%= i %>file" />
-    </div>
-
-    <div data-role="footer" style="text-align: right;">
-        <h3 id="page<%= i %>footer">Pagina ? di ?</h3>             
     </div>
 
     <!-- leftpanel1 -->
-    <div data-role="panel" id="rightpanel<%= i %>" data-position="right" data-display="reveal" data-theme="a">
-        <h3>Cambio Lingua</h3>
+    <div data-role="panel" id="leftpanel<%= i %>" data-position="left" data-display="reveal" data-theme="a">   
+       
+        <img src="images/farmast.png" style="width: 100%;" />
+
+        <p>Il documento è disponibile nelle seguenti versioni</p>
+
         <div data-role="navbar">
-            <ul>
-                <li>
-                    <a href="#page0"        
-                        class="ui-btn-icon-top">
-                        <span class="ui-btn-inner">
-                            <span class="ui-btn-text">Tedesco
-                            </span>
-                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
-                        </span>
-                    </a>
+
+            <ul>                
+
+                <li id="lang-it-<%= i %>" style="width: 100%;">
+                    <span class="ui-btn-inner ui-btn-text">
+                        <a href="javascript:chlang('it')" 
+                                data-rel="close">                        
+                            <img style="width: 20px;" src="images/it.png" /><br/>
+                            <span class="ui-btn-text">Italiano</span>                                                    
+                        </a>
+                    </span>
                 </li>
-                <li>
-                    <a href="#page0"        
-                        data-rel="close" 
-                        class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">
-                        <span class="ui-btn-inner">
-                            <span class="ui-btn-text">Chiudi menu
-                            </span>
-                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
-                        </span>
-                    </a>
+
+                <li id="lang-de-<%= i %>" style="width: 100%;">
+                    <span class="ui-btn-inner ui-btn-text">
+                        <a href="javascript:chlang('de')"
+                                data-rel="close">                        
+                            <img style="width: 20px;" src="images/de.png" /><br/>
+                            <span class="ui-btn-text">Deutsch</span>                                                    
+                        </a>
+                    </span>
                 </li>
+
+                <li id="lang-fr-<%= i %>" style="width: 100%;">
+                    <span class="ui-btn-inner ui-btn-text">
+                        <a href="javascript:chlang('fr')"
+                                data-rel="close">                        
+                            <img style="width: 20px;" src="images/fr.png" /><br/>
+                            <span class="ui-btn-text">Francais</span>                                                    
+                        </a>
+                    </span>
+                </li>
+
+                <li id="lang-en-<%= i %>" style="width: 100%;">
+                    <span class="ui-btn-inner ui-btn-text">
+                        <a href="javascript:chlang('en')"
+                                data-rel="close">                        
+                            <img style="width: 20px;" src="images/is.png" /><br/>
+                            <span class="ui-btn-text">English</span>                                                    
+                        </a>
+                    </span>
+                </li>
+
+                <li id="lang-es-<%= i %>" style="width: 100%;">
+                    <span class="ui-btn-inner ui-btn-text">
+                        <a href="javascript:chlang('es')"
+                                data-rel="close">                        
+                            <img style="width: 20px;" src="images/es.png" /><br/>
+                            <span class="ui-btn-text">Espanol</span>                                                    
+                        </a>
+                    </span>  
+                </li>
+
             </ul>
-        </div>        
+
+        </div>       
+
+        <br/>
         
+        <a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Chiudi</a>
+        <p>Per chiudere questo pannello usare il pulsante 'chiudi' o cliccare fuori dai bordi, trascinare il dito a destra o sinistra o premere il tasto Esc</p>
+
     </div>
     <!-- /leftpanel1 -->
 
