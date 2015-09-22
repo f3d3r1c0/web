@@ -68,5 +68,7 @@ $(document).bind("mobileinit", function(){
 
     bubble.showIfAllowed();
   }, 1000 /** delay to show the bubble */ );
+
  });
+
 });

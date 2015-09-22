@@ -445,7 +445,7 @@
 
 <div data-role="page" id="page<%= i %>">      
         
-    <div data-role="footer" class="ui-footer ui-bar-a" role="contentinfo" style="position: fixed; width: 100%;">
+    <div data-role="header" class="ui-header ui-bar-a" role="contentinfo" data-position="fixed">
         <div data-role="navbar" class="ui-navbar ui-mini" role="navigation">
             <ul class="ui-grid-b">
 
@@ -461,7 +461,7 @@
                         data-iconpos="top" 
                         data-theme="a" 
                         data-inline="true" 
-                        class="ui-btn ui-btn-up-a ui-btn-inline ui-btn-icon-top">
+                        class="ui-btn-icon-top">
                         <span class="ui-btn-inner">
                             <span class="ui-btn-text">Indietro
                             </span>
@@ -481,7 +481,7 @@
                         data-iconpos="top" 
                         data-theme="a" 
                         data-inline="true" 
-                        class="ui-btn-active ui-btn ui-btn-inline ui-btn-icon-top ui-btn-up-a"> 
+                        class="ui-btn-icon-top"> 
                         <span class="ui-btn-inner">
                             <span class="ui-btn-text">Nuova Ricerca
                             </span>
@@ -501,7 +501,7 @@
                         data-iconpos="top" 
                         data-theme="a" 
                         data-inline="true" 
-                        class="ui-btn ui-btn-inline ui-btn-icon-top ui-btn-up-a">
+                        class="ui-btn-icon-top">
                         <span class="ui-btn-inner">
                             <span class="ui-btn-text">Avanti
                             </span>
@@ -509,26 +509,71 @@
                         </span>
                     </a>
                 </li>
-
+<!--
+                <li class="ui-block-d">
+                    <a href="#rightpanel<%= i %>"                        
+                        data-icon="bars" 
+                        data-corners="false" 
+                        data-shadow="false" 
+                        data-iconshadow="true" 
+                        data-wrapperels="span" 
+                        data-iconpos="top" 
+                        data-theme="a" 
+                        data-inline="true" 
+                        class="ui-btn-icon-top">
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text">Cambia Lingua
+                            </span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>
+                    </a>
+                </li>
+-->
             </ul>
 
         </div><!-- /navbar -->
                
     </div><!-- /footer -->
 
-    <div data-role="main" class="ui-content" style="vertical-align:middle;"> 
+    <div data-role="main" class="ui-content" style="vertical-align:middle;">         
         <img style="width: 100%; border: 0px; border-top: 50px #ffffff solid;" src="images/loading.gif" id="page<%= i %>file" />
     </div>
 
     <div data-role="footer" style="text-align: right;">
-        <h1 id="page<%= i %>footer">Pagina ? di ?</h1>        
-        <select id="page<%= i %>select" 
-            <% If i > 0 Then %>
-            style="display: none;"
-            <% End If %>
-            onchange="selchange(this)">
-        </select>
+        <h3 id="page<%= i %>footer">Pagina ? di ?</h3>             
     </div>
+
+    <!-- leftpanel1 -->
+    <div data-role="panel" id="rightpanel<%= i %>" data-position="right" data-display="reveal" data-theme="a">
+        <h3>Cambio Lingua</h3>
+        <div data-role="navbar">
+            <ul>
+                <li>
+                    <a href="#page0"        
+                        class="ui-btn-icon-top">
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text">Tedesco
+                            </span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#page0"        
+                        data-rel="close" 
+                        class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text">Chiudi menu
+                            </span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>        
+        
+    </div>
+    <!-- /leftpanel1 -->
 
 </div>
 

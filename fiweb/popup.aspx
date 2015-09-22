@@ -31,6 +31,11 @@
     <link rel="icon" type="image/png" href="images/farmadati-apple-icon.png">
 	<script>
       page_popup_bubble = "#index";
+      //page_popup_bubble = "default.aspx";
+
+    //$("#TB_iframeContent")[0];
+    //iframe.contentWindow.focus()
+
     </script>		
 	<script type="text/javascript" src="js/jquery.mobile.min.js"></script>	
 <head></head>

@@ -1,3 +1,8 @@
+1) internazionalizzazione
+2) invio mail da farmastampati@farmadati.it
+3) aggiustare popup
+
+
 PRIORITARIO 
 - Combo internazionale sul visualizzatore quando AIC associato a più lingue
   per ora viene riportata solo in prima pagina, verificarne funzionamento.
