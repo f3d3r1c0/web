@@ -155,6 +155,9 @@
 
                             if (!doc || doc == null) doc = list[0];
 
+                            //everything ok reset aic field ...
+                            $('#aic').val('');
+
                             reload();
                             
                             $("#success").click();
@@ -274,7 +277,7 @@
                     }                    
                     ik ++;                    
                 });
-
+                                
                 $('#page' + k).on("swiperight", function () {          
                     if (swipe_off_flag) return;              
                     var n = parseInt($.mobile.activePage.attr('id').substr(4));
@@ -290,11 +293,14 @@
                     swipe_off();
                     $.mobile.changePage('#page' + (n + 1), 
                         { allowSamePageTransition: true, transition: 'slide' }); 
+                });                
+
+                /*
+
+                $('#page' + k).on("pageshow", function () {                                    
                 });
 
-                //$('#page' + k).on("pageshow", function () {                    
-                //
-                //});
+                */
 
             }
 
@@ -388,12 +394,12 @@
                     href="#popupCloseRight" data-rel="popup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" 
 		            data-position-to="window" 
 		            data-transition="flip">...</a>
-                <div data-role="popup" id="popupCloseRight" class="ui-content"
-                        style="max-width:280px; border: 3px #aa1111 solid; color: darkRed;">
-                    <a href="#" data-rel="back" 
-                            class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
-			                style="background-color: #dd4231;">Chiudi</a>
-	                <p id="error">...</p>
+            <div data-role="popup" id="popupCloseRight" class="ui-content"
+                    style="max-width:280px; border: 3px #aa1111 solid; color: darkRed;">
+                <a href="#" data-rel="back" 
+                        class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
+			            style="background-color: #dd4231;">Chiudi</a>
+	            <p id="error">...</p>
             </div>
             <!-- end popup -->
             
@@ -516,7 +522,7 @@
                
     </div><!-- /header -->
 
-    <div data-role="main" class="ui-content" style="vertical-align:middle;">         
+    <div data-role="main" class="ui-content" style="vertical-align: middle;">         
         <img style="width: 100%; border: 0px;" src="images/loading.gif" id="page<%= i %>file" />
     </div>
 
