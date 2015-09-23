@@ -346,9 +346,15 @@
                 $aic.show();
               });
 
+            $('#aic').keypress (function (event) {
+                if (event && event.which && event.which == 13) {
+                    dosearch();
+                }
+            });            
+
             if ($('#aic').val().trim().length > 0) {
                 dosearch();
-            }
+            }            
             
         }
 
@@ -374,7 +380,7 @@
             <span style="font-weight: bolder;">Inserisci il Codice AIC</span>                   
             
             <div class="ui-content"> 
-                <input name="aic" id="aic" type="text" size="10" value="<%= aic %>">
+                <input name="aic" id="aic" type="text" size="10" onkeypress="manageAicKeypress()" value="<%= aic %>">
             </div>
 
             <!-- popup, available positions: window, origin, #id -->
