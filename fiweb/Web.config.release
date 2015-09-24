@@ -42,10 +42,9 @@
     <!-- Log file for debug purposes
          WARNING: Comment logFile setting in production environment
          Use it only for debug purposes. Logger still experimental. (OPTIONAL) -->
-    <!--
-    <add key="logFile" value="C:\Temp\FarmastampatiMobi.log"/>
-    -->
-       
+    
+    <add key="logFile" value="D:\Temp\FarmastampatiMobi.log"/>
+           
     <!-- 
         ////////////////////////////////////////////////////////////////////
         //        

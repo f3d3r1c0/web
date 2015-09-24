@@ -4,7 +4,6 @@
  *      @see http://demos.jquerymobile.com/1.4.5/icons/       
  *
  */
-
 var list = null;
 var doc = null;           
 
@@ -188,7 +187,7 @@ function reload(numberOfPages)
             ik ++;                    
         });
                         
-        $('#page' + k).on("swiperight", function () {          
+        $('#page' + k + 'file').on("swiperight", function () {          
             if (swipe_off_flag) return;              
             var n = parseInt($.mobile.activePage.attr('id').substr(4));
             swipe_off();
@@ -196,7 +195,7 @@ function reload(numberOfPages)
                 { allowSamePageTransition: true, transition: 'slide', reverse: true });
         });
 
-        $('#page' + k).on("swipeleft", function () {         
+        $('#page' + k + 'file').on("swipeleft", function () {         
             if (swipe_off_flag) return;
             var n = parseInt($.mobile.activePage.attr('id').substr(4));                                        
             if (n >= doc.pagesCount - 1) return;
@@ -205,11 +204,32 @@ function reload(numberOfPages)
                 { allowSamePageTransition: true, transition: 'slide' }); 
         });                
 
-        /*
-
-        $('#page' + k).on("pageshow", function () {                                    
+        $('#page' + k + 'file').on("swipeup", function () {          
+            if (swipe_off_flag) return;              
+            var n = parseInt($.mobile.activePage.attr('id').substr(4));            
+            swipe_off();
+            alert('swipe up');
+            $.mobile.changePage('#page' + (n - 1), 
+                { allowSamePageTransition: true, transition: 'slideup'});
         });
 
+        $('#page' + k + 'file').on("swipedown", function () {          
+            if (swipe_off_flag) return;              
+            var n = parseInt($.mobile.activePage.attr('id').substr(4));
+            if (n >= doc.pagesCount - 1) return;
+            swipe_off();
+            $.mobile.changePage('#page' + (n - 1), 
+                { allowSamePageTransition: true, transition: 'slidedown'});
+        });
+
+        /*
+        $('#page' + k).on("pageshow", function () { 
+            //
+            // impostare qui eventuali azioni da esegure in fase di attivazione della pagina
+            // attenzione: non usare il k come riferimento alla pagina, bensi la var n come segue 
+            // var n = parseInt($.mobile.activePage.attr('id').substr(4));    
+            //
+        });
         */
 
     }
@@ -245,29 +265,41 @@ function chlang(lang, numberOfPages)
 }
 
 
-function _onload() {
+function _onload(numberOfPages) {
 
+    //
+    // da vedere l'utilita di queste istruzioni
+    //
     $.mobile.changePage("#other-page", { allowSamePageTransition: true });
-
     var $loading = $('#loading').hide();
     var $aic = $('#searchbutton').fadeIn();
 
+    //
+    // imposta il loader ajax 
+    //
     $(document)
-      .ajaxStart(function () {
-        $aic.hide();
-        $loading.fadeIn();
-      })
-      .ajaxStop(function () {
-        $loading.hide();
-        $aic.show();
-      });
+        .ajaxStart(function () {
+            $aic.hide();
+            $loading.fadeIn();
+        })
+        .ajaxStop(function () {
+            $loading.hide();
+            $aic.show();
+        });
+    
 
+    //
+    // abilita la ricerca tramite pressione del tasto invio
+    //
     $('#aic').keypress (function (event) {
         if (event && event.which && event.which == 13) {
             dosearch();
         }
     });            
 
+    //
+    // reindirizza sul foglietto se aic viene popolato da aspx al caricamento 
+    //
     if ($('#aic').val().trim().length > 0) {
         dosearch();
     }            

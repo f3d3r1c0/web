@@ -69,7 +69,6 @@ namespace webapp
                 }
             }
         }
-
         
         public static void Write(string msg, params object[] args)
         {
