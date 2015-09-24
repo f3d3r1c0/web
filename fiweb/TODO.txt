@@ -1,19 +1,9 @@
-1) internazionalizzazione
-2) invio mail da farmastampati@farmadati.it
-3) aggiustare popup
-
-
-PRIORITARIO 
-- Combo internazionale sul visualizzatore quando AIC associato a più lingue
-  per ora viene riportata solo in prima pagina, verificarne funzionamento.
-- popup di aiuto non zoomma
-- Popup aggiungi a home ... ios + Android
-- tracciamento su logfile con rolling backup / retention: 
-	a) riordinare codice con logging semplice
-	b) prova invio email
+1) verifica invio mail, scegliere account adeguato (farmastampati@farmadati.it?)
+2) Popup di istruzioni su installazione
 
 SECONDARIO
-- internazionalizzazione
+1) tracciamento su logfile con rolling backup / retention: 
+
 
  
 

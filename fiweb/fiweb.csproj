@@ -56,7 +56,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dbtest-development.sql" />
+    <Content Include="default-cached.js" />
     <Content Include="default.aspx" />
     <Content Include="default-cached.aspx" />
     <Content Include="Global.asax" />
@@ -65,13 +65,15 @@
     <Content Include="images\farmadati.png" />
     <Content Include="images\farmast-logo.png" />
     <Content Include="images\farmast.png" />
-    <Content Include="popup.aspx" />
     <None Include="libs\itextsharp.dll" />
+    <Content Include="js\images\ajax-loader.gif" />
+    <Content Include="js\jquery-1.11.3.min.js" />
+    <Content Include="js\jquery.mobile-1.4.5.min.css" />
+    <Content Include="js\jquery.mobile-1.4.5.min.js" />
     <Content Include="mailbody.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Web.config.release" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">

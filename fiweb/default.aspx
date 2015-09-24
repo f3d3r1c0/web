@@ -6,9 +6,10 @@
     If Not Request.QueryString Is Nothing Then
         For Each q As String In Request.QueryString
             If q.ToLower() = "popup" Then
-                If Request.QueryString(q).ToLower() = "true" Then
-                    redirectPage = "popup.aspx"
-                End If
+                '
+                ' TODO: gestire eventualmente mascheramento popup
+                '
+                '                
             Else 
                 If querystring.Length = 0 Then
                     querystring = "?"

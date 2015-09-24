@@ -86,285 +86,7 @@
           -->
 
     <!-- Page Scripting -->
-    <script type="text/javascript">
-
-        /*
-         *  Reference Documentation
-         *      @see http://demos.jquerymobile.com/1.0rc2/docs/api/events.html
-         *      @see http://demos.jquerymobile.com/1.4.5/icons/       
-         *
-         */
-
-        var list = null;
-        var doc = null;           
-
-        function msgbox(mesg)
-        {           
-            $('#error').html(mesg);
-            $('#displayerror').click();
-        }
-        
-        function dosearch()
-        {
-            try {
-
-                var vaic = $('#aic').val().trim();
-
-                if (vaic.length == 0) throw 'Inserire il codice AIC';
-                if (vaic.charAt(0) == 'A') vaic = aic.substr(1);
-                if (vaic.charAt(0) == 'a') vaic = aic.substr(1);
-
-                var aic = '';
-
-                for (var i = 0; i < vaic.length; i++) {
-                    if ("0123456789".indexOf(vaic.charAt(i)) >= 0)
-                        aic += vaic.charAt(i);
-                    else if (" .-\r\n\t".indexOf(vaic.charAt(i)) < 0) 
-                        throw 'Codice AIC non valido<br />' 
-                            + 'Deve contenere solo caratteri numerici,<br />'
-                            + 'puo\' avere come carattere iniziale \'A\'';               
-                }
-
-                while (aic.length < 9) {
-                    aic = '0' + aic; 
-                }
-
-                $.ajax({                    
-
-                    url: 'archive',
-                    dataType: 'json',
-                    data: '{ "aic": "' + aic + '" }',
-                    method: 'post',
-                                        
-                    success: function (data) {
-
-                        try {
-
-                            if (!data && data.length <= 0) 
-                                throw 'codice AIC ' + aic + ' non trovato';
-                                                        
-                            doc = null;
-                            list = data;
-    
-                            for (var i = 0; i < list.length; i ++) {    
-                                if (list[i].isDefaultLanguage) {
-                                    doc = list[i];
-                                    break;
-                                }
-                            }   
-
-                            if (!doc || doc == null) doc = list[0];
-
-                            //everything ok reset aic field ...
-                            $('#aic').val('');
-
-                            reload();
-                            
-                            $("#success").click();
-
-                        }
-                        catch (e1) {                        
-
-                            msgbox(e1);                            
-
-                        }
-
-                        $("#loading-popup").hide();
-
-                    },
-
-                    error: function (data) {   
-
-                        $("#loading-popup").hide();
-                        msgbox('Codice AIC non trovato');    
-                        
-                    }
-
-                });
-            }
-            catch(e2) {
-            
-                $("#loading-popup").hide();
-                msgbox(e2);    
-                
-            }         
-        }   
-        
-        function getpageurl(filename, page)
-        {            
-            var timeout = -1;
-            var nocache = false; 
-            var gsext = 'png';            
-            var gsopts = 
-                "-sDEVICE=pngalpha " +         
-                "-dFirstPage=" + page + " " +
-                "-dLastPage=" + page + " " +
-                "-dMaxBitmap=500000000 " +                    
-                        "-dAlignToPixels=0 " +
-                        "-dGridFitTT=0 " +          
-                        "-dTextAlphaBits=4 " +
-                        "-dGraphicsAlphaBits=4 " +
-                        "-r120x120"; 
-            return 'pages/' + filename + '?page=' + page +
-                    (timeout > 0 ? '&timeout=' + timeout : '') + 
-                    (nocache ? '&nocache=true' : '') + 
-                    '&gsext=' + gsext +
-                    '&gsopts=' + encodeURI(gsopts);                                
-        }
-
-        var swipe_off_flag = false;
-
-        function swipe_off()
-        {
-            swipe_off_flag = true;
-            setInterval("swipe_on()", 500);
-        }
-
-        function swipe_on() {
-            swipe_off_flag = false;
-        }
-
-        function reload()
-        {            
-            var ic = 0;
-
-            $('img').each(
-                function () {
-                    var id = $(this).attr('id');
-                    if (id == null) return;
-                    if (id.indexOf('page') < 0) return;                    
-                    if (id.indexOf('file') < 0) return;                    
-                    ic ++;
-                    if (ic > doc.pagesCount) {
-                        $(this).attr('src', 'images/loading.gif');                        
-                        $('#page' + (ic - 1) + 'footer').html('loading ...');
-                    }
-                    else {
-                        $(this).attr('src', getpageurl (doc.filename, ic));
-                        $('#page' + (ic - 1) + 'footer').html('Pagina ' + ic + ' di ' + doc.pagesCount);
-                    }                    
-                }
-            );          
-
-            for (var k = 0; k < <%= PAGESER %>; k ++) {                                                                            
-
-                $('#lang-it' + '-' + k).css('display', 'none');
-                $('#lang-de' + '-' + k).css('display', 'none');
-                $('#lang-en' + '-' + k).css('display', 'none');
-                $('#lang-es' + '-' + k).css('display', 'none');
-                $('#lang-fr' + '-' + k).css('display', 'none');
-                
-                for (var i = 0; i < list.length; i ++) {    
-                    var lang = list[i].language.toLowerCase();                                
-                    try {
-                        $('#lang-' + lang + '-' + k).css('display', 'block');
-                    }
-                    catch (e) {}
-                }   
-
-                var ik = -1;  
-
-                $('#page' + k + ' a').each (function() {
-                    switch (ik) {
-                        case -1:
-                            $(this).attr('href', '#page' + (k + ik));       
-                            break;                                         
-                        case 1:
-                            $(this).attr('href', (k < doc.pagesCount - 1 ? 
-                                    '#page' + (k + ik) : 
-                                    '#'));
-                            break;
-                    }                    
-                    ik ++;                    
-                });
-                                
-                $('#page' + k).on("swiperight", function () {          
-                    if (swipe_off_flag) return;              
-                    var n = parseInt($.mobile.activePage.attr('id').substr(4));
-                    swipe_off();
-                    $.mobile.changePage('#page' + (n - 1), 
-                        { allowSamePageTransition: true, transition: 'slide', reverse: true });
-                });
-
-                $('#page' + k).on("swipeleft", function () {         
-                    if (swipe_off_flag) return;
-                    var n = parseInt($.mobile.activePage.attr('id').substr(4));                                        
-                    if (n >= doc.pagesCount - 1) return;
-                    swipe_off();
-                    $.mobile.changePage('#page' + (n + 1), 
-                        { allowSamePageTransition: true, transition: 'slide' }); 
-                });                
-
-                /*
-
-                $('#page' + k).on("pageshow", function () {                                    
-                });
-
-                */
-
-            }
-
-        }
-
-
-        function chlang(lang)
-        {           
-            var i;                        
-            
-            for (i = 0; i < <%= PAGESER %>; i++) {
-                $('#page' + i + 'file').attr('src', 'images/loading.gif');                
-            }
-
-            for (i = 0; i < list.length; i ++) {
-                if (list[i].language.toLowerCase() == lang) {
-                    doc = list[i];                    
-                    break;
-                }
-            }
-
-            reload();                       
-
-            if ($.mobile.activePage.attr('id') == 'page0') {
-                $("html, body").animate({ scrollTop: 0 }, "slow");     
-            }
-            else {
-                $.mobile.changePage('#page0', 
-                        { allowSamePageTransition: true, transition: 'slide', reverse: true });                
-            }
-            
-        }
-
-
-        function _onload() {
-
-            $.mobile.changePage("#other-page", { allowSamePageTransition: true });
-
-            var $loading = $('#loading').hide();
-            var $aic = $('#searchbutton').fadeIn();
-
-            $(document)
-              .ajaxStart(function () {
-                $aic.hide();
-                $loading.fadeIn();
-              })
-              .ajaxStop(function () {
-                $loading.hide();
-                $aic.show();
-              });
-
-            $('#aic').keypress (function (event) {
-                if (event && event.which && event.which == 13) {
-                    dosearch();
-                }
-            });            
-
-            if ($('#aic').val().trim().length > 0) {
-                dosearch();
-            }            
-            
-        }
-
-    </script>
+    <script type="text/javascript" src="default-cached.js"></script>
 
 </head>
 
@@ -406,7 +128,7 @@
             <!-- search button click -->
             <a id="success" style="display: none" href="#page0" data-transition="slideup"></a>          
             <div id="searchbutton" class="ui-content"> 
-                <a href="javascript: dosearch();" 
+                <a href="javascript: dosearch(<%= PAGESER %>);" 
                     class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a><br />
             </div>
             <div id="loading" data-position="fixed" style="display: none;">
@@ -609,7 +331,7 @@
 
                 <li id="lang-it-<%= i %>" style="width: 100%;">
                     <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('it')" 
+                        <a href="javascript:chlang('it', <%= PAGESER %>)" 
                                 data-rel="close">                        
                             <img style="width: 20px;" src="images/it.png" /><br/>
                             <span class="ui-btn-text">Italiano</span>                                                    
@@ -619,7 +341,7 @@
 
                 <li id="lang-de-<%= i %>" style="width: 100%;">
                     <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('de')"
+                        <a href="javascript:chlang('de', <%= PAGESER %>)"
                                 data-rel="close">                        
                             <img style="width: 20px;" src="images/de.png" /><br/>
                             <span class="ui-btn-text">Deutsch</span>                                                    
@@ -629,7 +351,7 @@
 
                 <li id="lang-fr-<%= i %>" style="width: 100%;">
                     <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('fr')"
+                        <a href="javascript:chlang('fr', <%= PAGESER %>)"
                                 data-rel="close">                        
                             <img style="width: 20px;" src="images/fr.png" /><br/>
                             <span class="ui-btn-text">Francais</span>                                                    
@@ -639,7 +361,7 @@
 
                 <li id="lang-en-<%= i %>" style="width: 100%;">
                     <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('en')"
+                        <a href="javascript:chlang('en', <%= PAGESER %>)"
                                 data-rel="close">                        
                             <img style="width: 20px;" src="images/is.png" /><br/>
                             <span class="ui-btn-text">English</span>                                                    
@@ -649,7 +371,7 @@
 
                 <li id="lang-es-<%= i %>" style="width: 100%;">
                     <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('es')"
+                        <a href="javascript:chlang('es', <%= PAGESER %>)"
                                 data-rel="close">                        
                             <img style="width: 20px;" src="images/es.png" /><br/>
                             <span class="ui-btn-text">Espanol</span>                                                    
