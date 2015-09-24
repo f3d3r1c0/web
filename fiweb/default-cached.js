@@ -156,7 +156,7 @@ function reload(numberOfPages)
     );          
 
     for (var k = 0; k < numberOfPages; k ++) {                                                                            
-
+        
         $('#lang-it' + '-' + k).css('display', 'none');
         $('#lang-de' + '-' + k).css('display', 'none');
         $('#lang-en' + '-' + k).css('display', 'none');
@@ -268,14 +268,37 @@ function chlang(lang, numberOfPages)
 function _onload(numberOfPages) {
 
     //
-    // da vedere l'utilita di queste istruzioni
+    // TODO: da vedere l'utilita di queste istruzioni
     //
     $.mobile.changePage("#other-page", { allowSamePageTransition: true });
     var $loading = $('#loading').hide();
     var $aic = $('#searchbutton').fadeIn();
 
     //
-    // imposta il loader ajax 
+    // initialize focal zoom on png pages
+    //
+    for (var k = 0; k < numberOfPages; k++) {
+        (function () {
+            var $section = $('#focal' + k);
+            var $panzoom = $section.find('.panzoom').panzoom();
+            $panzoom.parent().on('mousewheel.focal', function (e) {
+                e.preventDefault();
+                var delta = e.delta || e.originalEvent.wheelDelta;
+                var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+                $panzoom.panzoom('zoom', zoomOut, {
+                    increment: 0.3,
+                    animate: false,
+                    focal: e
+                });
+            });
+        })();
+    }
+
+    //
+    // imposta il loader ajax
+    //      TODO da perfezionare: 
+    //      - bottone disabilitato ma visibile, 
+    //      - loader semi-opaco ma sovrapposto e fixed
     //
     $(document)
         .ajaxStart(function () {
@@ -287,7 +310,6 @@ function _onload(numberOfPages) {
             $aic.show();
         });
     
-
     //
     // abilita la ricerca tramite pressione del tasto invio
     //

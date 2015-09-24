@@ -18,9 +18,8 @@ namespace webapp
 
         private static int verbosity = 0;
 
-        //private static int MAX_SIZE = 1024 * 1024;
-        private static int MAX_SIZE = 1024;
-
+        private static int MAX_SIZE = 1024 * 1024;
+        
         private static int ROLL_SIZE = 10;
 
         public static string LogFile
