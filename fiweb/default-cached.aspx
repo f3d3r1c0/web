@@ -523,7 +523,7 @@
     </div><!-- /header -->
 
     <div data-role="main" class="ui-content" style="vertical-align: middle;">         
-        <img style="width: 100%; border: 0px;" src="images/loading.gif" id="page<%= i %>file" />
+        <img style="border: 0px;" src="images/loading.gif" id="page<%= i %>file" />
     </div>
 
     <div data-role="footer" class="ui-footer ui-bar-a" role="contentinfo" data-position="fixed">
