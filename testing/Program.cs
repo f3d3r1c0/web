@@ -13,15 +13,22 @@ namespace testing
         static void Main(string[] args)
         {
             Logger.Enabled = true;
-            Logger.Verbose = true; 
+            Logger.Verbose = false; 
             Logger.LogFile = @"..\..\log.txt";
 
-            new Thread(logger => {
-                for (int i = 0; i < 100000; i++)
+            Logger.Write("starting ...");
+
+            for (int k = 1; k <= 5; k++)
+            {
+                new Thread(logger =>
                 {
-                    Logger.Write("message from thread {0} nr.{1}", Thread.CurrentThread, (i + 1));
-                }
-            }).Start();
+                    for (int i = 0; i < 10000; i++)
+                    {
+                        Logger.Write("message nr.{0}", (i + 1));
+                    }
+                    Console.WriteLine("thread {0} exit ...", k);
+                }).Start();
+            }
             
         }
     }
