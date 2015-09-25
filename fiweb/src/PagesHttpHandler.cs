@@ -201,11 +201,10 @@ namespace webapp
                         response.StatusDescription = "Server Error";
                         response.Flush();
                     }
-                    catch (Exception eccezziunaleeeVerrameeennttee) 
+                    catch 
                     {
                         if (Logger.Enabled)
-                            Logger.Write("error flushing response - {0}", 
-                                eccezziunaleeeVerrameeennttee);
+                            Logger.Write("error flushing response! clent disconnected?");
                     }
                 }
             }

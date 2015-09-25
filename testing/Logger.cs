@@ -64,7 +64,8 @@ namespace webapp
             {
                 lock (_lock)
                 {
-                    verbosity = 2;
+                    if (value) verbosity = 2;
+                    else if (verbosity == 2) verbosity = 1;
                 }
             }
         }

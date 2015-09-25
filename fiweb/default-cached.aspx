@@ -1,4 +1,4 @@
-﻿<%@ Page Language="VB" EnableSessionState="false"%>
+﻿<%@ Page Language="VB" EnableSessionState="false" %>
 <%@ Import Namespace="webapp" %>
 <%
     Dim PAGESER as Integer = 30
@@ -6,10 +6,13 @@
     If Not Request.QueryString("aic") Is Nothing Then
         aic = Request.QueryString("aic").Trim().ToUpper()
     End If
+    Response.AppendHeader("Cache-Control", "no-cache, no-store, must-revalidate")     
+    Response.AppendHeader("Pragma", "no-cache")     
+    Response.AppendHeader("Expires", "0")     
     %>
 <!DOCTYPE html>
 <html lang="en">
-<head>  
+<head>
 
     <!-- Android -->
     <!--
@@ -108,10 +111,10 @@
             <span style="font-style: italic;">Visualizza il foglietto illustrativo</span><br /><br />
 
             <!-- aic text box -->
-            <span style="font-weight: bolder;">Inserisci il Codice AIC</span>                   
+            <span style="font-weight: bolder;">Inserisci il Codice AIC</span>
             
             <div class="ui-content"> 
-                <input name="aic" id="aic" type="text" size="10" onkeypress="manageAicKeypress()" value="<%= aic %>">
+                <input name="aic" id="aic" type="text" size="10" value="<%= aic %>">
             </div>
 
             <!-- popup, available positions: window, origin, #id -->
@@ -147,17 +150,17 @@
                 </a>
             </span>            
             <div data-role="popup" id="aicPopup" class="ui-content">
-            <a href="#" data-rel="back" 
-                        class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
-                        style="background-color: #dd4231;">Chiudi</a>
-            <span style="font-weight: smaller;">
-                Il codice AIC viene riportato di<br/>
-                solito su un lato della scatola<br/>
-                del medicinale come in figura:
-            </span>
-            <img style="border: 0px; width: 400px;" 
-                    alt="Codiice Agenzia Italiana del Farmaco" 
-                    src="images/aicsample.jpg"/>
+                <a href="#" data-rel="back" 
+                            class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
+                            style="background-color: darkRed;">Chiudi</a>
+                <span style="font-weight: smaller;">
+                    Il codice AIC viene riportato di<br/>
+                    solito su un lato della scatola<br/>
+                    del medicinale come in figura:
+                </span>
+                <img style="border: 0px; width: 400px;" 
+                        alt="Codiice Agenzia Italiana del Farmaco" 
+                        src="images/aicsample.jpg"/>
             </div>
 
         </div>
@@ -287,7 +290,7 @@
                 </li>
 
                 <li class="ui-block-b">                
-                    <a href="#" 
+                    <a href="javascript:xy();" 
                         data-transition="slidedown"                         
                         data-icon="info" 
                         data-corners="false" 

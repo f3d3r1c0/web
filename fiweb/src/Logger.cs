@@ -12,19 +12,19 @@ namespace webapp
 {
     public class Logger
     {
-        private static readonly object _lock = "";
+        public static readonly object _lock = "";
 
-        private static string _path = null;
+        public static string _path = null;
 
-        private static int verbosity = 0;
+        public static int verbosity = 0;
 
-        private static int MAX_SIZE = 1024 * 1024;
-        
-        private static int ROLL_SIZE = 10;
+        public static int MAX_SIZE = 1024 * 1024;
+
+        public static int ROLL_SIZE = 10;
 
         public static string LogFile
         {
-            get 
+            get
             {
                 return _path;
             }
@@ -64,12 +64,13 @@ namespace webapp
             {
                 lock (_lock)
                 {
-                    verbosity = 2;
+                    if (value) verbosity = 2;
+                    else if (verbosity == 2) verbosity = 1;
                 }
             }
         }
 
-        
+
         public static void Write(string msg, params object[] args)
         {
             if (verbosity <= 0) return;
@@ -111,11 +112,11 @@ namespace webapp
                     if (verbosity > 1)
                     {
                         prompt += " [";
-                        prompt += (Thread.CurrentThread.Name != null ? 
+                        prompt += (Thread.CurrentThread.Name != null ?
                             Thread.CurrentThread.Name : "0x" + Thread.CurrentThread.ManagedThreadId.ToString("X4"));
                         prompt += "] ";
 
-                        StackTrace stackTrace = new StackTrace();                        
+                        StackTrace stackTrace = new StackTrace();
                         StackFrame callingframe = stackTrace.GetFrame(1);
 
                         prompt += " ";
@@ -129,27 +130,31 @@ namespace webapp
                             prompt += "(+";
                             prompt += callingframe.GetFileLineNumber();
                             prompt += ")";
-                        }                        
+                        }
 
                     }
 
                     prompt += " > ";
                     _r = prompt + _r;
 
-                    FileInfo f = new FileInfo(_path);
-                    if (f.Length + _r.Length > MAX_SIZE)
+                    if (ROLL_SIZE > 0)
                     {
-                        int k = ROLL_SIZE;
-                        while (k > 0) {
-                            try
+                        FileInfo f = new FileInfo(_path);
+                        if (f.Exists && f.Length + _r.Length > MAX_SIZE)
+                        {
+                            int k = ROLL_SIZE;
+                            while (k-- > 0)
                             {
-                                FileInfo dst = new FileInfo(_path + "." + k);
-                                FileInfo src = new FileInfo(_path + (k > 0 ? "" : "." + (k - 1)));
-                                if (dst.Exists) dst.Delete();
-                                src.MoveTo(dst.FullName);
+                                try
+                                {
+                                    FileInfo src = new FileInfo(_path + (k == 0 ? "" : "." + (k - 1)));
+                                    if (!src.Exists) continue;
+                                    FileInfo dst = new FileInfo(_path + "." + k);
+                                    if (dst.Exists) dst.Delete();
+                                    src.MoveTo(dst.FullName);
+                                }
+                                catch { }
                             }
-                            catch { }
-                            k--;
                         }
                     }
 
@@ -161,9 +166,10 @@ namespace webapp
                 }
 
             }
-            catch
+            catch (Exception e)
             {
                 //eccezzziunale veramente!!!!
+                Console.WriteLine("error - {0}", e);
                 verbosity = 0;
             }
 

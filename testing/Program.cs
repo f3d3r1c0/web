@@ -26,7 +26,7 @@ namespace testing
                     {
                         Logger.Write("message nr.{0}", (i + 1));
                     }
-                    Console.WriteLine("thread {0} exit ...", k);
+                    Console.WriteLine("thread exit ...");
                 }).Start();
             }
             

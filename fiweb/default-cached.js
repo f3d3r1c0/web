@@ -4,6 +4,7 @@
  *      @see http://demos.jquerymobile.com/1.4.5/icons/       
  *
  */
+
 var list = null;
 var doc = null;           
 
@@ -20,8 +21,8 @@ function dosearch(numberOfPages)
         var vaic = $('#aic').val().trim();
 
         if (vaic.length == 0) throw 'Inserire il codice AIC';
-        if (vaic.charAt(0) == 'A') vaic = aic.substr(1);
-        if (vaic.charAt(0) == 'a') vaic = aic.substr(1);
+        if (vaic.charAt(0) == 'A') vaic = vaic.substr(1);
+        if (vaic.charAt(0) == 'a') vaic = vaic.substr(1);
 
         var aic = '';
 
@@ -187,6 +188,7 @@ function reload(numberOfPages)
             ik ++;                    
         });
                         
+        /*
         $('#page' + k + 'file').on("swiperight", function () {          
             if (swipe_off_flag) return;              
             var n = parseInt($.mobile.activePage.attr('id').substr(4));
@@ -221,16 +223,28 @@ function reload(numberOfPages)
             $.mobile.changePage('#page' + (n - 1), 
                 { allowSamePageTransition: true, transition: 'slidedown'});
         });
+        */
 
-        /*
         $('#page' + k).on("pageshow", function () { 
             //
             // impostare qui eventuali azioni da esegure in fase di attivazione della pagina
             // attenzione: non usare il k come riferimento alla pagina, bensi la var n come segue 
-            // var n = parseInt($.mobile.activePage.attr('id').substr(4));    
             //
+            //var n = parseInt($.mobile.activePage.attr('id').substr(4));    
+            //var $section = $('#focal' + n);
+            //var $panzoom = $section.find('.panzoom').panzoom();
+
+            //var $parent = $section;
+
+            /*
+            $panzoom.container = {
+                width: $parent.innerWidth(),
+                height: $parent.innerHeight()
+            };
+            */
+            //var po = $parent.offset();
+
         });
-        */
 
     }
 
@@ -278,6 +292,10 @@ function _onload(numberOfPages) {
     // initialize focal zoom on png pages
     //
     for (var k = 0; k < numberOfPages; k++) {
+        
+        //$('#focal' + k).width($window.width());
+        //$('#focal' + k).height($window.height());
+
         (function () {
             var $section = $('#focal' + k);
             var $panzoom = $section.find('.panzoom').panzoom();
@@ -286,6 +304,7 @@ function _onload(numberOfPages) {
                 var delta = e.delta || e.originalEvent.wheelDelta;
                 var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
                 $panzoom.panzoom('zoom', zoomOut, {
+                    minScale: 0.9,                    
                     increment: 0.3,
                     animate: false,
                     focal: e
@@ -326,4 +345,30 @@ function _onload(numberOfPages) {
         dosearch();
     }            
     
+}
+
+
+/*
+NOTE: 
+- come evienziato i figura
+
+- codice AIC non corretto chiave non corretta 
+- il foglietto illustrativo contenuto nella confezione è aggiornato 
+
+- lingua
+*/
+
+
+function xy()
+{
+    var s = '';
+    
+    s += $('#focal0').width();
+    s += ' x ';
+    s += $('#focal0').height();
+    s += '\r\n';
+    s += $('#focal0').offset();
+
+    alert(s);
+
 }
