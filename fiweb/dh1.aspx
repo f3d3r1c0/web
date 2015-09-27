@@ -92,7 +92,7 @@
     <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
 
     <!-- Page Scripting -->
-    <script type="text/javascript" src="default-cached.js"></script>
+    <script type="text/javascript" src="dh1.js"></script>
 
 </head>
 
@@ -145,7 +145,7 @@
             <span>                      
                 <a href="#aicPopup" data-rel="popup" data-transition="flip" data-position-to="window" 
                         class="ui-btn ui-corner-all ui-shadow ui-btn-middle">            
-                        Non trovi il codice AIC<br/>
+                        Che cosa è il codice AIC<br/>
                     <span style="font-size: 36px; font-weight: bolder;">?</span>
                 </a>
             </span>            
@@ -154,9 +154,8 @@
                             class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
                             style="background-color: darkRed;">Chiudi</a>
                 <span style="font-weight: smaller;">
-                    Il codice AIC viene riportato di<br/>
-                    solito su un lato della scatola<br/>
-                    del medicinale come in figura:
+                    Il codice AIC viene riportato sulla<br/>
+                    confezione come evidenziato i figura:
                 </span>
                 <img style="border: 0px; width: 400px;" 
                         alt="Codiice Agenzia Italiana del Farmaco" 
@@ -184,22 +183,19 @@
             <ul class="ui-grid-b">
 
                 <li class="ui-block-a">
-                    <a href="#page<%= i - 1 %>"
-                            data-transition="slide" 
-                            data-direction="reverse" 
-                            data-icon="arrow-l" 
-                            data-corners="false" 
-                            data-shadow="false" 
-                            data-iconshadow="true" 
-                            data-wrapperels="span" 
-                            data-iconpos="top" 
-                            data-theme="a" 
-                            data-inline="true" 
-                            data-mini="true"
-                            class="ui-btn-icon-top">                        
+                    <a href="#leftpanel<%= i %>"                        
+                        data-icon="bars" 
+                        data-corners="false" 
+                        data-shadow="false" 
+                        data-iconshadow="true" 
+                        data-wrapperels="span" 
+                        data-iconpos="top" 
+                        data-theme="a" 
+                        data-inline="true" 
+                        data-mini="true"
+                        class="ui-btn-icon-top">                        
                         <span class="ui-btn-inner">
-                            <span class="ui-btn-text">Indietro
-                            </span>
+                            <span class="ui-btn-text">Menu Lingua</span>
                             <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
                         </span>                        
                     </a>
@@ -227,6 +223,28 @@
                 </li>
 
                 <li class="ui-block-c">
+                    <a href="#page<%= i - 1 %>"
+                            data-transition="slide" 
+                            data-direction="reverse" 
+                            data-icon="arrow-l" 
+                            data-corners="false" 
+                            data-shadow="false" 
+                            data-iconshadow="true" 
+                            data-wrapperels="span" 
+                            data-iconpos="top" 
+                            data-theme="a" 
+                            data-inline="true" 
+                            data-mini="true"
+                            class="ui-btn-icon-top">                        
+                        <span class="ui-btn-inner">
+                            <span class="ui-btn-text">Indietro
+                            </span>
+                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
+                        </span>                        
+                    </a>
+                </li>
+                
+                <li class="ui-block-d">
                     <a href="#page<%= i + 1 %>"
                             data-transition="slide"                         
                             data-icon="arrow-r" 
@@ -263,80 +281,7 @@
             </div>
         </section>
     </div><!-- /pngpage -->
-
-    <div data-role="footer" class="ui-footer ui-bar-a" role="contentinfo" data-position="fixed">
-
-        <div data-role="navbar" class="ui-navbar ui-mini" role="navigation">
-
-            <ul class="ui-grid-b">
-
-                <li class="ui-block-a">
-                    <a href="#leftpanel<%= i %>"                        
-                        data-icon="bars" 
-                        data-corners="false" 
-                        data-shadow="false" 
-                        data-iconshadow="true" 
-                        data-wrapperels="span" 
-                        data-iconpos="top" 
-                        data-theme="a" 
-                        data-inline="true" 
-                        data-mini="true"
-                        class="ui-btn-icon-top">                        
-                        <span class="ui-btn-inner">
-                            <span class="ui-btn-text">Menu Lingua</span>
-                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
-                        </span>                        
-                    </a>
-                </li>
-
-                <li class="ui-block-b">                
-                    <a href="javascript:xy();" 
-                        data-transition="slidedown"                         
-                        data-icon="info" 
-                        data-corners="false" 
-                        data-shadow="false" 
-                        data-iconshadow="true" 
-                        data-wrapperels="span" 
-                        data-iconpos="top" 
-                        data-theme="a" 
-                        data-inline="true" 
-                        data-mini="true"
-                        class="ui-btn-icon-top"> 
-                        <span class="ui-btn-inner">
-                            <span class="ui-btn-text" id="page<%= i %>footer"></span>
-                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
-                        </span>
-                    </a>                    
-                </li>
-
-                <li class="ui-block-c">
-                    <a href="#page0"
-                        data-transition="slide" 
-                        data-direction="reverse"                        
-                        data-icon="home" 
-                        data-corners="false" 
-                        data-shadow="false" 
-                        data-iconshadow="true" 
-                        data-wrapperels="span" 
-                        data-iconpos="top" 
-                        data-theme="a" 
-                        data-inline="true" 
-                        data-mini="true"
-                        class="ui-btn-icon-top">                        
-                        <span class="ui-btn-inner">
-                            <span class="ui-btn-text">Pagina iniziale
-                            </span>
-                            <span class="ui-icon ui-icon-grid ui-icon-shadow">&nbsp;</span>
-                        </span>                        
-                    </a>
-                </li>
-                
-            </ul>
-
-        </div><!-- /navbar -->
-
-    </div>
-
+    
     <!-- leftpanel1 -->
     <div data-role="panel" id="leftpanel<%= i %>" data-position="left" data-display="reveal" data-theme="a">   
        

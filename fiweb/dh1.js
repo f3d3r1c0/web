@@ -147,11 +147,11 @@ function reload(numberOfPages)
             ic ++;
             if (ic > doc.pagesCount) {
                 $(this).attr('src', 'images/loading.gif');                        
-                $('#page' + (ic - 1) + 'footer').html('loading ...');
+                //$('#page' + (ic - 1) + 'footer').html('loading ...');
             }
             else {
                 $(this).attr('src', getpageurl (doc.filename, ic));
-                $('#page' + (ic - 1) + 'footer').html('Pagina ' + ic + ' di ' + doc.pagesCount);
+                //$('#page' + (ic - 1) + 'footer').html('Pagina ' + ic + ' di ' + doc.pagesCount);
             }                    
         }
     );          

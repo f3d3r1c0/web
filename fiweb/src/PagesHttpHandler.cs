@@ -49,9 +49,19 @@ namespace webapp
 
                 f_id = String.Format("F{0:D7}", Int32.Parse(s_id));
 
+                bool fullpdf = false;
+
                 string pdf = documentRoot;
                 pdf += f_id;
-                if (!pdf.ToLower().EndsWith(".pdf")) pdf += ".pdf";
+
+                if (!pdf.ToLower().EndsWith(".pdf")) 
+                {
+                    pdf += ".pdf";                    
+                }
+                else 
+                {
+                    fullpdf = true;
+                }
 
                 FileInfo pdfInf = new FileInfo(pdf);
 
@@ -61,6 +71,15 @@ namespace webapp
                     response.StatusCode = 404;
                     response.StatusDescription = "Not Found";
                     response.BinaryWrite(File.ReadAllBytes(context.Server.MapPath(".") + "images/404.gif"));
+                    response.Flush();
+                    return;
+                }
+                
+                if (fullpdf) 
+                {
+                    if (Logger.Enabled) Logger.Write("requested full pdf {0} ...", pdf);
+                    response.ContentType = "application/pdf";
+                    response.BinaryWrite(File.ReadAllBytes(pdfInf.FullName));
                     response.Flush();
                     return;
                 }
@@ -151,7 +170,7 @@ namespace webapp
                             response.StatusCode = 500;
                             response.StatusDescription = "Server Error";
                             response.BinaryWrite(File.ReadAllBytes(context.Server.MapPath(".") + "images/404.gif"));
-                            response.Flush();
+                            response.Flush();                            
                         }
                         else
                         {
@@ -161,7 +180,7 @@ namespace webapp
                             response.StatusCode = 503;
                             response.StatusDescription = "Service Unavailable";
                             response.BinaryWrite(File.ReadAllBytes(context.Server.MapPath(".") + "images/404.gif"));
-                            response.Flush();
+                            response.Flush();                            
                         }
                         return;
                     }

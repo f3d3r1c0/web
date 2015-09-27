@@ -1,16 +1,15 @@
 ﻿<%@ Page Language="VB" EnableSessionState="false"%>
 <%    
-    Dim redirectPage = "default-cached.aspx"
+    Dim redirectPage = "dh1.aspx"
     
     Dim querystring As String = ""
     If Not Request.QueryString Is Nothing Then
         For Each q As String In Request.QueryString
             If q.ToLower() = "popup" Then
                 '
-                ' TODO: gestire eventualmente mascheramento popup
-                '
-                '                
-            Else 
+                ' TODO: mascheramento popup?
+                '                             
+            Else             
                 If querystring.Length = 0 Then
                     querystring = "?"
                 Else

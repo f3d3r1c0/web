@@ -1,10 +1,13 @@
-1) verifica invio mail, scegliere account adeguato (farmastampati@farmadati.it?)
-2) Popup di istruzioni su installazione
+1) codice AIC non corretto / chiave non corretta 
+2) verifica invio mail (account? farmastampati@farmadati.it?)
+3) Popup di istruzioni su installazione
 
 SECONDARIO
 1) tracciamento su logfile con rolling backup / retention: 
 
 
+//note
+data-position="fixed" data-tap-toggle="false"
  
 
 

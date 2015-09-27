@@ -22,10 +22,10 @@ cp -f Web.config.release "$outdir/Web.config"
 
 sed -e 's/fiweb/FarmastampatiMobi/g' < fiweb.csproj > "$outdir/FarmastampatiMobi.csproj"
 
-uglifyjs -m --keep-fnames default-cached.js > "$outdir/default-cached.js"
-
-#for file in $(find *.aspx)
-#do
-#	sed -e 's/\"js\//\"http:\/\/php-farma01.rhcloud.com\/farmastampati\/js\//g' < $file > "$outdir/$file"
-#done
+for file in $(find -name dh*.js)
+do
+	echo "exporting $file ..."
+	uglifyjs -m --keep-fnames $file > "$outdir/$file"
+	#sed -e 's/\"js\//\"http:\/\/php-farma01.rhcloud.com\/farmastampati\/js\//g' < $file > "$outdir/$file"
+done
 
