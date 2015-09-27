@@ -127,7 +127,7 @@
 		<a id="success" style="display: none" href="#page0" data-transition="slideup"></a>          
 		
 		<a href="javascript: dosearch($('#aic').val());" 
-		   class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a>
+			class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a>
 		
 		<div id="loading" data-position="fixed" style="display: none;">
 			<img alt="loading" src="js/images/ajax-loader.gif" />
