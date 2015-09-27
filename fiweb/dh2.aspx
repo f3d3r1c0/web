@@ -129,7 +129,7 @@
             <span>                      
                 <a href="#aicPopup" data-rel="popup" data-transition="flip" data-position-to="window" 
                         class="ui-btn ui-corner-all ui-shadow ui-btn-middle">            
-                        Che cosa è il codice AIC<br/>
+                        Che cosa &egrave; il codice AIC<br/>
                     <span style="font-size: 36px; font-weight: bolder;">?</span>
                 </a>
             </span>            
@@ -216,7 +216,7 @@
        
         <img src="images/farmast.png" style="width: 100%;" />
 
-        <p>Il documento è disponibile nelle seguenti versioni</p>
+        <p>Il documento &egrave; disponibile nelle seguenti versioni</p>
 
         <div data-role="navbar">
 

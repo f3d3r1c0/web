@@ -206,7 +206,7 @@ function _onload() {
             $ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
             $ul.listview( "refresh" );
             $.ajax({
-                url: "data.jsp",
+                url: "archive",
                 dataType: "jsonp",
                 crossDomain: true,
                 data: {
@@ -223,6 +223,7 @@ function _onload() {
             });
         }
     });
+
     
 	/*
     $(document)
@@ -235,12 +236,19 @@ function _onload() {
         $('#aic').show();
       });
       */
-	  
-    $('#aic').keypress (function (event) {
-        if (event && event.which && event.which == 13) {
+
+    $(document).keydown(function(event){    
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
             dosearch($('#aic').val());
-        }
+        }    
     });
+	  
+    //$('#aic').keypress (function (event) {
+    //    if (event && event.which && event.which == 13) {
+    //        dosearch($('#aic').val());
+    //    }
+    //});
 
     if ($('#aic').val().trim().length > 0) {
         dosearch($('#aic').val());

@@ -227,7 +227,7 @@
        
         <img src="images/farmast.png" style="width: 100%;" />
 
-        <p>Il documento è disponibile nelle seguenti versioni</p>
+        <p>Il documento &egrave; disponibile nelle seguenti versioni</p>
 
         <div data-role="navbar">
 
