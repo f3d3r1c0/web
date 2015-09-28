@@ -56,9 +56,15 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="default-cached.js" />
     <Content Include="default.aspx" />
-    <Content Include="default-cached.aspx" />
+    <Content Include="dh0.aspx" />
+    <Content Include="dh0.js" />
+    <Content Include="dh1.aspx" />
+    <Content Include="dh1.js" />
+    <Content Include="dh2.aspx" />
+    <Content Include="dh2.js" />
+    <Content Include="dh3.aspx" />
+    <Content Include="dh3.js" />
     <Content Include="Global.asax" />
     <Content Include="images\aicsample.jpg" />
     <Content Include="images\farmadati-apple-icon.png" />
@@ -80,6 +86,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="src\ArchiveHttpHandler.cs" />
+    <Compile Include="src\AutocompleteHttpHandler.cs" />
     <Compile Include="src\Tools.cs" />
     <Compile Include="src\GhostscriptWrapper.cs" />
     <Compile Include="src\Logger.cs" />

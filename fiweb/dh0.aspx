@@ -139,7 +139,7 @@
                         style="background-color: #dd4231;">Chiudi</a>
             <span style="font-weight: smaller;">
                 Il codice AIC viene riportato sulla<br/>
-                confezione come evidenziato i figura:
+                confezione come evidenziato in figura:
             </span>
             <img style="border: 0px; width: 400px;" 
                     alt="Codiice Agenzia Italiana del Farmaco" 

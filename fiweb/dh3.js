@@ -37,6 +37,18 @@ function dosearch(vaic)
             aic = '0' + aic; 
         }
 
+        //  
+        // visualizzo in caricamento ...
+        //
+        $('#caricamento').css('display', 'block');
+
+        $('#page0file').load (function() {        
+            $('#caricamento').css('display', 'none');
+        });
+
+        //
+        // effettuo la chiamata 
+        //
         $.ajax({                    
 
             url: 'archive',
@@ -63,8 +75,11 @@ function dosearch(vaic)
 
                     if (!doc || doc == null) doc = list[0];
 
-                    //everything ok reset aic field ...
+                    //everything ok reset aic field ...                    
                     $('#aic').val('');
+                    $("#autocomplete").val("");
+                    $("#autocomplete").html("");
+                    //$('#autocomplete').html("");
 
                     reload();
                     
@@ -91,6 +106,25 @@ function dosearch(vaic)
             }
 
         });
+
+        /*
+        $('#page' + k + 'file').on("swiperight", function () {                      
+            var n = parseInt($.mobile.activePage.attr('id').substr(4));            
+        });
+
+        $('#page' + k + 'file').on("swipeleft", function () {         
+        });                
+
+        $('#page' + k + 'file').on("swipeup", function () {          
+        });
+
+        $('#page' + k + 'file').on("swipedown", function () {          
+        });
+
+        $('#page' + k).on("pageshow", function () {            
+        });
+        */
+
     }
     catch(e2) {
     
@@ -162,13 +196,18 @@ function reload()
             catch (e) {}
         }                           
     }
+
+    
+
 }
 
 
 function chlang(lang)
 {           
-    var i;                        
-    
+    var i;  
+
+    $('#caricamento').css('display', 'block');
+
     for (i = 0; i < 30; i++) {
         $('#page' + i + 'file').attr('src', 'images/loading.gif');                
     }
@@ -195,35 +234,37 @@ function chlang(lang)
 
 function _onload() {
 
-    $( "#autocomplete" ).on( "filterablebeforefilter", function ( e, data ) {
-        var $ul = $( this ),
-            $input = $( data.input ),
+    $("#autocomplete").on("filterablebeforefilter", function (e, data) {
+
+        var $ul = $(this),
+            $input = $(data.input),
             value = $input.val(),
-            html = "";
-		$('#aic').val(value);
-		$ul.html("");
-        if ( value && value.length > 2 ) {
-            $ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
-            $ul.listview( "refresh" );
+            html = "";  
+
+        $('#aic').val(value);
+        $ul.html("");
+        
+        if (value && value.length > 2) {
+            $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
+            $ul.listview("refresh");
             $.ajax({
-                url: "archive",
+                url: "autocom",
                 dataType: "jsonp",
                 crossDomain: true,
                 data: {
                     q: $input.val()
                 }
             })
-            .then( function ( response ) {
-                $.each( response, function ( i, val ) {
+            .then(function (response) {
+                $.each(response, function (i, val) {
                     html += '<li><a href="javascript:dosearch(' + "'" + val + "'" + ')">' + val + '</a></li>';
                 });
-                $ul.html( html );
-                $ul.listview( "refresh" );
-                $ul.trigger( "updatelayout");
+                $ul.html(html);
+                $ul.listview("refresh");
+                $ul.trigger("updatelayout");
             });
         }
     });
-
     
 	/*
     $(document)
@@ -236,10 +277,10 @@ function _onload() {
         $('#aic').show();
       });
       */
-
+    
     $(document).keydown(function(event){    
         var keycode = (event.keyCode ? event.keyCode : event.which);
-        if(keycode == '13'){
+        if(keycode == '13') {
             dosearch($('#aic').val());
         }    
     });

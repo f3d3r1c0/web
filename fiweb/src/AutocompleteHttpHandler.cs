@@ -19,8 +19,8 @@ namespace webapp
     public class AutocompleteHttpHandler : IHttpHandler
     {
         private string connectionString;
-        
-        public ArchiveHttpHandler()
+
+        public AutocompleteHttpHandler()
         {
             connectionString = ConfigurationManager.ConnectionStrings["farmadati"].ConnectionString;        
         }
@@ -46,6 +46,10 @@ namespace webapp
 				Stream stream = response.OutputStream;
 				DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(DocumentResponse));
 
+                string res = callback;
+                res += "([";					
+							
+
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					using (SqlCommand command = new SqlCommand(
@@ -60,9 +64,6 @@ namespace webapp
 
 						using (SqlDataReader sqlreader = command.ExecuteReader(CommandBehavior.CloseConnection))
 						{
-							Response.AppendHeader("Content-Type", "application/javascript");
-							string res = callback;
-							res += "(["						
 							int count = 0;
 							while (sqlreader.Read())
 							{
@@ -70,14 +71,16 @@ namespace webapp
 								res += "\"";
 								res += sqlreader.GetString(0);
 								res += "\"";
-							}
-							res += "]);"							
+							}                            
 						}
 					}
-				}  
-				
-				Response.Write(res);
-				Response.Flush();
+				}
+
+                res += "]);";							
+
+                response.AppendHeader("Content-Type", "application/javascript");							
+				response.Write(res);
+				response.Flush();
 				
             }
             catch (Exception e)

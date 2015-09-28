@@ -1,14 +1,24 @@
-1) codice AIC non corretto / chiave non corretta 
-2) verifica invio mail (account? farmastampati@farmadati.it?)
-3) Popup di istruzioni su installazione
+1) verifica invio mail (account? farmastampati@farmadati.it?)
 
-SECONDARIO
-1) tracciamento su logfile con rolling backup / retention: 
+2) data field di autocomplete :: focus 
 
+3) data field di autocomplete :: clean in nova ricerca
 
-//note
+4) Popup di istruzioni su installazione
+	
+	/mail -> insert ht[id, aic]
+	/default.aspx?id -> Esiste id ? 
+	                      |
+	                      + si -> wrap popup con /dh3.aspx?id rimuovi id
+	                      |
+	                      |
+	                      + no -> redirect /dh3.aspx rimuovi da querystring id e aic
+
+5) tracciamento su logfile con rolling backup / retention: 
+
+// -----------------------------------------------------------
+//  note
+// -----------------------------------------------------------
+
 data-position="fixed" data-tap-toggle="false"
- 
-
-
 

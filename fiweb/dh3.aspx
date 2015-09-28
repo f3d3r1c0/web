@@ -171,7 +171,7 @@
 		
             <ul class="ui-grid-b">			
                 <li class="ui-block-a" style="width: 50%;">
-                    <a href="#leftpanel0" 
+                    <a href="#leftpanel0" id="reveal0"
                         data-icon="bars" 
                         data-corners="false" 
                         data-shadow="false" 
@@ -211,15 +211,18 @@
         </div>		
     </div>    
 	
-	<div data-role="main" class="ui-content" style="vertical-align: middle">         	
-	<%
-    For i As Integer = 0 To PAGESER
-    %>
+	<div data-role="main" class="ui-content" style="vertical-align: middle;">         	
+        <div id="caricamento" style="width: 100 %; height: 800px; vertical-align: middle;">
+            <img src="images/caricamento.gif" alt="caricamento" style="border: 0px;"></src>
+        </div>
+    	<%
+        For i As Integer = 0 To PAGESER
+        %>    
         <img style="width: 100%; border: 0px;" src="#" id="page<%= i %>file" />    
-		<i class="ui-btn-text" id="page<%= i %>footer"></i>
-    <%
-    Next 
-    %>		
+    	<span class="ui-btn-text" id="page<%= i %>footer"></span>    
+        <%
+        Next 
+        %>		
     </div>
 	
     <!-- leftpanel1 -->
