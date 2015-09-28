@@ -138,8 +138,7 @@
 		<span>                      
 			<a href="#aicPopup" data-rel="popup" data-transition="flip" data-position-to="window" 
 					class="ui-btn ui-corner-all ui-shadow ui-btn-middle">            
-					Che cosa &egrave; il codice AIC<br/>
-				<span style="font-size: 36px; font-weight: bolder;">?</span>
+					Che cosa &egrave; il codice AIC ?				
 			</a>
 		</span>            
 		<div data-role="popup" id="aicPopup" class="ui-content">
@@ -211,15 +210,17 @@
         </div>		
     </div>    
 	
-	<div data-role="main" class="ui-content" style="vertical-align: middle;">         	
+	<div data-role="main" class="ui-content" style="vertical-align: middle; padding: 0px;">         	
         <div id="caricamento" style="width: 100 %; height: 800px; vertical-align: middle;">
-            <img src="images/caricamento.gif" alt="caricamento" style="border: 0px;"></src>
+            <img src="js/images/ajax-loader.gif" alt="caricamento" style="border: 0px;"></src>
         </div>
     	<%
         For i As Integer = 0 To PAGESER
         %>    
-        <img style="width: 100%; border: 0px;" src="#" id="page<%= i %>file" />    
-    	<span class="ui-btn-text" id="page<%= i %>footer"></span>    
+        <div style="box-shadow: 10px 10px 5px #888888; width: 100%;">
+            <img style="width: 100%;" src="#" id="page<%= i %>file" />    
+    	    <span data-role="footer" class="ui-btn-text" id="page<%= i %>footer"></span>    
+        </div>
         <%
         Next 
         %>		
