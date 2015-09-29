@@ -202,7 +202,7 @@ namespace webapp
                 response.Flush();
 
             }
-            catch (Exception e)
+            catch 
             {
                 try
                 {

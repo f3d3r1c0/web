@@ -44,9 +44,9 @@ namespace webapp
             HttpRequest request = context.Request;
             HttpResponse response = context.Response;
 
+            string transactionID = "";
             DateTime start = DateTime.Now;
-            string transactionID = Tools.NextId();
-
+            
             //
             // read smtp configuration 
             //
@@ -139,6 +139,8 @@ namespace webapp
                 }
 
                 if (!aicTestPassed) throw new MailServiceException(403, "AIC not found");
+
+                transactionID = Tools.CreateTransactionId(aic);
                 
                 SmtpClient client = new SmtpClient();
                 client.Port = port;
@@ -161,11 +163,19 @@ namespace webapp
                 StringBuilder body = new StringBuilder();
                 StreamReader sr = new StreamReader(mailBody);
 
+                string baseurl = request.Url.AbsoluteUri;
+                baseurl = baseurl.Substring(0, baseurl.LastIndexOf("/mail"));
+                
+                string dateFormat = "dddd d MMMM yyyy";
+
                 while ((line = sr.ReadLine()) != null)
                 {
                     body.Append(
                             line.
-                            Replace("@@aic@@", (aic != null ? aic : "")));
+                            Replace("@date", DateTime.Now.ToString(dateFormat)).
+                            Replace("@baseurl", baseurl).
+                            Replace("@id", transactionID)
+                            );
                 }
                 sr.Close();
 

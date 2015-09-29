@@ -12,6 +12,7 @@ namespace testing
     {
         static void Main(string[] args)
         {
+            /*
             Logger.Enabled = true;
             Logger.Verbose = false; 
             Logger.LogFile = @"..\..\log.txt";
@@ -29,6 +30,11 @@ namespace testing
                     Console.WriteLine("thread exit ...");
                 }).Start();
             }
+             * */
+
+            DateTime d = DateTime.Now;
+            Console.WriteLine("{0:dddd} {0:d} {0:MMMM} {0:yyyy}", d);
+
             
         }
     }

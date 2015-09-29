@@ -123,7 +123,6 @@ namespace webapp
                         prompt += callingframe.GetMethod().DeclaringType;
                         prompt += ".";
                         prompt += callingframe.GetMethod().Name;
-                        prompt += "()";
 
                         if (callingframe.GetFileLineNumber() > 0)
                         {
@@ -131,12 +130,15 @@ namespace webapp
                             prompt += callingframe.GetFileLineNumber();
                             prompt += ")";
                         }
+                        else
+                        {
+                            prompt += "()";
+                        } 
 
                     }
 
                     prompt += " > ";
-                    _r = prompt + _r;
-
+                    
                     if (ROLL_SIZE > 0)
                     {
                         FileInfo f = new FileInfo(_path);

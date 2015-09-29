@@ -76,7 +76,7 @@
 
 	<style type="text/css">
 	.ui-filter-inset {
-			margin-top: 0;
+		margin-top: 0;
 	}
 	</style>
     <!-- Page Scripting -->
@@ -148,8 +148,7 @@
 						class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
 						style="background-color: #dd4231;">Chiudi</a>
 			<span style="font-weight: smaller;">
-				Il codice AIC viene riportato sulla<br/>
-				confezione come evidenziato i figura:
+				il codice AIC è riportato sul bollino della confezione come evidenziato in giallo   
 			</span>
 			<img style="border: 0px; width: 400px;" 
 					alt="Codiice Agenzia Italiana del Farmaco" 
@@ -190,7 +189,7 @@
                     </a>
                 </li>				
                 <li class="ui-block-b" style="width: 50%;">
-                    <a href="#search" 
+                    <a href="#search" id="searchclick"
                         data-transition="slidedown"                         
                         data-icon="search" 
                         data-corners="false" 

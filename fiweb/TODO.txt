@@ -1,29 +1,26 @@
-1) EMA: verifica invio mail (account? farmastampati@farmadati.it?) coordinate aruba per 
+* EMANUELE: visualizzare solo fogli aggiornati, visualizzare messaggio di foglietto già aggiornato
+* data field di autocomplete :: focus
+* data field di autocomplete :: clean in nova ricerca
+* popup sminchiante al primo avvio (problema di Giovanni)
+
+* EMANUELE: verifica invio mail (account? farmastampati@farmadati.it?) coordinate aruba per 
    info@farmastampati.it
 
-2) EMA: visualizzare solo fogli aggiornati, visualizzare messaggio di foglietto già aggiornato
-
-2) data field di autocomplete :: focus
-
-3) data field di autocomplete :: clean in nova ricerca
-
-4) Popup di istruzioni su installazione
-	
+* Popup di istruzioni su installazione	
 	/mail -> insert ht[id, aic]
 	/default.aspx?id -> Esiste id ? 
-	                      |
+						  |
 	                      |
 	                      +-- si -> wrap popup con /dh3.aspx?id rimuovi id
 	                      |	                      
 	                      +-- no -> redirect /dh3.aspx rimuovi da querystring id e aic
 
-5) tracciamento su logfile con rolling backup / retention: 
+* tracciamento su logfile con rolling backup / retention: 
+
+* salvare la id table in application shutdown e rileggerla in appliation start
 
 // -----------------------------------------------------------
 //  note
 // -----------------------------------------------------------
 
 data-position="fixed" data-tap-toggle="false"
-
-
-
