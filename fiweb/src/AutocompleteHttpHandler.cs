@@ -54,7 +54,7 @@ namespace webapp
 				{
 					using (SqlCommand command = new SqlCommand(
 						String.Concat(
-							"SELECT TOP 5 [FDI_T218]",
+							"SELECT DISTINCT TOP 5 [FDI_T218]",
 							"   FROM [DBFarmadati_WEB].[dbo].[TDF] ",
 							"   WHERE [FDI_T218] LIKE '%", q , "%'")
 								, connection))

@@ -1,6 +1,9 @@
-1) verifica invio mail (account? farmastampati@farmadati.it?)
+1) EMA: verifica invio mail (account? farmastampati@farmadati.it?) coordinate aruba per 
+   info@farmastampati.it
 
-2) data field di autocomplete :: focus 
+2) EMA: visualizzare solo fogli aggiornati, visualizzare messaggio di foglietto già aggiornato
+
+2) data field di autocomplete :: focus
 
 3) data field di autocomplete :: clean in nova ricerca
 
@@ -9,10 +12,10 @@
 	/mail -> insert ht[id, aic]
 	/default.aspx?id -> Esiste id ? 
 	                      |
-	                      + si -> wrap popup con /dh3.aspx?id rimuovi id
 	                      |
-	                      |
-	                      + no -> redirect /dh3.aspx rimuovi da querystring id e aic
+	                      +-- si -> wrap popup con /dh3.aspx?id rimuovi id
+	                      |	                      
+	                      +-- no -> redirect /dh3.aspx rimuovi da querystring id e aic
 
 5) tracciamento su logfile con rolling backup / retention: 
 
@@ -21,4 +24,6 @@
 // -----------------------------------------------------------
 
 data-position="fixed" data-tap-toggle="false"
+
+
 

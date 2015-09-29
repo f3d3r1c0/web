@@ -114,6 +114,7 @@
 				href="#popupCloseRight" data-rel="popup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" 
 				data-position-to="window" 
 				data-transition="flip">...</a>
+
 		<div data-role="popup" id="popupCloseRight" class="ui-content"
 				style="max-width:280px; border: 3px #aa1111 solid; color: darkRed;">
 			<a data-rel="back" 
@@ -125,7 +126,7 @@
 		
 		<!-- search button click -->
 		<a id="success" style="display: none" href="#page0" data-transition="slideup"></a>          
-		
+
 		<a href="javascript: dosearch($('#aic').val());" 
 			class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a>
 		
@@ -133,14 +134,15 @@
 			<img alt="loading" src="js/images/ajax-loader.gif" />
 		</div>
 
-		<br/>
 		<!-- Aic help instructions  -->
+
 		<span>                      
 			<a href="#aicPopup" data-rel="popup" data-transition="flip" data-position-to="window" 
-					class="ui-btn ui-corner-all ui-shadow ui-btn-middle">            
-					Che cosa &egrave; il codice AIC ?				
+					class="ui-btn ui-corner-all ui-shadow ui-btn-middle" style="color: #a0a0a0;">            
+					Che cosa &egrave; il codice AIC				
 			</a>
 		</span>            
+
 		<div data-role="popup" id="aicPopup" class="ui-content">
 			<a href="#" data-rel="back" 
 						class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
@@ -170,7 +172,7 @@
 		
             <ul class="ui-grid-b">			
                 <li class="ui-block-a" style="width: 50%;">
-                    <a href="#leftpanel0" id="reveal0"
+                    <a href="#leftpanel0" 
                         data-icon="bars" 
                         data-corners="false" 
                         data-shadow="false" 
@@ -211,8 +213,9 @@
     </div>    
 	
 	<div data-role="main" class="ui-content" style="vertical-align: middle; padding: 0px;">         	
-        <div id="caricamento" style="width: 100 %; height: 800px; vertical-align: middle;">
-            <img src="js/images/ajax-loader.gif" alt="caricamento" style="border: 0px;"></src>
+        <div id="caricamento" style="width: 100 %; height: 800px;">
+            <br /><br /><br /><br /><br />
+            <img src="js/images/ajax-loader.gif" alt="caricamento" style="border: 0px; opacity: 0.3;"></src>
         </div>
     	<%
         For i As Integer = 0 To PAGESER

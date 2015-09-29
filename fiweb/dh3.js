@@ -42,9 +42,12 @@ function dosearch(vaic)
         //
         $('#caricamento').css('display', 'block');
 
-        $('#page0file').load (function() {        
+        $('#page0file').load (function() {
             $('#caricamento').css('display', 'none');
         });
+
+        // chiudo la lista autocomplete
+        $('#autocomplete').html("");
 
         //
         // effettuo la chiamata 
@@ -76,10 +79,7 @@ function dosearch(vaic)
                     if (!doc || doc == null) doc = list[0];
 
                     //everything ok reset aic field ...                    
-                    $('#aic').val('');
-                    $("#autocomplete").val("");
-                    $("#autocomplete").html("");
-                    //$('#autocomplete').html("");
+                    $('#aic').val('');   
 
                     reload();
                     
@@ -92,14 +92,12 @@ function dosearch(vaic)
 
                 }
 
-				$('#autocomplete').html("");
                 $("#loading-popup").hide();
 
             },
 
             error: function (data) {   
 
-				$('#autocomplete').html("");
                 $("#loading-popup").hide();
                 msgbox('Codice AIC non trovato');    
                 
@@ -120,10 +118,13 @@ function dosearch(vaic)
 
         $('#page' + k + 'file').on("swipedown", function () {          
         });
-
-        $('#page' + k).on("pageshow", function () {            
-        });
         */
+
+        $('#page' + k).on("pageshow", function () { 
+            //$('#autocomplete').data().focus(function(){
+            //    $(this).trigger('keydown.autocomplete');
+            //});
+        });        
 
     }
     catch(e2) {
@@ -195,9 +196,7 @@ function reload()
             }
             catch (e) {}
         }                           
-    }
-
-    
+    }    
 
 }
 
@@ -207,10 +206,6 @@ function chlang(lang)
     var i;  
 
     $('#caricamento').css('display', 'block');
-
-    for (i = 0; i < 30; i++) {
-        $('#page' + i + 'file').attr('src', 'images/loading.gif');                
-    }
 
     for (i = 0; i < list.length; i ++) {
         if (list[i].language.toLowerCase() == lang) {
@@ -268,15 +263,15 @@ function _onload() {
     
 	/*
     $(document)
-      .ajaxStart(function () {
+        .ajaxStart(function () {
         $('#aic').hide();
         $('#loading').fadeIn();
-      })
-      .ajaxStop(function () {
+        })
+        .ajaxStop(function () {
         $('#loading').hide();
         $('#aic').show();
-      });
-      */
+    });
+    */
     
     $(document).keydown(function(event){    
         var keycode = (event.keyCode ? event.keyCode : event.which);
