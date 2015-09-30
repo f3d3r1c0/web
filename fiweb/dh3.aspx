@@ -110,6 +110,7 @@
 		</ul>
 
 		<!-- popup, available positions: window, origin, #id -->
+        <!--
 		<a id="displayerror" style="display: none;" 
 				href="#popupCloseRight" data-rel="popup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" 
 				data-position-to="window" 
@@ -122,6 +123,24 @@
 					style="background-color: darkRed;">Chiudi</a>
 			<p id="error">...</p>
 		</div>
+    -->
+
+<a style="display: none" id="popupDialogButton" href="#popupDialog" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-transition="pop"></a>
+
+<div tabindex="0" style="max-width: 1570px; top: 490.5px; left: 621px;" id="popupDialog-popup" class="ui-popup-container pop in ui-popup-active">
+    <div data-position-to="origin" data-transition="none" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow">
+        <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
+            <h1 aria-level="1" role="heading" class="ui-title">Avviso</h1>
+        </div>
+        <div role="main" data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d">
+            <h3 class="ui-title" id="popupDialogMessage"></h3>            
+            <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Chiudi</span></span></a>                          
+        </div>
+    </div>
+</div>
+
+
+
 		<!-- end popup -->
 		
 		<!-- search button click -->
@@ -148,7 +167,7 @@
 						class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
 						style="background-color: #dd4231;">Chiudi</a>
 			<span style="font-weight: smaller;">
-				il codice AIC è riportato sul bollino della confezione come evidenziato in giallo   
+				il codice AIC &grave; riportato sul bollino della confezione come evidenziato in giallo   
 			</span>
 			<img style="border: 0px; width: 400px;" 
 					alt="Codiice Agenzia Italiana del Farmaco" 

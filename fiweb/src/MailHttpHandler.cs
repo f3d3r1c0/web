@@ -233,10 +233,10 @@ namespace webapp
                     Tools.ReplyJSon(response, "id", transactionID);
                     response.Flush();
                 }
-                catch(Exception veryeccexxiunal)
+                catch(Exception ex)
                 {
                     if (Logger.Enabled)
-                        Logger.Write("Error flushing response - {0}", veryeccexxiunal);
+                        Logger.Write("Error flushing response - {0}", ex);
                 }
             }
 

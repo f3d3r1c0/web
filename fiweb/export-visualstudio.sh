@@ -30,7 +30,6 @@ sed -e 's/fiweb/FarmastampatiMobi/g' < fiweb.csproj > "$outdir/FarmastampatiMobi
 #	#sed -e 's/\"js\//\"http:\/\/php-farma01.rhcloud.com\/farmastampati\/js\//g' < $file > "$outdir/$file"
 #done
 
-[ -d "output" ] || mkdir output
 for file in dh0.js dh1.js dh2.js dh3.js
 do
 	echo "exporting $file ..."

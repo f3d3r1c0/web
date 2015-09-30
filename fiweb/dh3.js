@@ -10,8 +10,10 @@ var doc = null;
 
 function msgbox(mesg)
 {           
-    $('#error').html(mesg);
-    $('#displayerror').click();
+    $('#popupDialogMessage').html(mesg);
+    $('#popupDialogButton').click();
+    //$('#error').html(mesg);
+    //$('#displayerror').click();
 }
 
 function dosearch(vaic)
@@ -47,7 +49,8 @@ function dosearch(vaic)
         });
 
         // chiudo la lista autocomplete
-        $('#autocomplete').html("");
+        $('#autocomplete').html('');
+        if (tbox) tbox.val('');
 
         //
         // effettuo la chiamata 
@@ -223,6 +226,7 @@ function chlang(lang)
     
 }
 
+var tbox = null;
 
 function _onload() {
 
@@ -232,6 +236,8 @@ function _onload() {
             $input = $(data.input),
             value = $input.val(),
             html = "";  
+
+        tbox = $(data.input);
 
         $('#aic').val(value);
         $ul.html("");
