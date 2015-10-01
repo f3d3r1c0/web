@@ -44,9 +44,9 @@ namespace webapp
             HttpRequest request = context.Request;
             HttpResponse response = context.Response;
 
-            string transactionID = "";
             DateTime start = DateTime.Now;
-            
+            string transactionID = Tools.CreateTransactionId();
+                        
             //
             // read smtp configuration 
             //
@@ -140,8 +140,6 @@ namespace webapp
 
                 if (!aicTestPassed) throw new MailServiceException(403, "AIC not found");
 
-                transactionID = Tools.CreateTransactionId(aic);
-                
                 SmtpClient client = new SmtpClient();
                 client.Port = port;
                 client.Host = mailSmtpServer;
@@ -174,7 +172,7 @@ namespace webapp
                             line.
                             Replace("@date", DateTime.Now.ToString(dateFormat)).
                             Replace("@baseurl", baseurl).
-                            Replace("@id", transactionID)
+                            Replace("@id", aic)
                             );
                 }
                 sr.Close();

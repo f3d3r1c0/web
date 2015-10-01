@@ -5,24 +5,37 @@
  *
  */
 
-var list = null;
 var doc = null;           
+var list = null;
+var tbox = null;
 
 function msgbox(mesg)
 {           
     $('#popupDialogMessage').html(mesg);
-    $('#popupDialogButton').click();
-    //$('#error').html(mesg);
-    //$('#displayerror').click();
+    $('#popupDialog').popup('open');    
 }
 
-function dosearch(vaic)
+function dosearch(aic_)
 {
     try {
-		
-		if (!vaic || vaic.trim().length == 0) throw 'Inserire il codice AIC';
-		vaic = vaic.trim().toUpperCase();
-        if (vaic.charAt(0) == 'A') vaic = vaic.substr(1);
+
+        var vaic = null;
+
+        if (aic_ && aic_.length > 0) {
+            if (tbox) tbox.val(aic_);
+            vaic = aic_;
+        }
+        else if (!tbox) {
+            msgbox('Inserire il codice AIC');
+            return;
+        }
+        else {
+            vaic = tbox.val().trim();
+        }
+
+		if (!vaic || vaic.length == 0) throw 'Inserire il codice AIC';		
+        
+        if (vaic.charAt(0).toUpperCase() == 'A') vaic = vaic.substr(1);
         
         var aic = '';
 
@@ -30,9 +43,9 @@ function dosearch(vaic)
             if ("0123456789".indexOf(vaic.charAt(i)) >= 0)
                 aic += vaic.charAt(i);
             else if (" .-\r\n\t".indexOf(vaic.charAt(i)) < 0) 
-                throw 'Codice AIC non valido<br />' 
-                    + 'Deve contenere solo caratteri numerici,<br />'
-                    + 'puo\' avere come carattere iniziale \'A\'';               
+                throw 'Il codice AIC inserito non &egrave; corretto.<br/>' 
+                    + 'Deve contenere fino a un massimo di 9 caratteri numerici e '
+                    + 'pu&ograve; avere come carattere iniziale la lettera A';               
         }
 
         while (aic.length < 9) {
@@ -47,10 +60,6 @@ function dosearch(vaic)
         $('#page0file').load (function() {
             $('#caricamento').css('display', 'none');
         });
-
-        // chiudo la lista autocomplete
-        $('#autocomplete').html('');
-        if (tbox) tbox.val('');
 
         //
         // effettuo la chiamata 
@@ -67,7 +76,7 @@ function dosearch(vaic)
                 try {
 
                     if (!data && data.length <= 0) 
-                        throw 'codice AIC ' + aic + ' non trovato';
+                        throw 'codice AIC ' + aic + ' non valido';
                                                 
                     doc = null;
                     list = data;
@@ -81,12 +90,16 @@ function dosearch(vaic)
 
                     if (!doc || doc == null) doc = list[0];
 
-                    //everything ok reset aic field ...                    
-                    $('#aic').val('');   
+                    // azzero il campo ricerca                    
+                    if (tbox) { tbox.val(''); }
 
                     reload();
                     
-                    $("#success").click();
+                    $.mobile.changePage('#page0', { 
+                            allowSamePageTransition: true, 
+                            transition: 'slidedown'
+                        });
+
 
                 }
                 catch (e1) {                        
@@ -95,22 +108,22 @@ function dosearch(vaic)
 
                 }
 
-                $("#loading-popup").hide();
-
             },
 
             error: function (data) {   
-
-                $("#loading-popup").hide();
+                
                 msgbox('Codice AIC non trovato');    
                 
             }
 
         });
 
+        // pulisco la lista di autocompletamento
+        $('#autocomplete').html('');        
+
         /*
         $('#page0file').on("swiperight", function () {                      
-            var n = parseInt($.mobile.activePage.attr('id').substr(4));            
+            var pageid = $.mobile.activePage.attr('id');
         });
 
         $('#page0file').on("swipeleft", function () {         
@@ -121,16 +134,18 @@ function dosearch(vaic)
 
         $('#page0file').on("swipedown", function () {          
         });
-
-        $('#page0').on("pageshow", function () {                         
-        });        
         */
+
+        $('#search').on("pageshow", function () {                         
+            if (tbox) {
+                tbox.focus();
+            }
+        });        
 
     }
     catch(e2) {
-    
-        $("#loading-popup").hide();
-        msgbox(e2);    
+            
+        msgbox(e2);            
         
     }         
 }   
@@ -226,9 +241,7 @@ function chlang(lang)
     
 }
 
-var tbox = null;
-
-function _onload() {
+function _onload(aic) {
 
     $("#autocomplete").on("filterablebeforefilter", function (e, data) {
 
@@ -239,7 +252,6 @@ function _onload() {
 
         tbox = $(data.input);
 
-        $('#aic').val(value);
         $ul.html("");
         
         if (value && value.length > 2) {
@@ -254,8 +266,8 @@ function _onload() {
                 }
             })
             .then(function (response) {
-                $.each(response, function (i, val) {
-                    html += '<li><a href="javascript:dosearch(' + "'" + val + "'" + ')">' + val + '</a></li>';
+                $.each(response, function (i, val) {                    
+                    html += '<li><a href="javascript:dosearch(' + val + ');">' + val + '</a></li>';
                 });
                 $ul.html(html);
                 $ul.listview("refresh");
@@ -264,36 +276,40 @@ function _onload() {
         }
     });
     
-	/*
+    $('#loading').height = $('#searchButton').height;
+
     $(document)
-        .ajaxStart(function () {
-        $('#aic').hide();
-        $('#loading').fadeIn();
+        .ajaxStart(function () {                   
+            $('#searchButton').hide();
+            $('#loading').fadeIn();
         })
-        .ajaxStop(function () {
-        $('#loading').hide();
-        $('#aic').show();
-    });
-    */
+        .ajaxStop(function () {                
+            $('#loading').hide();
+            $('#searchButton').fadeIn();    
+        });
+
+    $('#popupAic').css('maxWidth', $(window.width));
+    $('#popupAic').css('maxHeight', $(window.height));
+    $('#popupDialog').css('maxWidth', $(window.width));
+    $('#popupDialog').css('maxHeight', $(window.height));
     
+    // submit alla pressione di invio
     $(document).keydown(function(event){    
         var keycode = (event.keyCode ? event.keyCode : event.which);
         if(keycode == '13') {
-            dosearch($('#aic').val());
+            dosearch();
         }    
     });
-
-    //$('#aic').keypress (function (event) {
-    //    if (event && event.which && event.which == 13) {
-    //        dosearch($('#aic').val());
-    //    }
-    //});
-
-    if ($('#aic').val().trim().length > 0) {
-        dosearch($('#aic').val());
-        return;
+    
+    //
+    // TODO submit automatico se passato da query string
+    //
+    if (aic.length > 0) {
+        dosearch(aic);  
+        return;  
     }
 
+    // previene il bookmark della pagina fatto su #page0
     if (window.location.href.indexOf('#page0') >= 0) {
         $('#searchclick').click();
     }

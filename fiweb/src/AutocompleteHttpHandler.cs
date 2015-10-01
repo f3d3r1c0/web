@@ -47,8 +47,7 @@ namespace webapp
 				DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(DocumentResponse));
 
                 string res = callback;
-                res += "([";					
-							
+                res += "([";							
 
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{

@@ -12,8 +12,8 @@
     
     If Not Request.QueryString Is Nothing Then
         For Each q As String In Request.QueryString
-            If q.ToLower() = "id" Then
-                If Tools.RemoveTransactionId(Request.QueryString(q)) Then
+            If q.ToLower() = "install" Then
+                If Request.QueryString(q).ToLower().Equals("true") Then
                     masqPopup = True
                 End If
             Else
@@ -31,8 +31,7 @@
     
     Dim url As String = redirectPage + querystring
     
-    If masqPopup Then
-        
+    If masqPopup Then        
         Dim html As String = ""
         Dim line As String
         Dim sr As StreamReader = New StreamReader(Path.GetFullPath(Context.Server.MapPath("./popup.html")))
@@ -41,19 +40,13 @@
             If line Is Nothing Then Exit Do
             html += line.Replace("@url", url)
         Loop
-        sr.Close()
-        
+        sr.Close()        
         Response.ContentType = "text/html"
         Response.Write(html)
-        Response.Flush()
-        
-        Return
-        
-    Else
-        
-        Response.Redirect(url, True)
-        
+        Response.Flush()        
+        Return        
+    Else        
+        Response.Redirect(url, True)        
     End If
-    
-    
+        
     %>

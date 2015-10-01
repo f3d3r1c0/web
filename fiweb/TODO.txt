@@ -1,10 +1,27 @@
+domande:
+ 1) come posso verificare il codice farmacia
+ 2) si può risalire alla descrizione del farmaco dall'aic su qualche tabella ?
+
 * EMANUELE: visualizzare solo fogli aggiornati, visualizzare messaggio di foglietto già aggiornato
-* data field di autocomplete :: focus
-* data field di autocomplete :: clean in nova ricerca
-* popup sminchiante al primo avvio (problema di Giovanni)
+  intervenire su ArchiveHttpHandler
+
+* gestione codice aic con foglietto aggiornato:
+	messaggio: “Il foglio illustrativo nella confezione è aggiornato”
+
+* messaggi di errore email:
+		403	Richiesta non valida / Parametri insufficienti
+		404	Indirizzo di email inesistente o non valido 
+				https://developers.google.com/site-verification/v1/getting_started
+		404	Codice farmacia inesistente o non valido
+		404	Codice AIC inesistente o non valido
+		500	Errore di backend (a seguire stacktrace nel campo http.statusDescription)
+		503	Backend non disponibile (service unavailable)
+
+* popup AIC svolazzante al primo click (verificare se c'è ancora...)
 
 * EMANUELE: verifica invio mail (account? farmastampati@farmadati.it?) coordinate aruba per 
    info@farmastampati.it
+   - 
 
 * Popup di istruzioni su installazione	
 	/mail -> insert ht[id, aic]
@@ -19,8 +36,14 @@
 
 * salvare la id table in application shutdown e rileggerla in appliation start
 
+* focus dopo popup
+
 // -----------------------------------------------------------
 //  note
 // -----------------------------------------------------------
 
+languages query: 
+select DISTINCT FDI_T483 from TDF
+
 data-position="fixed" data-tap-toggle="false"
+

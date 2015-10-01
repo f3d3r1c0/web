@@ -4,7 +4,7 @@
     Dim PAGESER as Integer = 30
     Dim aic As String = ""
     If Not Request.QueryString("aic") Is Nothing Then
-        aic = Request.QueryString("aic").Trim().ToUpper()
+        aic = Request.QueryString("aic").Trim().ToUpper()        
     End If
     Response.AppendHeader("Cache-Control", "no-cache, no-store, must-revalidate")     
     Response.AppendHeader("Pragma", "no-cache")     
@@ -80,12 +80,11 @@
 	}
 	</style>
     <!-- Page Scripting -->
-    <script type="text/javascript" src="dh3.js"></script>
-	
+    <script type="text/javascript" src="dh3.js"></script>	
 	
 </head>
 
-<body oncontextmenu="return true;" onload="_onload()">
+<body oncontextmenu="return true;" onload="_onload('<%= aic %>')">
 
 <center>
     
@@ -97,83 +96,63 @@
 		<img alt="Farmastampati Logo" src="images/farmast.png"/><br />
 		<span style="font-style: italic;">Visualizza il foglietto illustrativo</span><br /><br />
 
-		<!-- aic text box -->
+		<!-- aic autocomplete  text box -->
 		<span style="font-weight: bolder;">Inserisci il Codice AIC</span>
-		<input style="display: none;" name="aic" id="aic" type="text" size="10" value="<%= aic %>">
 		
 		<ul id="autocomplete" 
 				data-role="listview" 
-				data-inset="true" 
+				data-inset="true"
 				data-filter="true" 
-				data-filter-placeholder="Codice AIC ..." 
+				data-filter-placeholder="Inserisci il codice AIC ..." 
 				data-filter-theme="a">
 		</ul>
-
-		<!-- popup, available positions: window, origin, #id -->
-        <!--
-		<a id="displayerror" style="display: none;" 
-				href="#popupCloseRight" data-rel="popup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" 
-				data-position-to="window" 
-				data-transition="flip">...</a>
-
-		<div data-role="popup" id="popupCloseRight" class="ui-content"
-				style="max-width:280px; border: 3px #aa1111 solid; color: darkRed;">
-			<a data-rel="back" 
-					class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
-					style="background-color: darkRed;">Chiudi</a>
-			<p id="error">...</p>
-		</div>
-    -->
-
-<a style="display: none" id="popupDialogButton" href="#popupDialog" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-transition="pop"></a>
-
-<div tabindex="0" style="max-width: 1570px; top: 490.5px; left: 621px;" id="popupDialog-popup" class="ui-popup-container pop in ui-popup-active">
-    <div data-position-to="origin" data-transition="none" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow">
-        <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
-            <h1 aria-level="1" role="heading" class="ui-title">Avviso</h1>
-        </div>
-        <div role="main" data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d">
-            <h3 class="ui-title" id="popupDialogMessage"></h3>            
-            <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Chiudi</span></span></a>                          
-        </div>
-    </div>
-</div>
-
-
-
-		<!-- end popup -->
 		
-		<!-- search button click -->
-		<a id="success" style="display: none" href="#page0" data-transition="slideup"></a>          
-
-		<a href="javascript: dosearch($('#aic').val());" 
+        <!-- msgbox -->        
+        <div tabindex="0" style="max-width: 1570px; top: 490.5px; left: 621px;" id="popupDialog-popup" class="ui-popup-container pop in ui-popup-active">
+            <div data-position-to="origin" data-transition="none" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="c" style="background: white;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow">
+                <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
+                    <h1 aria-level="1" role="heading" class="ui-title">Avviso</h1>
+                </div>
+                <div role="main" data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d">
+                    <h3 class="ui-title" id="popupDialogMessage"></h3>            
+                    <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Chiudi</span></span></a>
+                </div>
+            </div>
+        </div>
+		
+		<!-- search button click -->		
+		<a href="javascript: dosearch();" id="searchButton"
 			class="ui-btn ui-corner-all ui-shadow ui-btn-middle">Cerca</a>
 		
-		<div id="loading" data-position="fixed" style="display: none;">
-			<img alt="loading" src="js/images/ajax-loader.gif" />
+        <!-- ajax loader -->
+        <div id="loading" data-position="fixed" style="display: none;">
+			<img alt="loading" src="js/images/ajax-loader.gif" style="opacity: 0.3;"/>
 		</div>
-
-		<!-- Aic help instructions  -->
-
+        
+		<!-- aic help instructions  -->
 		<span>                      
-			<a href="#aicPopup" data-rel="popup" data-transition="flip" data-position-to="window" 
+			<a href="#popupAic" data-rel="popup" data-position-to="window" data-transition="slideup"
 					class="ui-btn ui-corner-all ui-shadow ui-btn-middle" style="color: #a0a0a0;">            
 					Che cosa &egrave; il codice AIC				
 			</a>
 		</span>            
+        <div tabindex="1" id="popupAic-popup" class="ui-popup-container pop in ui-popup-active">
+            <div data-position-to="origin" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupAic" data-overlay-theme="a" data-theme="c" style="max-width:400px; max-height: 340px; background: white; overflow: hidden;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow">
+                <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
+                    <h1 aria-level="1" role="heading" class="ui-title">Informazione</h1>
+                </div>
+                <div role="main" data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d">
+                    <p style="font-weight: smaller;">
+                        Il codice AIC &egrave; riportato sul bollino della confezione come evidenziato in giallo   
+                    </p>
+                    <img style="border: 0px; width: 370px;" 
+                            alt="Codiice Agenzia Italiana del Farmaco" 
+                            src="images/aicsample.jpg"/>
+                    <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Chiudi</span></span></a>
+                </div>                
+            </div>
+        </div>
 
-		<div data-role="popup" id="aicPopup" class="ui-content">
-			<a href="#" data-rel="back" 
-						class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"
-						style="background-color: #dd4231;">Chiudi</a>
-			<span style="font-weight: smaller;">
-				il codice AIC &grave; riportato sul bollino della confezione come evidenziato in giallo   
-			</span>
-			<img style="border: 0px; width: 400px;" 
-					alt="Codiice Agenzia Italiana del Farmaco" 
-					src="images/aicsample.jpg"/>
-		</div>
-            
     </div>
 
 </div>
@@ -231,7 +210,7 @@
     </div>    
 	
 	<div data-role="main" class="ui-content" style="vertical-align: middle; padding: 0px;">         	
-        <div id="caricamento" style="width: 100 %; height: 800px;">
+        <div id="caricamento" style="width: 100%; height: 800px;">
             <br /><br /><br /><br /><br />
             <img src="js/images/ajax-loader.gif" alt="caricamento" style="border: 0px; opacity: 0.3;"></src>
         </div>
@@ -288,27 +267,18 @@
                     <span class="ui-btn-inner ui-btn-text">
                         <a href="javascript:chlang('en')"
                                 data-rel="close">                        
-                            <img style="width: 20px;" src="images/is.png" /><br/>
+                            <img style="width: 20px;" src="images/en.png" /><br/>
                             <span class="ui-btn-text">English</span>                                                    
                         </a>
                     </span>
-                </li>
-                <li id="lang-es-0" style="width: 100%;">
-                    <span class="ui-btn-inner ui-btn-text">
-                        <a href="javascript:chlang('es')"
-                                data-rel="close">                        
-                            <img style="width: 20px;" src="images/es.png" /><br/>
-                            <span class="ui-btn-text">Espanol</span>                                                    
-                        </a>
-                    </span>  
-                </li>
+                </li>                
             </ul>
         </div>       
 
         <br/>
         
         <a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Chiudi</a>
-        <p>Per chiudere questo pannello usare il pulsante 'chiudi' o cliccare fuori dai bordi, trascinare il dito a destra o sinistra o premere il tasto Esc</p>
+        <p>Per chiudere questo pannello usare il pulsante 'chiudi' o cliccare fuori dai bordi, trascinare il dito a sinistra o premere il tasto Esc</p>
 
     </div>
     <!-- /leftpanel1 -->

@@ -12,35 +12,18 @@ namespace webapp
         static Int32 transaction_counter = 0;
         static Random rnd = new Random(-84612123);
 
-        static Hashtable idTable = new Hashtable();
-            
-        public static string CreateTransactionId(string aic)
+        public static string CreateTransactionId()
         { 
-            string id = null;
-            if (aic == null) return null;
+            string id = null;            
             lock (transaction_lock)
             {
                 transaction_counter++;
                 transaction_counter %= 1000000000;
-                id = String.Format("{0:D9}-{1:D9}", rnd.Next(1000000000), transaction_counter);
-                idTable.Add(id, aic);
+                id = String.Format("{0:D9}-{1:D9}", rnd.Next(1000000000), transaction_counter);        
             }
             return id;
         }
-
-        public static bool RemoveTransactionId(string id)
-        {
-            lock (transaction_lock)
-            {
-                if (idTable.ContainsKey(id))
-                {
-                    idTable.Remove(id);
-                    return true;
-                }
-            }
-            return false;
-        }
-
+                
         public static void ReplyJSon(HttpResponse response, params object[] args)
         {
             response.ContentType = "application/json; charset=utf-8";
