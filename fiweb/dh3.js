@@ -33,8 +33,8 @@ function dosearch(aic_)
             vaic = tbox.val().trim();
         }
 
-		if (!vaic || vaic.length == 0) throw 'Inserire il codice AIC';		
-        
+		if (!vaic || vaic.length == 0) throw 'Inserire il codice AIC';	
+
         if (vaic.charAt(0).toUpperCase() == 'A') vaic = vaic.substr(1);
         
         var aic = '';
@@ -200,8 +200,7 @@ function reload()
 
         $('#lang-it' + '-' + k).css('display', 'none');
         $('#lang-de' + '-' + k).css('display', 'none');
-        $('#lang-en' + '-' + k).css('display', 'none');
-        $('#lang-es' + '-' + k).css('display', 'none');
+        $('#lang-en' + '-' + k).css('display', 'none');        
         $('#lang-fr' + '-' + k).css('display', 'none');
         
         for (var i = 0; i < list.length; i ++) {    
@@ -267,7 +266,7 @@ function _onload(aic) {
             })
             .then(function (response) {
                 $.each(response, function (i, val) {                    
-                    html += '<li><a href="javascript:dosearch(' + val + ');">' + val + '</a></li>';
+                    html += '<li><a href="javascript:dosearch(\'' + val + '\');">' + val + '</a></li>';
                 });
                 $ul.html(html);
                 $ul.listview("refresh");
