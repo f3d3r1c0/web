@@ -14,16 +14,26 @@
 <html lang="en">
 <head>  
 
+    <!--
     <meta name="viewport" 
         content="initial-scale=1.0,width=device-width,user-scalable=1" />
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
         
     <title>Foglietto Illustrativo</title>
     
     <!-- JQuery Libraries -->
-    <link rel="stylesheet" href="js/jquery.mobile-1.4.5.min.css"/>
-    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-
+    
+    <!-- jquery 1.4.2 -->
+    <link rel="stylesheet" href="js/jquery.mobile-1.4.2.min.css"/>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
+    
+    <!-- jquery 1.4.5 -->
+    <!-- <link rel="stylesheet" href="js/jquery.mobile-1.4.5.min.css"/> -->
+    <!-- <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script> -->
+    <!-- <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script> -->        
+	
     <!-- Icons -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="apple-touch-icon-precomposed" href="images/farmadati-apple-icon.png" />
@@ -108,8 +118,8 @@
 		</ul>
 		
         <!-- msgbox -->        
-        <div tabindex="0" style="max-width: 1570px; top: 490.5px; left: 621px;" id="popupDialog-popup" class="ui-popup-container pop in ui-popup-active">
-            <div data-position-to="origin" data-transition="none" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="c" style="background: white;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow">
+        <div tabindex="0" id="popupDialog-popup" class="ui-popup-container pop in ui-popup-active" data-history="false" >
+            <div data-position-to="origin" data-transition="none" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="c" style="background: white;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow" data-history="false" >
                 <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
                     <h1 aria-level="1" role="heading" class="ui-title">Avviso</h1>
                 </div>
@@ -136,8 +146,8 @@
 					Che cosa &egrave; il codice AIC				
 			</a>
 		</span>            
-        <div tabindex="1" id="popupAic-popup" class="ui-popup-container pop in ui-popup-active">
-            <div data-position-to="origin" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupAic" data-overlay-theme="a" data-theme="c" style="max-width:400px; max-height: 340px; background: white; overflow: hidden;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow">
+        <div tabindex="1" id="popupAic-popup" class="ui-popup-container pop in ui-popup-active" data-history="false">
+            <div data-position-to="origin" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupAic" data-overlay-theme="a" data-theme="c" style="background: white; overflow: hidden;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow" data-history="false" >
                 <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
                     <h1 aria-level="1" role="heading" class="ui-title">Informazione</h1>
                 </div>
@@ -161,7 +171,7 @@
 
 <!-- BEGIN VISUALIZER -->
 
-<div data-role="page" id="page0">  
+<div data-role="page" id="page0" data-history="false">  
     
 	<div data-role="header" class="ui-header ui-bar-a" role="contentinfo">
 	
@@ -209,7 +219,7 @@
         </div>		
     </div>    
 	
-	<div data-role="main" class="ui-content" style="vertical-align: middle; padding: 0px;">         	
+	<div data-role="main" class="ui-content" style="vertical-align: middle; padding: 0px;" data-history="false">         	
         <div id="caricamento" style="width: 100%; height: 800px;">
             <br /><br /><br /><br /><br />
             <img src="js/images/ajax-loader.gif" alt="caricamento" style="border: 0px; opacity: 0.3;"></src>

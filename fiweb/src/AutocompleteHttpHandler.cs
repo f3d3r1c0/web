@@ -39,15 +39,28 @@ namespace webapp
             {
                 string q = Tools.GetRequestParameter(request, "q");
 				if (q == null) throw new Exception("invalid autocomplete request (missing 'q')");
-				
+
+                if (q.StartsWith("A") || q.StartsWith("a")) q = q.Substring(1);
+                
 				string callback = Tools.GetRequestParameter(request, "callback");
 				if (callback == null) throw new Exception("invalid autocomplete request (missing 'callback')");
-				                
-				Stream stream = response.OutputStream;
-				DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(DocumentResponse));
-
+				
                 string res = callback;
-                res += "([";							
+                res += "([";
+
+                char[] carr = "0123456789".ToCharArray();
+
+                foreach (char c in q.ToCharArray())
+                {
+                    if (!carr.Contains(c))
+                    {
+                        res += "]);";
+                        response.AppendHeader("Content-Type", "application/javascript");
+                        response.Write(res);
+                        response.Flush();
+                        return;
+                    }
+                }
 
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
@@ -55,7 +68,7 @@ namespace webapp
 						String.Concat(
 							"SELECT DISTINCT TOP 5 [FDI_T218]",
 							"   FROM [DBFarmadati_WEB].[dbo].[TDF] ",
-							"   WHERE [FDI_T218] LIKE '%", q , "%'")
+							"   WHERE [FDI_T218] LIKE '", q , "%'")
 								, connection))
 					{
 						command.CommandType = CommandType.Text;
