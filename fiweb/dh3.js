@@ -76,8 +76,11 @@ function dosearch(aic_)
                 try {
 
                     if (!data && data.length <= 0) 
-                        throw 'codice AIC ' + aic + ' non valido';
-                                                
+                        throw 'Codice AIC non valido o non trovato (2)';
+                    
+                    if (data[0].aicFS.length == 0) 
+                        throw 'Il foglietto presente nella confezione &egrave; gi&agrave; aggiornato';
+                    
                     doc = null;
                     list = data;
 
@@ -111,8 +114,8 @@ function dosearch(aic_)
             },
 
             error: function (data) {   
-                
-                msgbox('Codice AIC non trovato');    
+
+                msgbox('Codice AIC non valido o non trovato');    
                 
             }
 
@@ -150,6 +153,7 @@ function dosearch(aic_)
     }         
 }   
 
+/*
 function getpageurl(filename, page)
 {            
     var timeout = -1;
@@ -163,6 +167,29 @@ function getpageurl(filename, page)
                 "-dAlignToPixels=0 " +
                 "-dGridFitTT=0 " +          
                 "-dTextAlphaBits=4 " +
+                "-dGraphicsAlphaBits=4 " +
+                "-r120x120"; 
+    return 'pages/' + filename + '?page=' + page +
+            (timeout > 0 ? '&timeout=' + timeout : '') + 
+            (nocache ? '&nocache=true' : '') + 
+            '&gsext=' + gsext +
+            '&gsopts=' + encodeURI(gsopts);                                
+}
+*/
+
+function getpageurl(filename, page)
+{            
+    var timeout = -1;
+    var nocache = false; 
+    var gsext = 'png';            
+    var gsopts = 
+        "-sDEVICE=pngalpha " +         
+        "-dFirstPage=" + page + " " +
+        "-dLastPage=" + page + " " +
+        "-dMaxBitmap=500000000 " +                    
+                "-dAlignToPixels=0 " +
+                "-dGridFitTT=0 " +          
+                "-dTextAlphaBits=1 " +
                 "-dGraphicsAlphaBits=4 " +
                 "-r120x120"; 
     return 'pages/' + filename + '?page=' + page +
@@ -287,10 +314,12 @@ function _onload(aic) {
             $('#searchButton').fadeIn();    
         });
 
-    $('#popupAic').css('maxWidth', $(window.width));
-    $('#popupAic').css('maxHeight', $(window.height));
-    $('#popupDialog').css('maxWidth', $(window.width));
-    $('#popupDialog').css('maxHeight', $(window.height));
+    //TODO: vedere se rifare lo stesso 
+
+    //$('#popupAic').css('maxWidth', $(window.width));
+    //$('#popupAic').css('maxHeight', $(window.height));
+    //$('#popupDialog').css('maxWidth', $(window.width));
+    //$('#popupDialog').css('maxHeight', $(window.height));
     
     // submit alla pressione di invio
     $(document).keydown(function(event){    
@@ -299,7 +328,19 @@ function _onload(aic) {
             dosearch();
         }    
     });
-    
+
+    $(window).on( "orientationchange", function( event ) {
+      //$( "#orientation" ).text( "This device is in " + event.orientation + " mode!" );
+       $('img').each(
+        function() {
+            var id = $(this).attr('id');
+            if (id == null) return;
+            if (id.indexOf('page') < 0) return;                    
+            if (id.indexOf('file') < 0) return;   
+            $(this).css('width', $(window.width));            
+        });              
+    });
+        
     //
     // TODO submit automatico se passato da query string
     //

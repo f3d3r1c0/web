@@ -37,6 +37,9 @@ namespace webapp
 
         [DataMember]
         internal bool isDefaultLanguage;
+
+        [DataMember]
+        internal string aicFS;
     }
 
     public class ArchiveHttpHandler : IHttpHandler
@@ -83,13 +86,32 @@ namespace webapp
                     Stream stream = response.OutputStream;
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(DocumentResponse));
 
+                    /*
+                    string sql_ = String.Concat(
+                                "SELECT ",
+                                "  TR001.FDI_0001 ",    // 0 - aic banca dati
+                                "  TDF.FDI_T227 ",      // 1 - nome file pdf
+                                "  TDF.FDI_T483 ",      // 2 - lingua
+                                "  FS_MOBI.FDI_T485 ",  // 3 - aic farmastampati (null => foglietto aggiornato)
+                                "FROM TR001 " +
+                                "  LEFT JOIN TDF ON (TR001.FDI_0001=TDF.FDI_T218 COLLATE Latin1_General_CI_AS) " +
+                                "  LEFT JOIN FS_MOBI ON (TR001.FDI_0001=FS_MOBI.FDI_T485) " +
+                                "WHERE TR001.FDI_0001='", form.aic, "'");
+                    */
+
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
                         using (SqlCommand command = new SqlCommand(
                             String.Concat(
-                                "SELECT [FDI_T227], [FDI_T483] ",
-                                "   FROM [DBFarmadati_WEB].[dbo].[TDF] ",
-                                "   WHERE [FDI_T218]='", form.aic, "'")
+                                "SELECT ",
+                                "  TR001.FDI_0001, ",    // 0 - aic banca dati
+                                "  TDF.FDI_T227, ",      // 1 - nome file pdf
+                                "  TDF.FDI_T483, ",      // 2 - lingua
+                                "  FS_MOBI.FDI_T485 ",  // 3 - aic farmastampati (null => foglietto aggiornato)
+                                "FROM TR001 " + 
+                                "  LEFT JOIN TDF ON (TR001.FDI_0001=TDF.FDI_T218 COLLATE Latin1_General_CI_AS) " +  
+                                "  LEFT JOIN FS_MOBI ON (TR001.FDI_0001=FS_MOBI.FDI_T485) " +  
+                                "WHERE TR001.FDI_0001='", form.aic, "'")
                                     , connection))
                         {
                             command.CommandType = CommandType.Text;
@@ -105,9 +127,10 @@ namespace webapp
                                     while (sqlreader.Read())
                                     {
                                         DocumentResponse entry = new DocumentResponse();
-                                        entry.language = sqlreader.IsDBNull(1) ? "" : sqlreader.GetString(1);
-                                        entry.pagesCount = countPdfPages(documentRoot + sqlreader.GetString(0));
-                                        entry.filename = sqlreader.IsDBNull(0) ? "" : sqlreader.GetString(0).ToUpper().Replace(".PDF", "");
+                                        entry.language = sqlreader.IsDBNull(2) ? "" : sqlreader.GetString(2);
+                                        entry.pagesCount = countPdfPages(documentRoot + sqlreader.GetString(1));
+                                        entry.filename = sqlreader.IsDBNull(1) ? "" : sqlreader.GetString(1).ToUpper().Replace(".PDF", "");
+                                        entry.aicFS = sqlreader.IsDBNull(3) ? "" : sqlreader.GetString(3);
                                         lst.Add(entry);
                                     }
 
@@ -134,7 +157,7 @@ namespace webapp
                                 }
                                 else
                                 {
-                                    throw new Exception("AIC not found");
+                                    throw new Exception("aic not found");
                                 }
                             }
                         }
@@ -145,7 +168,7 @@ namespace webapp
             catch (Exception e)
             {
                 response.StatusCode = 500;
-                response.StatusDescription = "Server Error - " + e.Message;
+                response.StatusDescription = e.Message;
             }
             finally 
             {

@@ -94,7 +94,7 @@
 	
 </head>
 
-<body oncontextmenu="return true;" onload="_onload('<%= aic %>')">
+<body oncontextmenu="return false;" onload="_onload('<%= aic %>')">
 
 <center>
     
