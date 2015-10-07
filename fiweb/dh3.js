@@ -140,9 +140,9 @@ function dosearch(aic_)
         */
 
         $('#search').on("pageshow", function () {                         
-            if (tbox) {
-                tbox.focus();
-            }
+            //if (tbox) {
+            //    tbox.focus();
+            //}
         });        
 
     }
@@ -314,12 +314,17 @@ function _onload(aic) {
             $('#searchButton').fadeIn();    
         });
 
-    //TODO: vedere se rifare lo stesso 
-
-    //$('#popupAic').css('maxWidth', $(window.width));
-    //$('#popupAic').css('maxHeight', $(window.height));
-    //$('#popupDialog').css('maxWidth', $(window.width));
-    //$('#popupDialog').css('maxHeight', $(window.height));
+    //
+    // FIX IOS 9.0.2 bug changing orientation to landscape
+    //    
+    if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
+        $(window).on( "orientationchange", function (event) {        
+            $('meta[name=viewport]').attr('content', 'initial-scale=1; maximum-scale=1.0; user-scalable=1;');
+        });
+        document.body.addEventListener('gesturestart', function () {                    
+            $('meta[name=viewport]').attr('content', 'initial-scale=1; maximum-scale=3.0; user-scalable=1;');
+        }, false);
+    }   
     
     // submit alla pressione di invio
     $(document).keydown(function(event){    
