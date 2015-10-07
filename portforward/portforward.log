@@ -1,0 +1,21 @@
+2015-10-07T14:51:27,311 DEBUG main org.apache.log4j.PropertyConfigurator - Parsing for [root] with value=[TRACE, rolling, stdout].
+2015-10-07T14:51:27,331 DEBUG main org.apache.log4j.PropertyConfigurator - Level token is [TRACE].
+2015-10-07T14:51:27,331 DEBUG main org.apache.log4j.PropertyConfigurator - Category root set to TRACE.
+2015-10-07T14:51:27,331 DEBUG main org.apache.log4j.PropertyConfigurator - Parsing appender named "rolling".
+2015-10-07T14:51:27,361 DEBUG main org.apache.log4j.PropertyConfigurator - Parsing layout options for "rolling".
+2015-10-07T14:51:27,441 DEBUG main org.apache.log4j.config.PropertySetter - Setting property [conversionPattern] to [%d{yyyy-MM-dd'T'HH:mm:ss,SSS} %p %t %c - %m%n].
+2015-10-07T14:51:27,571 DEBUG main org.apache.log4j.PropertyConfigurator - End of parsing for "rolling".
+2015-10-07T14:51:27,571 DEBUG main org.apache.log4j.config.PropertySetter - Setting property [maxFileSize] to [10MB].
+2015-10-07T14:51:27,571 DEBUG main org.apache.log4j.config.PropertySetter - Setting property [maxBackupIndex] to [10].
+2015-10-07T14:51:27,571 DEBUG main org.apache.log4j.config.PropertySetter - Setting property [file] to [portforward.log].
+2015-10-07T14:51:27,591 DEBUG main org.apache.log4j.rolling.RollingFileAppender - setFile called: portforward.log, true
+2015-10-07T14:51:27,591 DEBUG main org.apache.log4j.rolling.RollingFileAppender - setFile ended
+2015-10-07T14:51:27,591 DEBUG main org.apache.log4j.PropertyConfigurator - Parsed "rolling" options.
+2015-10-07T14:51:27,591 DEBUG main org.apache.log4j.PropertyConfigurator - Parsing appender named "stdout".
+2015-10-07T14:51:27,601 DEBUG main org.apache.log4j.PropertyConfigurator - Parsing layout options for "stdout".
+2015-10-07T14:51:27,601 DEBUG main org.apache.log4j.config.PropertySetter - Setting property [conversionPattern] to [%5p [%t] (%F:%L) - %m%n].
+2015-10-07T14:51:27,601 DEBUG main org.apache.log4j.PropertyConfigurator - End of parsing for "stdout".
+2015-10-07T14:51:27,601 DEBUG main org.apache.log4j.PropertyConfigurator - Parsed "stdout" options.
+2015-10-07T14:51:27,601 DEBUG main org.apache.log4j.PropertyConfigurator - Finished configuring.
+2015-10-07T14:51:27,671 INFO main com.sharneng.net.portforward.Listener - Ready to accept client connection on 0.0.0.0:9999
+2015-10-07T14:51:27,671 TRACE main com.sharneng.net.portforward.TargetConnector - new ServerConnectionManager( InetSocketAddress )

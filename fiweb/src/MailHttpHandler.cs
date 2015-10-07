@@ -99,7 +99,7 @@ namespace webapp
                     throw new MailServiceException(400, "missing mailbox address");
 
                 if (pharmacy == null)
-                    throw new MailServiceException(400, "missing mailbox address");
+                    throw new MailServiceException(400, "missing pharmacy code");
 
                 if (aic == null)
                     throw new MailServiceException(400, "missing AIC code");

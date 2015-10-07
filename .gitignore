@@ -15,3 +15,7 @@
 /adfinder/adfinder.csproj.user
 /testing/bin
 /testing/obj
+/portforward/.build
+/portforward/portforward.jar
+/portforward/portforward.log
+/portforward/*.log
