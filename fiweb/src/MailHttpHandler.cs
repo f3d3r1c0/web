@@ -98,26 +98,46 @@ namespace webapp
                 if (mailBox == null)
                     throw new MailServiceException(400, "missing mailbox address");
 
+                if (mailBox.IndexOf("@") < 0)
+                    throw new MailServiceException(404, "bad mailbox address");
+
+                if (mailBox.IndexOf("@", mailBox.IndexOf("@") + 1) > 0)
+                    throw new MailServiceException(404, "bad mailbox address");
+
+                if (mailBox.IndexOf(".", mailBox.IndexOf("@") + 1) < 0)
+                    throw new MailServiceException(404, "bad mailbox address");
+                
                 if (pharmacy == null)
                     throw new MailServiceException(400, "missing pharmacy code");
 
+                long ph_id = 0;
+                
+                if (pharmacy.Length > 6)
+                    throw new MailServiceException(404, "bad pharmacy code"); 
+                
+                while (pharmacy.Length < 6) pharmacy = "0" + pharmacy;
+                                
+                if (!long.TryParse(pharmacy.TrimStart('0'), out ph_id))
+                    throw new MailServiceException(404, "bad pharmacy code"); 
+                
                 if (aic == null)
                     throw new MailServiceException(400, "missing AIC code");
-                
-                aic = aic.ToUpper();
-                
-                if (aic.StartsWith("A"))
-                {
-                    aic = aic.Substring(1);
-                }
 
-                while (aic.Length < 9)
-                {
-                    aic = "0" + aic;
-                }
+                aic = aic.ToUpper();                
+                
+                if (aic.StartsWith("A")) aic = aic.Substring(1);
 
+                if (aic.Length > 9)
+                    throw new MailServiceException(404, "bad AIC code"); 
+                
+                while (aic.Length < 9) aic = "0" + aic;
+
+                long aic_id = 0;
+                if (!long.TryParse(aic.TrimStart('0'), out aic_id))
+                    throw new MailServiceException(404, "bad AIC code"); 
+                
                 bool aicTestPassed = false;
-
+                
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(
