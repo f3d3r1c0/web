@@ -140,26 +140,33 @@
 		</div>
         
 		<!-- aic help instructions  -->
-		<span>                      
+		<span>
 			<a href="#popupAic" data-rel="popup" data-position-to="window" data-transition="slideup"
-					class="ui-btn ui-corner-all ui-shadow ui-btn-middle" style="color: #a0a0a0;">            
-					Che cosa &egrave; il codice AIC				
+					class="ui-btn ui-corner-all ui-shadow ui-btn-middle" style="color: #a0a0a0;">
+					Che cosa &egrave; il codice AIC
 			</a>
-		</span>            
+		</span>
         <div tabindex="1" id="popupAic-popup" class="ui-popup-container pop in ui-popup-active" data-history="false">
-            <div data-position-to="origin" data-corners="true" data-shadow="true" data-disabled="false" aria-disabled="false" data-role="popup" id="popupAic" data-overlay-theme="a" data-theme="c" style="background: white; overflow: hidden;" class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow" data-history="false" >
+            <div data-corners="true" data-shadow="true" data-disabled="false" 
+                aria-disabled="false" data-role="popup" id="popupAic" 
+                data-overlay-theme="a" data-theme="c" 
+                class="ui-corner-all ui-popup ui-body-c ui-overlay-shadow" 
+                data-history="false"
+                style="background: white; overflow: hidden;" >
                 <div role="banner" data-role="header" data-theme="b" class="ui-corner-top ui-header ui-bar-a">
                     <h1 aria-level="1" role="heading" class="ui-title">Informazione</h1>
                 </div>
                 <div role="main" data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d">
-                    <p style="font-weight: smaller;">
-                        Il codice AIC &egrave; riportato sul bollino della confezione come evidenziato in giallo   
-                    </p>
-                    <img style="border: 0px; width: 370px;" 
+                    <p>Il codice AIC &egrave; riportato sul bollino della confezione come evidenziato in giallo</p>
+                    <img style="border: 0px;" 
                             alt="Codiice Agenzia Italiana del Farmaco" 
-                            src="images/aicsample.jpg"/>
-                    <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Chiudi</span></span></a>
-                </div>                
+                            src="images/aicsample.jpg" width="200px" />
+                    <a class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-c" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true" href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">
+                        <span class="ui-btn-inner ui-btn-corner-all">                        
+                            <span class="ui-btn-text">Chiudi</span>
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -171,7 +178,7 @@
 
 <!-- BEGIN VISUALIZER -->
 
-<div data-role="page" id="page0" data-history="false">  
+<div data-role="page" id="page0">  
     
 	<div data-role="header" class="ui-header ui-bar-a" role="contentinfo">
 	
