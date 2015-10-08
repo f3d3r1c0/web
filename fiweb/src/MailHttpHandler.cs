@@ -9,6 +9,8 @@ using System.Web.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
+using System.Globalization;
+using System.Threading;
 
 namespace webapp
 {
@@ -40,7 +42,7 @@ namespace webapp
         }
 
         public void ProcessRequest(HttpContext context)
-        {
+        {                   
             HttpRequest request = context.Request;
             HttpResponse response = context.Response;
 
@@ -71,7 +73,7 @@ namespace webapp
             try
             {
                 if (mailSmtpServer == null)
-                    throw new MailServiceException(403, "bad mail configuration");
+                    throw new MailServiceException(500, "bad mail configuration");
 
                 if (mailFrom == null)
                     mailFrom = "noreply@nodomain.com";
@@ -134,8 +136,8 @@ namespace webapp
 
                 long aic_id = 0;
                 if (!long.TryParse(aic.TrimStart('0'), out aic_id))
-                    throw new MailServiceException(404, "bad AIC code"); 
-                
+                    throw new MailServiceException(404, "bad AIC code");
+
                 bool aicTestPassed = false;
                 
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -185,15 +187,25 @@ namespace webapp
                 baseurl = baseurl.Substring(0, baseurl.LastIndexOf("/mail"));
                 
                 string dateFormat = "dddd d MMMM yyyy";
-
+                
+                string date = DateTime.Now.ToString(dateFormat);
+                CultureInfo ci_global = Thread.CurrentThread.CurrentCulture;
+                CultureInfo ci_local = new CultureInfo("it-IT");
+                if (!ci_global.Equals(ci_local))
+                {
+                    Thread.CurrentThread.CurrentCulture = ci_local;
+                    date = DateTime.Now.ToString(dateFormat);
+                    Thread.CurrentThread.CurrentCulture = ci_global;
+                }
+                    
                 while ((line = sr.ReadLine()) != null)
                 {
                     body.Append(
                             line.
-                            Replace("@date", DateTime.Now.ToString(dateFormat)).
-                            Replace("@baseurl", baseurl).
-                            Replace("@id", aic)
-                            );
+                                Replace("@date", date).
+                                Replace("@baseurl", baseurl).
+                                Replace("@id", aic)
+                                );
                 }
                 sr.Close();
 
