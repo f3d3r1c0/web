@@ -320,11 +320,25 @@ function _onload(aic) {
     if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
         $(window).on( "orientationchange", function (event) {        
             $('meta[name=viewport]').attr('content', 'initial-scale=1; maximum-scale=1.0; user-scalable=1;');
+
+            var w = $(window).width();
+            var h = $(window).height();            
+            
+            $('#popupAic').css('max-width', w + 'px');
+            $('#popupAic').css('max-height', h + 'px');
+            $('#popupAic').css('top', '0px');
+            $('#popupAic').css('left', '0px');
+            
+            $('#popupDialog').css('max-width', w + 'px');
+            $('#popupDialog').css('max-height', h + 'px');
+            $('#popupDialog').css('top', '0px');
+            $('#popupDialog').css('left', '0px');            
+
         });
         document.body.addEventListener('gesturestart', function () {                    
             $('meta[name=viewport]').attr('content', 'initial-scale=1; maximum-scale=3.0; user-scalable=1;');
         }, false);
-    }   
+    }       
     
     // submit alla pressione di invio
     $(document).keydown(function(event){    
